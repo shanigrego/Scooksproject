@@ -1,5 +1,6 @@
 package com.example.scooksproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,6 +18,7 @@ import java.util.List;
 
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         private Exception exception;
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
         protected String doInBackground(String... urls) {
             Document doc = null;
             try {
@@ -73,7 +76,21 @@ public class MainActivity extends AppCompatActivity {
                 String val=list.get(i).childNodes().get(0).childNodes().get(0).toString();
                 listOfIngredients.add(val);
             }
-            //Elements titleContainer=doc.getElementsByClass("titleContainer");
+            //TODO forloop: titleContainer.get(i).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            //i keep it that way because is more readable
+            // doesnt work with kosher in the forloop need a special treat
+            Elements titleContainer=doc.getElementsByClass("titleContainer");
+            String timeOfWorkNeeded=titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            String totalTimeRecipe=titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            String difficultLevel=titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            String Kosher=titleContainer.get(3).childNodes().get(0).childNodes().get(2).childNodes().get(0).toString();
+
+            Elements recipeInstructions=doc.getElementsByClass("recipeInstructions ArticleText fontSize");
+
+            List<Node> levelBetwwen=recipeInstructions.get(0).childNodes();
+
+            Elements children=recipeInstructions.get(0).children();
+            children.removeIf(element -> (element.tagName()!="p"));
 
 
             return null;
