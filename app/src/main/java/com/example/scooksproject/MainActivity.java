@@ -15,11 +15,14 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -28,28 +31,14 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn;
+    private Button btn;
+    private Button nextPageBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btn = (Button) findViewById(R.id.buttonTry);
-        btn.setOnClickListener(this::playOnClick);
-    }
-
-
-    public void playOnClick(View view) {
-        try {
-            onClick(view);
-        } catch (IOException ex) {
-            btn.setText(ex.getMessage());
-        }
-    }
-
-    public void onClick(View view) throws IOException {
-
-        new RetrieveFeedTask().execute("https://www.wikipedia.org/");
+        initComponents();
     }
 
     class RetrieveFeedTask extends AsyncTask<String, Void, String> {
@@ -75,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String val=list.get(i).childNodes().get(0).childNodes().get(0).toString();
                 listOfIngredients.add(val);
+                Log.d("Ingredient", val);
             }
             //TODO forloop: titleContainer.get(i).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
             //i keep it that way because is more readable
@@ -92,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             Elements children=recipeInstructions.get(0).children();
             children.removeIf(element -> (element.tagName()!="p"));
 
-
             return null;
         }
 
@@ -100,6 +89,27 @@ public class MainActivity extends AppCompatActivity {
             // TODO: check this.exception
             // TODO: do something with the feed
         }
+    }
+
+    private void initComponents(){
+        btn = findViewById(R.id.buttonTry);
+        nextPageBtn = findViewById(R.id.startBtn);
+
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RetrieveFeedTask().execute("https://www.wikipedia.org/");
+            }
+        });
+
+        nextPageBtn.setOnClickListener(new View.OnClickListener() {
+            Intent intent = new Intent(MainActivity.this, HomePage.class);
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
     }
 
 }
