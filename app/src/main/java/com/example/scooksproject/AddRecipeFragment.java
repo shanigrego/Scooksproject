@@ -11,10 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-public class AddRecipeActivity extends AppCompatActivity {
+public class AddRecipeFragment extends Fragment {
 
     private EditText recipeName;
     private EditText makingTimeET;
@@ -28,15 +29,24 @@ public class AddRecipeActivity extends AppCompatActivity {
     private LinearLayout singleRecipeLinearLayout;
     private ScrollView scrollViewRecipeBook;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe_book_activity);
-        initComponents();
 
-        //Change levelOfPreperation to popup menu
-        //Change preperationTime to popup clock
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.insertion_single_recipe, null);
+        initComponents(view);
+        return view;
     }
+
+//    @Override
+//    protected void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.recipe_book_activity);
+//        initComponents();
+//
+//        //Change levelOfPreperation to popup menu
+//        //Change preperationTime to popup clock
+//    }
 
     private void submitRecipeFunc(){
         String recipeNameStr = recipeName.getText().toString();
@@ -52,20 +62,20 @@ public class AddRecipeActivity extends AppCompatActivity {
         //check for existence in database
     }
 
-    private void initComponents(){
+    private void initComponents(View view){
         //Fetch components from insert_single_recipe.xml layout
-        LayoutInflater inflater = getLayoutInflater();
-        View insertionSingleRecipeView = inflater.inflate(R.layout.insertion_single_recipe, null);
-        recipeName = insertionSingleRecipeView.findViewById(R.id.recipeNameET);
-        recipeNameErrorTV = insertionSingleRecipeView.findViewById(R.id.recipeNameError);
-        otherErrorTV = insertionSingleRecipeView.findViewById(R.id.otherErrors);
-        makingTimeET = insertionSingleRecipeView.findViewById(R.id.makingTimeET);
-        preperationTimeET = insertionSingleRecipeView.findViewById(R.id.preperationTimeET);
-        levelEV = insertionSingleRecipeView.findViewById(R.id.levelEV);
-        addIngredientsBtn = insertionSingleRecipeView.findViewById(R.id.addIngredientsBtn);
-        addWorkingProccessBtn = insertionSingleRecipeView.findViewById(R.id.addWorkingProccessBtn);
-        submitRecipe = insertionSingleRecipeView.findViewById(R.id.submitRecipeBtn);
-        singleRecipeLinearLayout = insertionSingleRecipeView.findViewById(R.id.singleRecipeLinearLayout);
+//        LayoutInflater inflater = getLayoutInflater();
+//        View view = inflater.inflate(R.layout.insertion_single_recipe, null);
+        recipeName = view.findViewById(R.id.recipeNameET);
+        recipeNameErrorTV = view.findViewById(R.id.recipeNameError);
+        otherErrorTV = view.findViewById(R.id.otherErrors);
+        makingTimeET = view.findViewById(R.id.makingTimeET);
+        preperationTimeET = view.findViewById(R.id.preperationTimeET);
+        levelEV = view.findViewById(R.id.levelEV);
+        addIngredientsBtn = view.findViewById(R.id.addIngredientsBtn);
+        addWorkingProccessBtn = view.findViewById(R.id.addWorkingProccessBtn);
+        submitRecipe = view.findViewById(R.id.submitRecipeBtn);
+        singleRecipeLinearLayout = view.findViewById(R.id.singleRecipeLinearLayout);
         //Fetching Finished
 
 //        scrollViewRecipeBook = findViewById(R.id.recipeBookScrollView);
@@ -79,10 +89,12 @@ public class AddRecipeActivity extends AppCompatActivity {
         });
 
         addIngredientsBtn.setOnClickListener(new View.OnClickListener() {
-            Intent intent = new Intent(AddRecipeActivity.this, IngredientsActivity.class);
+
+            Fragment fragment = new IngredientsActivity();
+            //Intent intent = new Intent(AddRecipeFragment.this, IngredientsActivity.class);
             @Override
             public void onClick(View v) {
-                startActivity(intent);
+                ((HomePageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
             }
         });
     }

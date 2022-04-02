@@ -1,10 +1,9 @@
 package com.example.scooksproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -12,11 +11,13 @@ import com.google.android.material.navigation.NavigationBarView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 public class HomePageActivity extends AppCompatActivity {
 
     private Button recipeBookBtn;
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
+    private ScrollView scrollView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +32,11 @@ public class HomePageActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Intent intent = new Intent(HomePageActivity.this, RecipeBookActivity.class);
+                Fragment fragment;
                 switch(item.getItemId()){
                     case(R.id.recipeBookIcon):
-                        startActivity(intent);
+                        fragment = new RecipeBookFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
                         break;
                     default:
                         break;
@@ -52,4 +54,5 @@ public class HomePageActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
 }
