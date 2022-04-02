@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class RecipeBook extends AppCompatActivity {
+public class AddRecipeActivity extends AppCompatActivity {
 
     private EditText recipeName;
     private EditText makingTimeET;
@@ -31,7 +31,7 @@ public class RecipeBook extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe_book);
+        setContentView(R.layout.recipe_book_activity);
         initComponents();
 
         //Change levelOfPreperation to popup menu
@@ -68,9 +68,9 @@ public class RecipeBook extends AppCompatActivity {
         singleRecipeLinearLayout = insertionSingleRecipeView.findViewById(R.id.singleRecipeLinearLayout);
         //Fetching Finished
 
-        scrollViewRecipeBook = findViewById(R.id.recipeBookScrollView);
-        ((ViewGroup)singleRecipeLinearLayout.getParent()).removeView(singleRecipeLinearLayout);
-        scrollViewRecipeBook.addView(singleRecipeLinearLayout);
+//        scrollViewRecipeBook = findViewById(R.id.recipeBookScrollView);
+//        ((ViewGroup)singleRecipeLinearLayout.getParent()).removeView(singleRecipeLinearLayout);
+//        scrollViewRecipeBook.addView(singleRecipeLinearLayout);
         submitRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +79,7 @@ public class RecipeBook extends AppCompatActivity {
         });
 
         addIngredientsBtn.setOnClickListener(new View.OnClickListener() {
-            Intent intent = new Intent(RecipeBook.this, IngredientsActivity.class);
+            Intent intent = new Intent(AddRecipeActivity.this, IngredientsActivity.class);
             @Override
             public void onClick(View v) {
                 startActivity(intent);

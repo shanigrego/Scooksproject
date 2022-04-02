@@ -19,9 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomePage"/>
-        <activity android:name=".RecipeBook"/>
+        <activity android:name=".HomePageActivity"/>
+        <activity android:name=".AddRecipeActivity"/>
         <activity android:name=".IngredientsActivity"/>
+        <activity android:name=".RecipeBookActivity"/>
     </application>
 
 </manifest>
