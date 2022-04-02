@@ -16,7 +16,12 @@ import java.util.List;
 
 import androidx.annotation.RequiresApi;
 
+
+//TODO:1.כל מצרך צריך להפריד לכמות, יחידת מידה ושם המצרך
+// 2. אופן ההכנה
 public class RecipeParser extends AsyncTask<String, Void, String> {
+
+
 
     //call this function from other classes
     public void parseAllRecipes(){
@@ -32,16 +37,17 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
+
+
         Document doc = null;
         try {
-            doc = Jsoup.connect("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-490bcc516297d31006.htm?sCh=c7250a2610f26110&pId=1595820704?referrer=https%3A%2F%2Fwww.mako.co.il%2Ffood%3Fpartner%3DSecondNav&referrer=https%3A%2F%2Fwww.mako.co.il%2Ffood-cooking_magazine%2Fquiche_recipes%2FRecipe-490bcc516297d31006.htm%3FsCh%3Dc7250a2610f26110%26pId%3D1595820704").get();
+            doc = Jsoup.connect("https://www.mako.co.il/food-holiday-recipes/sukkot-recipes/Article-7f96f603fd95841006.htm").get();
         } catch (IOException e) {
             e.printStackTrace();
         }
         String recipeName = doc.title();
 
         Elements ingerderins =doc.getElementsByClass("recipeIngredients");
-        // btn.setText(docTitle);
         Element el=ingerderins.get(0);
         List<Node> list= el.childNodes();
         List<String>  listOfIngredients =new LinkedList<>();
@@ -55,6 +61,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         //TODO forloop: titleContainer.get(i).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         //i keep it that way because is more readable
         // doesnt work with kosher in the forloop need a special treat
+
         Elements titleContainer=doc.getElementsByClass("titleContainer");
         String timeOfWorkNeeded=titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String totalTimeRecipe=titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
@@ -71,11 +78,6 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return null;
     }
 
-    protected void onPostExecute(String feed) {
-        // TODO: check this.exception
-        // TODO: do something with the feed
-    }
-
     private List<Ingredient> createIngredientList(List<String> ingredientsStringList){
         for (String ingred : ingredientsStringList){
             Ingredient ingredient = parseStringToIngredient(ingred);
@@ -85,9 +87,60 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     private Ingredient parseStringToIngredient(String ingredientAsString){
 
+        double amount=1;
+        String measureUnit="",name="";
+        int i=0;
+        String[] ArraySplit=ingredientAsString.split(" ");
+        if(isNumber(ArraySplit[i].charAt(0)))
+        {
+           amount=Double.parseDouble(ArraySplit[0]);
+           i++;
+        }
+        while(isMeasureUnit(ArraySplit[i]))
+        {
+            measureUnit+=ArraySplit[i];
+            i++;
+        }
+        for (;i<ArraySplit.length; i++)
+        {
+            name+=ArraySplit[i]+" ";
+        }
 
-
-        return null;
+        Ingredient ingredient=new Ingredient(name,amount,measureUnit);
+        return ingredient;
     }
+    private boolean isNumber(char ch)
+    {
+        boolean res=false;
+        if(ch>='0' &&ch<='9') {
+            res = true;
+        }
+        return res;
+    }
+    private boolean isMeasureUnit(String str)
+    {
+        List<String> DictionaryUnitOfMeasure= new LinkedList<>();
+        DictionaryUnitOfMeasure.add("כפות");
+        DictionaryUnitOfMeasure.add("כף");
+        DictionaryUnitOfMeasure.add("כפית");
+        DictionaryUnitOfMeasure.add("גרם");
+        DictionaryUnitOfMeasure.add("כפיות");
+        DictionaryUnitOfMeasure.add("כוס");
+        DictionaryUnitOfMeasure.add("כוסות");
+        DictionaryUnitOfMeasure.add("פחית");
+        boolean res=false;
+
+        for (String unit :DictionaryUnitOfMeasure) {
+            if(str.equals(unit))
+            {
+                res=true;
+                break;
+            }
+        }
+
+        return res;
+    }
+
+
 
 }
