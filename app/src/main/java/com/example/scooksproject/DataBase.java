@@ -64,7 +64,7 @@ public class DataBase {
                 Iterable<DataSnapshot> dataSnapshots = dataSnapshot.getChildren();
                 for (DataSnapshot dataSanpshot : dataSnapshots) {
                     allRecipes.add(dataSnapshot.child(dataSanpshot.getKey()).getValue(Recipe.class));
-                } 
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
