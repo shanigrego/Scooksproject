@@ -11,10 +11,11 @@ public class Recipe {
     private String totalTimeRecipe;
     private String difficultLevel;
     private List<Ingredient> ingredients;
-    private Elements recipeInstructions;
+    private List<String> recipeInstructions;
 
+    public Recipe(){}
     public Recipe(String name, String timeOfWorkNeeded, String totalTimeRecipe, String difficultLevel,
-                    List<Ingredient> ingredients, Elements recipeInstructions) {
+                    List<Ingredient> ingredients, List<String> recipeInstructions) {
         this.name=name;
         this.timeOfWorkNeeded=timeOfWorkNeeded;
         this.totalTimeRecipe=totalTimeRecipe;
@@ -23,6 +24,39 @@ public class Recipe {
         this.recipeInstructions=recipeInstructions;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getTimeOfWorkNeeded() {
+        return timeOfWorkNeeded;
+    }
 
+    public String getTotalTimeRecipe() {
+        return totalTimeRecipe;
+    }
+
+    public String getDifficultLevel() {
+        return difficultLevel;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public List<String> getRecipeInstructions() {
+        return recipeInstructions;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "name='" + name + '\'' +
+                ", timeOfWorkNeeded='" + timeOfWorkNeeded + '\'' +
+                ", totalTimeRecipe='" + totalTimeRecipe + '\'' +
+                ", difficultLevel='" + difficultLevel + '\'' +
+                ", ingredients=" + ingredients +
+                ", recipeInstructions=" + recipeInstructions +
+                '}';
+    }
 }

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
-
+        DataBase db = DataBase.getInstance();
+        DataBase.getAllRecipes();
     }
 
     private void initComponents(){

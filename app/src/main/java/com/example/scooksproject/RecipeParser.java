@@ -11,6 +11,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -27,10 +28,9 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
 
     //call this function from other classes
-
-
     public void parseAllRecipes() {
         parseSingleRecipe("https://www.wikipedia.org/");
+
     }
 
     //parse a single recipe
@@ -38,17 +38,25 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         execute(recipeUrl);
     }
 
-
+    private static ArrayList<Recipe> allRecipes = new ArrayList<>();
     private Exception exception;
+
+    public static ArrayList<Recipe> getAllRecipes() {
+        return allRecipes;
+    }
+
+    public static void uploadRecipe() {
+        DataBase db = DataBase.getInstance();
+        db.uploadRecipe(allRecipes.get(0));
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
 
 
-
         Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-shavuot/Recipe-bab935b63871b61026.htm?sCh=426d1e17c1f26310&pId=1595820704");
         String recipeName = doc.title();
-        List<Ingredient> listOfIngredients=createIngredientListFromDoc(doc);
+        List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 
         Elements titleContainer = doc.getElementsByClass("titleContainer");
         String timeOfWorkNeeded = titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
@@ -56,27 +64,34 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
 
 
-        Elements recipeInstructions =getRecipeInstructions(doc);
+        List<String> recipeInstructions = getRecipeInstructions(doc);
 
-
-
-    return null;
-
+        Recipe recipe = new Recipe(recipeName, timeOfWorkNeeded, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions);
+        allRecipes.add(recipe);
+        uploadRecipe();
+        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private Elements getRecipeInstructions(Document doc)
-    {
+    private List<String> getRecipeInstructions(Document doc) {
         Elements recipeInstructions = doc.getElementsByClass("recipeInstructions ArticleText fontSize");
-        recipeInstructions=recipeInstructions.get(0).children();
+        recipeInstructions = recipeInstructions.get(0).children();
         recipeInstructions.removeIf(element -> (element.tagName() != "p"));
         recipeInstructions.removeIf(element -> !element.childNodes().get(0).toString().contains("small"));
 
-        return recipeInstructions;
+        List<String> instructionsList = new LinkedList<>();
+        for (Element element :
+                recipeInstructions) {
+            String a = element.childNodes().get(0).childNodes().get(0).toString();
+            String b = element.childNodes().get(1).toString();
+            instructionsList.add(a + ". " + b);
+        }
+        return instructionsList;
     }
+
     private List<Ingredient> createIngredientListFromDoc(Document doc) {
         Elements ingredients = doc.getElementsByClass("ingredients");
-        Element  ingred= ingredients.get(0);
+        Element ingred = ingredients.get(0);
         List<String> listOfIngredientsString = new LinkedList<>();
         for (int i = 1; i < ingred.childNodes().size(); i += 2) {
 
@@ -95,8 +110,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return createIngredientList(listOfIngredientsString);
     }
 
-    private Document getRecipeAccordingToUrl(String url)
-    {
+    private Document getRecipeAccordingToUrl(String url) {
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
@@ -105,11 +119,12 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         }
         return doc;
     }
+
     private List<Ingredient> createIngredientList(List<String> ingredientsStringList) {
-       List<Ingredient> list=new LinkedList<>();
+        List<Ingredient> list = new LinkedList<>();
 
         for (String ingred : ingredientsStringList) {
-            list.add( parseStringToIngredient(ingred));
+            list.add(parseStringToIngredient(ingred));
         }
         return list;
     }
@@ -123,14 +138,14 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         //Set<String> measureAmount = createMeasureAmountDict();
         Dictionary<String, Double> amountStrToDoubleDict = createAmountToDoubleDict();
         String[] arraySplit = ingredientAsString.split(" ");
-        if (isNumber(arraySplit[i].charAt(0))|| arraySplit[i].charAt(0) == '½') {
-            if( arraySplit[i].charAt(0) == '½')
+        if (isNumber(arraySplit[i].charAt(0)) || arraySplit[i].charAt(0) == '½') {
+            if (arraySplit[i].charAt(0) == '½')
                 amount = 0.5;
             else
                 amount = Double.parseDouble(arraySplit[0]);
             i++;
         } else {
-            while (amountStrToDoubleDict.get(arraySplit[i])!=null) {
+            while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
                 amount += amountStrToDoubleDict.get(arraySplit[i]);
                 i++;
             }
@@ -140,20 +155,20 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
             measureUnit += arraySplit[i];
             i++;
         }
-        while (amountStrToDoubleDict.get(arraySplit[i])!=null) {
+        while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
             amount += amountStrToDoubleDict.get(arraySplit[i]);
             i++;
         }
-        if(amount == 0){
+        if (amount == 0) {
             amount = 1;
         }
         for (; i < arraySplit.length; i++) {
-            if(arraySplit[i].contains("(")){
-                while( i<arraySplit.length && !arraySplit[i].contains(")"))
+            if (arraySplit[i].contains("(")) {
+                while (i < arraySplit.length && !arraySplit[i].contains(")"))
                     i++;
                 i++;
             }
-            if(i<arraySplit.length)
+            if (i < arraySplit.length)
                 name += arraySplit[i] + " ";
         }
         Log.d("ing", "name: " + name + "\n amount: " + amount + "\n measureUnit: " + measureUnit);

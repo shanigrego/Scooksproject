@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "996843586751",
+    "project_id": "scook-25859",
+    "storage_bucket": "scook-25859.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996843586751:android:012f8943cc8f0b6696720a",
+        "android_client_info": {
+          "package_name": "com.example.scooksproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996843586751-27i80kl3ubkun7to47ovj5rut1vfn5l0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVUQfSkh84iZDdNvjqrJ6e_WEcNWvXnQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996843586751-27i80kl3ubkun7to47ovj5rut1vfn5l0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

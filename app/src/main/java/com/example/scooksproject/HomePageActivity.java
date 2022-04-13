@@ -7,6 +7,7 @@ import android.widget.ScrollView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DatabaseReference;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
