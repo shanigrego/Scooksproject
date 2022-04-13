@@ -27,6 +27,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
 
     //call this function from other classes
+
+
     public void parseAllRecipes() {
         parseSingleRecipe("https://www.wikipedia.org/");
     }
@@ -36,56 +38,80 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         execute(recipeUrl);
     }
 
+
     private Exception exception;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
 
 
-        Document doc = null;
-        try {
-            doc = Jsoup.connect("https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-f4ae22bf17dfb71026.htm?Partner=interlink").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-shavuot/Recipe-bab935b63871b61026.htm?sCh=426d1e17c1f26310&pId=1595820704");
         String recipeName = doc.title();
-
-        Elements ingerderins = doc.getElementsByClass("recipeIngredients");
-        Element el = ingerderins.get(0);
-        List<Node> list = el.childNodes();
-        List<String> listOfIngredients = new LinkedList<>();
-        for (int i = 1; i < list.size(); i += 2) {
-
-            String val = list.get(i).childNodes().get(0).childNodes().get(0).toString();
-            listOfIngredients.add(val);
-            Log.d("Ingredient", val);
-        }
-        createIngredientList(listOfIngredients);
-        //TODO forloop: titleContainer.get(i).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-        //i keep it that way because is more readable
-        // doesnt work with kosher in the forloop need a special treat
+        List<Ingredient> listOfIngredients=createIngredientListFromDoc(doc);
 
         Elements titleContainer = doc.getElementsByClass("titleContainer");
         String timeOfWorkNeeded = titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String totalTimeRecipe = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-        String Kosher = titleContainer.get(3).childNodes().get(0).childNodes().get(2).childNodes().get(0).toString();
 
-        Elements recipeInstructions = doc.getElementsByClass("recipeInstructions ArticleText fontSize");
 
-        List<Node> levelBetwwen = recipeInstructions.get(0).childNodes();
+        Elements recipeInstructions =getRecipeInstructions(doc);
 
-        Elements children = recipeInstructions.get(0).children();
-        children.removeIf(element -> (element.tagName() != "p"));
 
-        return null;
+
+    return null;
+
     }
 
-    private List<Ingredient> createIngredientList(List<String> ingredientsStringList) {
-        for (String ingred : ingredientsStringList) {
-            Ingredient ingredient = parseStringToIngredient(ingred);
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Elements getRecipeInstructions(Document doc)
+    {
+        Elements recipeInstructions = doc.getElementsByClass("recipeInstructions ArticleText fontSize");
+        recipeInstructions=recipeInstructions.get(0).children();
+        recipeInstructions.removeIf(element -> (element.tagName() != "p"));
+        recipeInstructions.removeIf(element -> !element.childNodes().get(0).toString().contains("small"));
+
+        return recipeInstructions;
+    }
+    private List<Ingredient> createIngredientListFromDoc(Document doc) {
+        Elements ingredients = doc.getElementsByClass("ingredients");
+        Element  ingred= ingredients.get(0);
+        List<String> listOfIngredientsString = new LinkedList<>();
+        for (int i = 1; i < ingred.childNodes().size(); i += 2) {
+
+            if (ingred.childNodes().get(i).toString().contains("recipeIngredients")) {
+                List<Node> list = ingred.childNodes().get(i).childNodes();
+
+                for (int j = 1; j < list.size(); j += 2) {
+
+                    String val = list.get(j).childNodes().get(0).childNodes().get(0).toString();
+                    listOfIngredientsString.add(val);
+                    Log.d("Ingredient", val);
+                }
+            }
+
         }
-        return null;
+        return createIngredientList(listOfIngredientsString);
+    }
+
+    private Document getRecipeAccordingToUrl(String url)
+    {
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return doc;
+    }
+    private List<Ingredient> createIngredientList(List<String> ingredientsStringList) {
+       List<Ingredient> list=new LinkedList<>();
+
+        for (String ingred : ingredientsStringList) {
+            list.add( parseStringToIngredient(ingred));
+        }
+        return list;
     }
 
     private Ingredient parseStringToIngredient(String ingredientAsString) {
