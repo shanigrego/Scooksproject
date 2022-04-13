@@ -24,7 +24,7 @@ public class RecipeBookFragment extends Fragment {
             Fragment fragment = new MyRecipiesFragment();
             @Override
             public void onClick(View v) {
-                ((HomePageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                ((HomePageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("back").commit();
             }
         });
         return view;

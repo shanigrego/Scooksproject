@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 
@@ -13,14 +12,14 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-public class IngredientsActivity extends Fragment implements PopupMenu.OnMenuItemClickListener {
+public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private ListView listView;
     private static IngredientListViewAdapter adapter;
     private static ArrayList<String> items;
+    //private ImageView backBtn;
     private static int lastBtnClicked;
 
     @Nullable
@@ -47,10 +46,18 @@ public class IngredientsActivity extends Fragment implements PopupMenu.OnMenuIte
         addItem("סוכר");
         addItem("לחם");
         addItem("רום");
+//
+//        backBtn.setOnClickListener(new View.OnClickListener() {
+//            RecipeBookFragment fragment = new RecipeBookFragment();
+//            @Override
+//            public void onClick(View v) {
+//                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+//            }
+//        });
     }
 
     public static void setLastBtnClicked(int lastBtnClicked) {
-        IngredientsActivity.lastBtnClicked = lastBtnClicked;
+        IngredientsFragment.lastBtnClicked = lastBtnClicked;
     }
 
     public static void addItem(String str){
@@ -71,7 +78,7 @@ public class IngredientsActivity extends Fragment implements PopupMenu.OnMenuIte
     public void showPopupMenu(View v){
         PopupMenu popupMenu = new PopupMenu(getContext(), v);
         popupMenu.setOnMenuItemClickListener(this);
-        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.inflate(R.menu.popup_menu_amount);
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override

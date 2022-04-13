@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".HomePageActivity"/>
         <activity android:name=".AddRecipeFragment"/>
-        <activity android:name=".IngredientsActivity"/>
+        <activity android:name=".IngredientsFragment"/>
         <activity android:name=".RecipeBookFragment"/>
     </application>
 

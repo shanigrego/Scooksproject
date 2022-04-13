@@ -26,7 +26,6 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void initComponents(){
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

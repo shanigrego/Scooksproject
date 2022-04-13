@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="341dp"
-        android:layout_height="583dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,6 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/arrow_back"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"/>
+
 
             <EditText
                 android:id="@+id/recipeNameET"
@@ -44,15 +53,16 @@
                 android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/levelEV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:height="50dp"
-                    android:hint="רמת קושי" />
+                    android:hint="רמת קושי"
+                    android:onClick="showPopupMenu"/>
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/preperationTimeET"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -60,7 +70,7 @@
                     android:height="50dp"
                     android:hint="זמן הכנה" />
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/makingTimeET"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
