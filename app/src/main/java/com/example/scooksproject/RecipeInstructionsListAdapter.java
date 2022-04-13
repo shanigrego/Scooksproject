@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
     private ArrayList<String> items;
     private EditText txtDetails;
     private TextView stepNum;
+    private ImageView removeBtn;
 
     public RecipeInstructionsListAdapter(@NonNull Context context, ArrayList<String> items) {
         super(context, R.layout.recipe_instructions_single_item, items);
@@ -37,7 +39,15 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
 
             txtDetails =convertView.findViewById(R.id.txtDetails);
             stepNum = convertView.findViewById(R.id.stepNum);
+            removeBtn = convertView.findViewById(R.id.removeRecipeStep);
+
             stepNum.setText(Integer.toString(position + 1));
+            removeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RecipeInstructionsFragment.removeItem(position);
+                }
+            });
         }
         txtDetails.setHint(" הזן את מהלך שלב " + (position + 1) + "\n בהכנת המתכון ");
         return convertView;

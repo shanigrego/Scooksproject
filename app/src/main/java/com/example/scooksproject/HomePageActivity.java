@@ -18,6 +18,7 @@ public class HomePageActivity extends AppCompatActivity {
     private Button recipeBookBtn;
     private BottomNavigationView bottomNavigationView;
     private ScrollView scrollView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,16 +26,20 @@ public class HomePageActivity extends AppCompatActivity {
         initComponents();
     }
 
-    private void initComponents(){
+    private void initComponents() {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment;
-                switch(item.getItemId()){
-                    case(R.id.recipeBookIcon):
+                switch (item.getItemId()) {
+                    case (R.id.recipeBookIcon):
                         fragment = new RecipeBookFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                        break;
+                    case (R.id.groceryList):
+                        fragment = new GroceriesListFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
                         break;
                     default:
@@ -43,15 +48,5 @@ public class HomePageActivity extends AppCompatActivity {
                 return true;
             }
         });
-//        recipeBookBtn = findViewById(R.id.recipeBookBtn);
-//
-//        recipeBookBtn.setOnClickListener(new View.OnClickListener() {
-//            Intent intent = new Intent(HomePageActivity.this, RecipeBookActivity.class);
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(intent);
-//            }
-//        });
     }
-
 }

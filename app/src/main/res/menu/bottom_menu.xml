@@ -25,8 +25,8 @@
         android:icon="@drawable/recipe_book"/>
 
     <item
-        android:id="@+id/exit"
+        android:id="@+id/groceryList"
         android:title="יציאה"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/shutdown"/>
+        android:icon="@drawable/grocery_list"/>
 </menu>

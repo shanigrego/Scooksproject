@@ -34,10 +34,11 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="70dp"
         android:src="@drawable/search"
+        app:layout_constraintBottom_toBottomOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.345"
         app:layout_constraintStart_toEndOf="@+id/editText"
-        tools:layout_editor_absoluteY="87dp" />
+        app:layout_constraintTop_toTopOf="@+id/editText" />
 
     <TextView
         android:id="@+id/textView"

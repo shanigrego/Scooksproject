@@ -13,44 +13,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class RecipeInstructionsFragment extends Fragment {
+public class GroceriesListFragment extends Fragment {
 
     private static ListView listView;
     private static ArrayList<String> items;
-    private static RecipeInstructionsListAdapter adapter;
-    private TextView addStepTV;
+    private static GroceriesListAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.recipe_instructions_list, null);
-        listView = view.findViewById(R.id.recipeStepsListView);
+        View view = inflater.inflate(R.layout.groceries_list_fragment, null);
+        listView = view.findViewById(R.id.groceriesListView);
         items = new ArrayList<>();
-        adapter = new RecipeInstructionsListAdapter(getContext(), items);
-        addItem("1");
-        addItem("2");
-        addItem("3");
+        adapter = new GroceriesListAdapter(getContext(), items);
+        addItem("שמן");
+        addItem("ביצים");
+        addItem("מלפפון חמוץ גודל M");
         listView.setAdapter(adapter);
-        addStepTV = view.findViewById(R.id.addStep);
 
-        addStepTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecipeInstructionsFragment.addItem("ddd"/*txtDetails.getText().toString()*/);
-            }
-        });
         return view;
     }
 
-    public static void addItem(String str){
+    public static void addItem(String str) {
         items.add(str);
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
     }
 
-    public static void removeItem(int index){
+    public static void removeItem(int index) {
         items.remove(index);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 }
+
