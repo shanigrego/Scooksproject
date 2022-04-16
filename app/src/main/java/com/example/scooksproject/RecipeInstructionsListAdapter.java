@@ -2,6 +2,7 @@ package com.example.scooksproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
 
     private Context context;
     private ArrayList<String> items;
-    private EditText txtDetails;
     private TextView stepNum;
     private ImageView removeBtn;
 
@@ -37,19 +37,31 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.recipe_instructions_single_item, null);
 
-            txtDetails =convertView.findViewById(R.id.txtDetails);
+            EditText txtDetails =convertView.findViewById(R.id.txtDetails);
             stepNum = convertView.findViewById(R.id.stepNum);
             removeBtn = convertView.findViewById(R.id.removeRecipeStep);
 
             stepNum.setText(Integer.toString(position + 1));
+            txtDetails.setText(items.get(position));
+            if(position != items.size() - 1){
+                    removeBtn.setVisibility(View.INVISIBLE);
+            }
             removeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     RecipeInstructionsFragment.removeItem(position);
+                 }
+            });
+            txtDetails.setHint(" הזן את מהלך שלב " + (position + 1) + "\n בהכנת המתכון ");
+            txtDetails.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        items.set(position, txtDetails.getText().toString());
+                    }
                 }
             });
         }
-        txtDetails.setHint(" הזן את מהלך שלב " + (position + 1) + "\n בהכנת המתכון ");
         return convertView;
     }
 

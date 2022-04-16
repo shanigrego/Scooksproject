@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<item
-    android:id="@+id/home"
-    android:title="בית"
-    app:showAsAction="ifRoom"
-    android:icon="@drawable/home"/>
+
+    <item
+        android:id="@+id/groceryList"
+        android:title="רשימת קניות"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/grocery_list"/>
 
     <item
         android:id="@+id/account"
@@ -25,8 +26,9 @@
         android:icon="@drawable/recipe_book"/>
 
     <item
-        android:id="@+id/groceryList"
-        android:title="יציאה"
+        android:id="@+id/home"
+        android:title="בית"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/grocery_list"/>
+        android:icon="@drawable/home"/>
+
 </menu>
