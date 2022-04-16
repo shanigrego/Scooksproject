@@ -50,13 +50,6 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
             else
                 amountIngredient.setHint("0");
 
-//            amountIngredient.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    amountIngredient.requestFocus();
-//                }
-//            });
-
             //Remove Button initialization
             removeIngredient.setOnClickListener(new View.OnClickListener() {
                 @Override

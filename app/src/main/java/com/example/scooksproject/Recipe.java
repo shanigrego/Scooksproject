@@ -13,7 +13,10 @@ public class Recipe {
     private List<Ingredient> ingredients;
     private List<String> recipeInstructions;
 
+    //Required for firebase
+    //Do not erase!!!
     public Recipe(){}
+
     public Recipe(String name, String timeOfWorkNeeded, String totalTimeRecipe, String difficultLevel,
                     List<Ingredient> ingredients, List<String> recipeInstructions) {
         this.name=name;

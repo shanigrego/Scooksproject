@@ -6,6 +6,8 @@ public class Ingredient {
     private double amount;
     private String measureUnit;
 
+    //Required for firebase
+    //Do not erase!!!
     public Ingredient(){}
 
     public Ingredient(String name, double amount, String measureUnit) {
