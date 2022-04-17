@@ -39,7 +39,6 @@ public class RecipeBookFragment extends Fragment {
         allRecipes = DataBase.getAllRecipes();
         adapter = new AllRecipesGridAdapter(getContext(), allRecipes);
         allRecipesGridView.setAdapter(adapter);
-
         filteredItems = new ArrayList<>();
 
         initComponents();

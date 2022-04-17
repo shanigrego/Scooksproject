@@ -15,10 +15,23 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.549">
-    </ImageView>
+        app:layout_constraintVertical_bias="0.549" />
 
 
+    <ImageView
+        android:id="@+id/favouriteGridViewBtn"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/favourite"
+        android:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintEnd_toEndOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
+        tools:ignore="UseAppTint" />
 
     <TextView
         android:id="@+id/gridLayoutRecipeName"

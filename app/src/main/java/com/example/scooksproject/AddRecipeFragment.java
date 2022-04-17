@@ -6,6 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
@@ -45,8 +48,8 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     private LinearLayout singleRecipeLinearLayout;
     private ScrollView scrollViewRecipeBook;
     private ImageView backBtn;
-    int makingTimeHour, makingTimeMinute;
-
+    private int makingTimeHour, makingTimeMinute;
+    private AddRecipeViewModel viewModel;
 
     @Nullable
     @Override
@@ -67,6 +70,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         List<Ingredient> ingredients = IngredientsFragment.getIngredients();
 
         Recipe recipe = new Recipe(recipeNameStr, preperationTime, totalTime, difficulty, ingredients, recipeInstructions);
+        DataBase.getInstance().uploadRecipe(recipe);
     }
 
     private boolean checkRecipeName(String name) {
@@ -81,6 +85,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 
 
     private void initComponents(View view) {
+        viewModel = new ViewModelProvider(requireActivity()).get(AddRecipeViewModel.class);
         recipeName = view.findViewById(R.id.recipeNameET);
         recipeNameErrorTV = view.findViewById(R.id.recipeNameError);
         otherErrorTV = view.findViewById(R.id.otherErrors);
@@ -103,6 +108,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                 getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, recipeInstructionsFragment).addToBackStack("tag").commit();
             }
         });
+
         submitRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +127,21 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
             }
         });
 
+        //Recipe Name initialization
+        recipeName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.setRecipeName(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+        recipeName.setText(viewModel.getRecipeName());
+
+        //Level Button initialization
+        levelBtn.setText(viewModel.getDifficulty());
         levelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,15 +151,19 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.easy:
-                                levelBtn.setText("כל אחד יכול");
+                                viewModel.setDifficulty("כל אחד יכול");
+                                //levelBtn.setText("כל אחד יכול");
                                 break;
                             case R.id.medium:
-                                levelBtn.setText("בינוני");
+                                viewModel.setDifficulty("בינוני");
+                                //levelBtn.setText("בינוני");
                                 break;
                             case R.id.hard:
-                                levelBtn.setText("נדרשת מיומנות");
+                                viewModel.setDifficulty("נדרשת מיומנות");
+                                //levelBtn.setText("נדרשת מיומנות");
                                 break;
                         }
+                        levelBtn.setText(viewModel.getDifficulty());
                         return true;
                     }
                 });
@@ -147,6 +172,8 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
             }
         });
 
+        //Making Time Btn initialization
+        makingTimeBtn.setText(viewModel.getMakingTime());
         makingTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +194,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                                     if (makingTimeMinute == 0) {
                                         makingTimeBtn.setText(makingTimeHour + " שעות");
                                         if (makingTimeHour == 2) {
-                                            preperationTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
+                                            makingTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
                                         }
                                     } else
                                         makingTimeBtn.setText(makingTimeHour + " שעות ו" + makingTimeMinute + " דקות");
@@ -176,7 +203,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                                 }
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(0, 0, 0, makingTimeHour, makingTimeMinute);
-
+                                viewModel.setMakingTime(makingTimeBtn.getText().toString());
                             }
                         }, 12, 0, true);
                 timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -185,6 +212,8 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
             }
         });
 
+        //Preparation Time Btn initialization
+        preperationTimeBtn.setText(viewModel.getPreparationTime());
         preperationTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +245,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                                 }
                                 Calendar calendar = Calendar.getInstance();
                                 calendar.set(0, 0, 0, makingTimeHour, makingTimeMinute);
-
+                                viewModel.setPreparationTime(preperationTimeBtn.getText().toString());
                             }
                         }, 12, 0, true);
                 timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
