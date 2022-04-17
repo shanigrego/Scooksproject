@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -70,7 +71,9 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         List<Ingredient> ingredients = IngredientsFragment.getIngredients();
 
         Recipe recipe = new Recipe(recipeNameStr, preperationTime, totalTime, difficulty, ingredients, recipeInstructions);
-        DataBase.getInstance().uploadRecipe(recipe);
+        //DataBase.getInstance().uploadRecipe(recipe);
+       StorageManager.WriteToFile("MyRecipe.txt",recipe,getContext().getFilesDir());
+        List<Recipe> rec=StorageManager.ReadFromFile("MyRecipe.txt",getContext().getFilesDir());
     }
 
     private boolean checkRecipeName(String name) {

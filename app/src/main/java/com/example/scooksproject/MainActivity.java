@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
         nextPageBtn.setOnClickListener(new View.OnClickListener() {
             Intent intent = new Intent(MainActivity.this, HomePageActivity.class);
             @Override
-            public void onClick(View v) {
-                startActivity(intent);
-            }
+            public void onClick(View v) { startActivity(intent); }
         });
     }
 }

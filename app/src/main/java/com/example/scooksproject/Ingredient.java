@@ -1,6 +1,8 @@
 package com.example.scooksproject;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
 
     private String name;
     private double amount;

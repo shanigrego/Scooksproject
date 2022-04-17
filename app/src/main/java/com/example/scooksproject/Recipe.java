@@ -2,9 +2,10 @@ package com.example.scooksproject;
 
 import org.jsoup.select.Elements;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     private String name;
     private String timeOfWorkNeeded;
