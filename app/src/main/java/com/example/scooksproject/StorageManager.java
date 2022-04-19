@@ -13,43 +13,47 @@ import java.util.List;
 
 public class StorageManager {
 
-
-    public static void WriteToFile(String fileName, Recipe content,File path)
-    {
+    public static void WriteToFile(String fileName, Recipe content, File path, boolean append) {
         try {
-        FileOutputStream writer= new FileOutputStream(new File(path,fileName),true);
-//        if(path.length()==0)
-//        {
-//            ObjectOutputStream objectStream= new ObjectOutputStream(writer);
-//            objectStream.writeObject(content);
-//            objectStream.close();
-//        }
-//        else{
-//            MyObjectOutputStream objectStream= new MyObjectOutputStream(writer);
-//            objectStream.writeObject(content);
-//            objectStream.close();
-//        }
-        ObjectOutputStream objectStream= new ObjectOutputStream(writer);
-        objectStream.writeObject(content);
-        objectStream.close();
-        writer.close();
+            FileOutputStream writer = new FileOutputStream(new File(path, fileName), append);
+            ObjectOutputStream objectStream= new ObjectOutputStream(writer);
+            objectStream.writeObject(content);
+            objectStream.close();
+            writer.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static List<Recipe> ReadFromFile(String fileName, File path)
-    {
-        List<Recipe> list= new LinkedList<>();
-        Recipe recipe=null;
+    public static void WriteToFile(String fileName, List<Recipe> recipes, File path, boolean append) {
+        ObjectOutputStream objectStream = null;
         try {
-            FileInputStream reader= new FileInputStream(new File(path,fileName));
-            ObjectInputStream objectStream= new ObjectInputStream(reader);
-            recipe=(Recipe)objectStream.readObject();
-            while(reader.available()!=0) {
-                list.add(recipe);
+            FileOutputStream writer = new FileOutputStream(new File(path, fileName), append);
+            for (Recipe recipe :
+                    recipes) {
+
+                objectStream = new ObjectOutputStream(writer);
+                objectStream.writeObject(recipe);
+            }
+            objectStream.close();
+            writer.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Recipe> ReadFromFile(String fileName, File path) {
+        List<Recipe> list = new LinkedList<>();
+        Recipe recipe = null;
+        ObjectInputStream objectStream = null;
+        try {
+            FileInputStream reader = new FileInputStream(new File(path, fileName));
+            while (reader.available() != 0) {
+                objectStream = new ObjectInputStream(reader);
                 recipe = (Recipe) objectStream.readObject();
+                list.add(recipe);
             }
             objectStream.close();
             reader.close();

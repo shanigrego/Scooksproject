@@ -27,7 +27,6 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
     private ImageView backBtn;
 
 
-
     public static LinkedList<Ingredient> getIngredients() {
         return ingredients;
     }
@@ -38,8 +37,9 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
         View view = inflater.inflate(R.layout.ingredients_activity, null);
         initComponents(view);
         com.google.android.material.textview.MaterialTextView addIngredient = view.findViewById(R.id.addSingleIngredientBtn);
-        HomePageActivity.getBottomAppBar().setVisibility(View.INVISIBLE);
-        HomePageActivity.getChefButton().setVisibility(View.INVISIBLE);
+//        HomePageActivity.getBottomAppBar().setVisibility(View.INVISIBLE);
+//        HomePageActivity.getChefButton().setVisibility(View.INVISIBLE);
+        HomePageActivity.HideBottomNavigationBar();
 
         addIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,9 +64,9 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
 
     private void initComponents(View view) {
         listView = view.findViewById(R.id.ingredientsListView);
-        if(ingredients == null)
+        if (ingredients == null)
             ingredients = new LinkedList<>();
-        adapter = new IngredientListViewAdapter(getContext(), ingredients);
+        adapter = new IngredientListViewAdapter(getContext(), ingredients, false);
         listView.setAdapter(adapter);
         backBtn = view.findViewById(R.id.recipeIngredientsBackArraow);
 
@@ -77,7 +77,8 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
                 str,
                 0,
                 "גרם"
-                ));
+        ));
+        saveData();
         listView.setAdapter(adapter);
     }
 
@@ -91,18 +92,23 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
         return false;
     }
 
-    private void saveData(){
+    private static void saveData() {
         View view1;
         EditText ingName, ingAmount;
         Button ingMeasureUnit;
         for (int i = 0; i < listView.getCount(); i++) {
             view1 = listView.getChildAt(i);
             ingName = view1.findViewById(R.id.nameIngredient);
-            ingAmount = view1.findViewById(R.id.amountIngredient);
-            ingMeasureUnit = view1.findViewById(R.id.measureUnitIngredient);
-            ingredients.get(i).setName(ingName.getText().toString());
-            ingredients.get(i).setMeasureUnit(ingMeasureUnit.getText().toString());
-            ingredients.get(i).setAmount(Double.parseDouble(ingAmount.getText().toString()));
+            if (!ingName.getText().toString().isEmpty()) {
+                ingAmount = view1.findViewById(R.id.amountIngredient);
+                ingMeasureUnit = view1.findViewById(R.id.measureUnitIngredient);
+                ingredients.get(i).setName(ingName.getText().toString());
+                ingredients.get(i).setMeasureUnit(ingMeasureUnit.getText().toString());
+                if(ingAmount.getText().toString().isEmpty())
+                    ingredients.get(i).setAmount(0);
+                else
+                    ingredients.get(i).setAmount(Double.parseDouble(ingAmount.getText().toString()));
+            }
         }
     }
 }

@@ -21,10 +21,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:layout_toLeftOf="@+id/measureUnitIngredient"
+        android:background="@android:color/transparent"
         android:hint="הוסף מצרך"
         android:textAlignment="textStart"
-        android:textSize="20dp"
-        android:background="@android:color/transparent"/>
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/measureUnitIngredient"

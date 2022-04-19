@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/my_recipes_floating_button" />
 
     <EditText
-        android:id="@+id/searchRecipesET"
+        android:id="@+id/recipeBookSearchET"
         android:layout_width="183dp"
         android:layout_height="43dp"
         android:layout_marginStart="120dp"
@@ -34,11 +34,11 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="70dp"
         android:src="@drawable/search"
-        app:layout_constraintBottom_toBottomOf="@+id/searchRecipesET"
+        app:layout_constraintBottom_toBottomOf="@+id/recipeBookSearchET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.345"
-        app:layout_constraintStart_toEndOf="@+id/searchRecipesET"
-        app:layout_constraintTop_toTopOf="@+id/searchRecipesET" />
+        app:layout_constraintStart_toEndOf="@+id/recipeBookSearchET"
+        app:layout_constraintTop_toTopOf="@+id/recipeBookSearchET" />
 
     <GridView
         android:id="@+id/allRecipesGridView"
@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchRecipesET"
+        app:layout_constraintTop_toBottomOf="@+id/recipeBookSearchET"
         android:numColumns="2"
         android:layout_marginTop="20dp"/>
 

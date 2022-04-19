@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,11 +20,11 @@ import androidx.annotation.Nullable;
 public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
 
     private Context context;
-    private ArrayList<String> items;
+    private List<String> items;
     private TextView stepNum;
     private ImageView removeBtn;
 
-    public RecipeInstructionsListAdapter(@NonNull Context context, ArrayList<String> items) {
+    public RecipeInstructionsListAdapter(@NonNull Context context, List<String> items) {
         super(context, R.layout.recipe_instructions_single_item, items);
         this.context = context;
         this.items = items;

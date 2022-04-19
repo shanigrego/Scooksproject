@@ -16,6 +16,7 @@ import android.widget.PopupMenu;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +24,14 @@ import androidx.annotation.Nullable;
 public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
 
     private Context context;
-    private LinkedList<Ingredient> ingredients;
+    private List<Ingredient> ingredients;
+    private boolean viewOnly;
 
-    public IngredientListViewAdapter(@NonNull Context context, LinkedList<Ingredient> ingredients) {
+    public IngredientListViewAdapter(@NonNull Context context, List<Ingredient> ingredients, boolean viewOnly) {
         super(context, R.layout.ingredient_list_item, ingredients);
         this.context = context;
         this.ingredients = ingredients;
+        this.viewOnly = viewOnly;
     }
 
     @NonNull
@@ -42,6 +45,8 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
             EditText amountIngredient = convertView.findViewById(R.id.amountIngredient);
             ImageView removeIngredient = convertView.findViewById(R.id.removeIngredient);
             Button measureUnit = convertView.findViewById(R.id.measureUnitIngredient);
+            if(viewOnly == true)
+                setButtonsForViewOnly(amountIngredient, measureUnit, removeIngredient);
 
             //Amount Ingredient initialization
             String amount = String.valueOf(ingredients.get(position).getAmount());
@@ -98,6 +103,12 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
             });
         }
         return convertView;
+    }
+
+    private void setButtonsForViewOnly(EditText amountIngredient, Button measureUnit, ImageView removeIngredient) {
+        amountIngredient.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+        measureUnit.setBackgroundResource(android.R.color.transparent);
+        removeIngredient.setVisibility(View.INVISIBLE);
     }
 
     @Override

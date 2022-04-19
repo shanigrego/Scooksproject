@@ -56,6 +56,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.insertion_single_recipe, null);
+        HomePageActivity.HideBottomNavigationBar();
         initComponents(view);
         return view;
     }
@@ -70,10 +71,9 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         List<String> recipeInstructions = RecipeInstructionsFragment.getItems();
         List<Ingredient> ingredients = IngredientsFragment.getIngredients();
 
-        Recipe recipe = new Recipe(recipeNameStr, preperationTime, totalTime, difficulty, ingredients, recipeInstructions);
+        Recipe recipe = new Recipe(recipeNameStr, preperationTime, totalTime, difficulty, ingredients, recipeInstructions/*, null*/);
         //DataBase.getInstance().uploadRecipe(recipe);
-       StorageManager.WriteToFile("MyRecipe.txt",recipe,getContext().getFilesDir());
-        List<Recipe> rec=StorageManager.ReadFromFile("MyRecipe.txt",getContext().getFilesDir());
+        StorageManager.WriteToFile("MyOwnRecipes.txt",recipe,getContext().getFilesDir(), true);
     }
 
     private boolean checkRecipeName(String name) {

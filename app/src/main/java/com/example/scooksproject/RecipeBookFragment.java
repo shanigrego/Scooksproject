@@ -31,10 +31,11 @@ public class RecipeBookFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_book_activity, null);
+        HomePageActivity.ShowBottomNavigationBar();
 
         myRecpiesButton = view.findViewById(R.id.myRecipeFloatingBtn);
         allRecipesGridView = view.findViewById(R.id.allRecipesGridView);
-        searchET = view.findViewById(R.id.searchRecipesET);
+        searchET = view.findViewById(R.id.recipeBookSearchET);
 
         allRecipes = DataBase.getAllRecipes();
         adapter = new AllRecipesGridAdapter(getContext(), allRecipes);

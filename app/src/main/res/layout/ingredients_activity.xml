@@ -32,21 +32,21 @@
     <ListView
         android:id="@+id/ingredientsListView"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/addSingleIngredientBtn"
         android:layout_below="@+id/headerIngredientsList" />
 
 
     <TextView
         android:id="@+id/addSingleIngredientBtn"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_text_view"
         android:backgroundTint="#FF91E0"
         android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:text="+"
         android:textColor="@android:color/white"
         android:textSize="30sp" />

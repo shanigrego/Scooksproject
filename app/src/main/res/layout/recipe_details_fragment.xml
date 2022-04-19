@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipeDetailesScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/recipeDetailsBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"/>
+
+        <LinearLayout
+            android:id="@+id/headersLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/recipeDetailsRecipeName"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="רמת קושי"
+                android:onClick="showPopupMenu" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="זמן הכנה" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="זמן עבודה" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headersLinearLayout"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/levelTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="רמת קושי"
+                android:onClick="showPopupMenu" />
+
+            <TextView
+                android:id="@+id/preperationTimeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="זמן הכנה" />
+
+            <TextView
+                android:id="@+id/makingTimeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:height="50dp"
+                android:gravity="center"
+                android:hint="זמן עבודה" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recipeDetailsRecipeName"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:hint="שם המתכון"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/headerIngredients"
+            android:layout_width="164dp"
+            android:layout_height="33dp"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:text="מצרכים" />
+
+        <TextView
+            android:id="@+id/recipeDetailsSteps"
+            android:layout_width="164dp"
+            android:layout_height="33dp"
+            android:layout_below="@+id/recipeDetailsIngredientsList"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:text="הוראות הכנה" />
+
+
+        <com.example.scooksproject.NonScrollListView
+            android:id="@+id/recipeDetailsIngredientsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerIngredients"
+            android:orientation="horizontal" />
+
+
+        <com.example.scooksproject.NonScrollListView
+            android:id="@+id/recipeDetailsStepsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recipeDetailsSteps" />
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

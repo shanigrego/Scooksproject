@@ -6,6 +6,39 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search"
+        app:layout_constraintLeft_toRightOf="@id/myRecipesSearchET"
+        app:layout_constraintBottom_toBottomOf="@id/myRecipesSearchET"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"/>
+
+    <EditText
+        android:id="@+id/myRecipesSearchET"
+        android:layout_width="183dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="320dp"
+        android:hint="חיפוש"
+        app:layout_constraintBottom_toTopOf="@+id/addRecipeBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <GridView
+        android:id="@+id/myRecipesGridView"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:numColumns="2"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/addRecipeBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myRecipesSearchET" />
+
+    <ImageView
         android:id="@+id/backBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,29 +51,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.005" />
 
-    <EditText
-        android:id="@+id/searchRecipesET"
-        android:layout_width="183dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="80dp"
-        android:hint="חיפוש"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/addRecipeBtn"
-        android:layout_marginBottom="400dp"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addRecipeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.816"
         app:srcCompat="@drawable/add" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,11 @@
 package com.example.scooksproject;
 
+import android.graphics.Bitmap;
+
 import org.jsoup.select.Elements;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 
 public class Recipe implements Serializable {
@@ -13,19 +16,22 @@ public class Recipe implements Serializable {
     private String difficultLevel;
     private List<Ingredient> ingredients;
     private List<String> recipeInstructions;
+    private Bitmap recipeImg;
 
     //Required for firebase
     //Do not erase!!!
-    public Recipe(){}
+    public Recipe() {
+    }
 
     public Recipe(String name, String timeOfWorkNeeded, String totalTimeRecipe, String difficultLevel,
-                    List<Ingredient> ingredients, List<String> recipeInstructions) {
-        this.name=name;
-        this.timeOfWorkNeeded=timeOfWorkNeeded;
-        this.totalTimeRecipe=totalTimeRecipe;
-        this.difficultLevel=difficultLevel;
-        this.ingredients=ingredients;
-        this.recipeInstructions=recipeInstructions;
+                  List<Ingredient> ingredients, List<String> recipeInstructions/*, Bitmap recipeImg*/) {
+        this.name = name;
+        this.timeOfWorkNeeded = timeOfWorkNeeded;
+        this.totalTimeRecipe = totalTimeRecipe;
+        this.difficultLevel = difficultLevel;
+        this.ingredients = ingredients;
+        this.recipeInstructions = recipeInstructions;
+        this.recipeImg = recipeImg;
     }
 
     public String getName() {
@@ -51,6 +57,8 @@ public class Recipe implements Serializable {
     public List<String> getRecipeInstructions() {
         return recipeInstructions;
     }
+
+    public Bitmap getRecipeImg() { return recipeImg; }
 
     @Override
     public String toString() {

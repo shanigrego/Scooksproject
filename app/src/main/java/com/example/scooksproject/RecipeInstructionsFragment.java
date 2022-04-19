@@ -40,8 +40,7 @@ public class RecipeInstructionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.recipe_instructions_list, null);
         listView = view.findViewById(R.id.recipeStepsListView);
         submitBtn = view.findViewById(R.id.submitRecipeInstructions);
-        HomePageActivity.getBottomAppBar().setVisibility(View.INVISIBLE);
-        HomePageActivity.getChefButton().setVisibility(View.INVISIBLE);
+        HomePageActivity.HideBottomNavigationBar();
         if (items == null) {
             items = new ArrayList<>();
             addItem("");
@@ -64,8 +63,6 @@ public class RecipeInstructionsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 saveData();
-                HomePageActivity.getBottomAppBar().setVisibility(View.VISIBLE);
-                HomePageActivity.getChefButton().setVisibility(View.VISIBLE);
                 Fragment fragment = new AddRecipeFragment();
                 getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
             }

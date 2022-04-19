@@ -9,21 +9,27 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 public class AllRecipesGridAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Recipe> allRecipes;
+    private List<Recipe> allRecipes;
     private boolean isFav;
+    private List<Recipe> favouriteRecipesList;
+    private Recipe currentRecipe;
 
-    public AllRecipesGridAdapter(Context context, ArrayList<Recipe> allRecipes) {
+    public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
         this.allRecipes = allRecipes;
-        this.isFav = false;
+        favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", context.getFilesDir());
+
     }
 
     @Override
@@ -52,24 +58,60 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+            currentRecipe = allRecipes.get(position);
+            isFav = isFavourite() == null ? false : true;
+
+            if (isFavourite() != null)
+                setFavouriteBtnColor(R.color.pink, favouritesBtn);
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
                 int color;
 
                 @Override
                 public void onClick(View v) {
                     isFav = !isFav;
-                    if (isFav == true)
+                    if (isFav == true) {
                         color = R.color.pink;
-                    else
+                        StorageManager.WriteToFile("Fav1.txt", allRecipes.get(position), context.getFilesDir(), true);
+                    } else {
                         color = R.color.white;
-                    DrawableCompat.setTint(
-                            DrawableCompat.wrap(favouritesBtn.getDrawable()),
-                            ContextCompat.getColor(context, color)
-                    );
+                        removeRecipeFromFavourites();
+                    }
+                    setFavouriteBtnColor(color, favouritesBtn);
                 }
             });
-
+            recipeImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
+                    FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
+                }
+            });
         }
         return convertView;
     }
+
+    private void removeRecipeFromFavourites() {
+        favouriteRecipesList.remove(isFavourite());
+        StorageManager.WriteToFile("Fav1.txt", favouriteRecipesList, context.getFilesDir(), false);
+        notifyDataSetChanged();
+    }
+
+    private void setFavouriteBtnColor(int color, ImageView favouritesBtn) {
+        DrawableCompat.setTint(
+                DrawableCompat.wrap(favouritesBtn.getDrawable()),
+                ContextCompat.getColor(context, color)
+        );
+    }
+
+    private Recipe isFavourite() {
+        for (Recipe recipe :
+                favouriteRecipesList) {
+            if (recipe.getName().equals(currentRecipe.getName()))
+                return recipe;
+        }
+        return null;
+    }
+
+
 }

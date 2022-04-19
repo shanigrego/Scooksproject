@@ -2,6 +2,7 @@ package com.example.scooksproject;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -15,12 +16,13 @@ import com.google.firebase.database.DatabaseReference;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 public class HomePageActivity extends AppCompatActivity {
 
     private Button recipeBookBtn;
-    private BottomNavigationView bottomNavigationView;
+    private static BottomNavigationView bottomNavigationView;
     private static LinearLayout scrollView;
     private static com.google.android.material.bottomappbar.BottomAppBar bottomAppBar;
     private static com.google.android.material.floatingactionbutton.FloatingActionButton chefButton;
@@ -45,6 +47,21 @@ public class HomePageActivity extends AppCompatActivity {
         return scrollView;
     }
 
+    public static void HideBottomNavigationBar(){
+        bottomAppBar.setVisibility(View.INVISIBLE);
+        chefButton.setVisibility(View.INVISIBLE);
+        bottomNavigationView.setVisibility(View.INVISIBLE);
+        scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    public static void ShowBottomNavigationBar(){
+        bottomAppBar.setVisibility(View.VISIBLE);
+        chefButton.setVisibility(View.VISIBLE);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+    }
+
+
     private void initComponents() {
         scrollView = findViewById(R.id.scrollViewLinearLayout);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -62,6 +79,10 @@ public class HomePageActivity extends AppCompatActivity {
                         break;
                     case (R.id.groceryList):
                         fragment = new GroceriesListFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                        break;
+                    case (R.id.favouritesNavBtn):
+                        fragment = new FavouritesFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
                         break;
                     default:

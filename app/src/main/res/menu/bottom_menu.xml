@@ -9,7 +9,7 @@
         android:icon="@drawable/grocery_list"/>
 
     <item
-        android:id="@+id/account"
+        android:id="@+id/favouritesNavBtn"
         android:title="מועדפים"
         app:showAsAction="ifRoom"
         android:icon="@drawable/favourites"/>

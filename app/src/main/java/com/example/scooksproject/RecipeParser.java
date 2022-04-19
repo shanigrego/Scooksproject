@@ -1,5 +1,7 @@
 package com.example.scooksproject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -11,6 +13,8 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashSet;
@@ -62,11 +66,22 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         String timeOfWorkNeeded = titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String totalTimeRecipe = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-
+        Elements image=doc.getElementsByClass("imgInside");
+        String urlString= image.get(0).childNode(1).attributes().get("src");
+        URL url = null;
+        Bitmap bmp = null;
+        try {
+            url = new URL(urlString);
+            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         List<String> recipeInstructions = getRecipeInstructions(doc);
 
-        Recipe recipe = new Recipe(recipeName, timeOfWorkNeeded, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions);
+        Recipe recipe = new Recipe(recipeName, timeOfWorkNeeded, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions/*, bmp*/);
         allRecipes.add(recipe);
         uploadRecipe();
         return null;

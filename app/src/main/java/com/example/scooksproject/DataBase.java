@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -29,11 +30,14 @@ public class DataBase {
     private static DataBase obj;
     private static DatabaseReference databaseReference;
     private FirebaseDatabase db;
+    private FirebaseStorage st;
     private StorageReference mStorgaeRef;
     private static ArrayList<Recipe> allRecipes;
 
     private DataBase() {
         db = FirebaseDatabase.getInstance();
+        st = FirebaseStorage.getInstance();
+        mStorgaeRef = st.getReference("Uploads");
         databaseReference = db.getReference("DB");
         allRecipes = new ArrayList<>();
     }
@@ -74,7 +78,6 @@ public class DataBase {
     }
 
     public void uploadRecipe(Recipe recipe) {
-        //String uploadID = databaseReference.push().getKey();
         databaseReference.child(recipe.getName()).setValue(recipe);
     }
 }
