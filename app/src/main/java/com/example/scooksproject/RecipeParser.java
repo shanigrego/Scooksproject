@@ -26,9 +26,9 @@ import java.util.Set;
 import androidx.annotation.RequiresApi;
 
 
-//TODO:1.כל מצרך צריך להפריד לכמות, יחידת מידה ושם המצרך
-// 2. אופן ההכנה
+
 public class RecipeParser extends AsyncTask<String, Void, String> {
+
 
 
     //call this function from other classes
@@ -63,7 +63,10 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 
         Elements titleContainer = doc.getElementsByClass("titleContainer");
-        String timeOfWorkNeeded = titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+
+        String preparationTime =titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+
+
         String totalTimeRecipe = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         Elements image=doc.getElementsByClass("imgInside");
@@ -80,12 +83,13 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         }
 
         List<String> recipeInstructions = getRecipeInstructions(doc);
-
-        Recipe recipe = new Recipe(recipeName, timeOfWorkNeeded, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions/*, bmp*/);
+        Recipe recipe = new Recipe(recipeName, preparationTime, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions/*, bmp*/);
         allRecipes.add(recipe);
         uploadRecipe();
         return null;
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private List<String> getRecipeInstructions(Document doc) {
@@ -202,6 +206,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return dict;
     }
 
+
+
     private Set<String> createMeasureAmountDict() {
         Set<String> DictionaryUnitOfMeasure = new HashSet<>();
         //List<String> DictionaryUnitOfMeasure= new LinkedList<>();
@@ -225,7 +231,6 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     private Set<String> createMeasureUnitDict() {
         Set<String> DictionaryUnitOfMeasure = new HashSet<>();
-        //List<String> DictionaryUnitOfMeasure= new LinkedList<>();
         DictionaryUnitOfMeasure.add("כפות");
         DictionaryUnitOfMeasure.add("כף");
         DictionaryUnitOfMeasure.add("כפית");

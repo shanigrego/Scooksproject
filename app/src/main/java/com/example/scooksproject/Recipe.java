@@ -6,6 +6,7 @@ import org.jsoup.select.Elements;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Recipe implements Serializable {
@@ -41,7 +42,6 @@ public class Recipe implements Serializable {
     public String getTimeOfWorkNeeded() {
         return timeOfWorkNeeded;
     }
-
     public String getTotalTimeRecipe() {
         return totalTimeRecipe;
     }
@@ -55,9 +55,8 @@ public class Recipe implements Serializable {
     }
 
     public List<String> getRecipeInstructions() {
-        return recipeInstructions;
+         return recipeInstructions;
     }
-
     public Bitmap getRecipeImg() { return recipeImg; }
 
     @Override

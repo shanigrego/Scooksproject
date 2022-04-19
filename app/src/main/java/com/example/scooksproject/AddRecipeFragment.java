@@ -76,6 +76,8 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         StorageManager.WriteToFile("MyOwnRecipes.txt",recipe,getContext().getFilesDir(), true);
     }
 
+
+
     private boolean checkRecipeName(String name) {
         String enterRecipeName = "נא להכניס שם מתכון!";
         if (name.isEmpty()) {
