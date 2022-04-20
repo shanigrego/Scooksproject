@@ -2,6 +2,8 @@ package com.example.scooksproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -24,12 +27,15 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     private boolean isFav;
     private List<Recipe> favouriteRecipesList;
     private Recipe currentRecipe;
+    private ImageView chefIcon;
+    private ImageView chefIconPink;
+    private boolean chosenForMeal;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
         this.allRecipes = allRecipes;
         favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", context.getFilesDir());
-
+        chosenForMeal = false;
     }
 
     @Override
@@ -58,11 +64,35 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+            chefIcon = convertView.findViewById(R.id.chefIconSelectionRecipe);
+            chefIconPink = convertView.findViewById(R.id.chefIconSelectionRecipePink);
             currentRecipe = allRecipes.get(position);
             isFav = isFavourite() == null ? false : true;
 
             if (isFavourite() != null)
                 setFavouriteBtnColor(R.color.pink, favouritesBtn);
+
+            //Chef Icon initialization
+            chefIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chosenForMeal = !chosenForMeal;
+                    chefIcon.setVisibility(View.INVISIBLE);
+                    chefIconPink.setVisibility(View.VISIBLE);
+                }
+            });
+
+            chefIconPink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chosenForMeal = !chosenForMeal;
+                    chefIcon.setVisibility(View.VISIBLE);
+                    chefIconPink.setVisibility(View.INVISIBLE);
+                }
+            });
+
+
+            //Favourites Button initialization
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
                 int color;
 

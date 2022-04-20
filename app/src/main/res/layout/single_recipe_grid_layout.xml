@@ -22,8 +22,7 @@
         android:id="@+id/favouriteGridViewBtn"
         android:layout_width="29dp"
         android:layout_height="29dp"
-        android:layout_marginStart="128dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="12dp"
         android:src="@drawable/favourite"
         android:tint="@android:color/white"
@@ -32,6 +31,28 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
         tools:ignore="UseAppTint" />
+
+
+    <ImageView
+        android:id="@+id/chefIconSelectionRecipe"
+        android:layout_width="25.5dp"
+        android:layout_height="25.5dp"
+        android:src="@drawable/chef_white"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/favouriteGridViewBtn"
+        app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintTop_toTopOf="@+id/favouriteGridViewBtn" />
+
+ <ImageView
+        android:id="@+id/chefIconSelectionRecipePink"
+        android:layout_width="25.5dp"
+        android:layout_height="25.5dp"
+        android:src="@drawable/chef_green"
+        android:visibility="invisible"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/favouriteGridViewBtn"
+        app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintTop_toTopOf="@+id/favouriteGridViewBtn" />
 
     <TextView
         android:id="@+id/gridLayoutRecipeName"
