@@ -58,7 +58,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... urls) {
 
 
-        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-cooking_magazine/ron_yohananov_recipes/Recipe-4be3ee54a61c971027.htm?sCh=baf439cdf3178110&pId=25483675");
+        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-recipes/recipes_column-cakes/Recipe-c295510002adf71026.htm?sCh=131539cdf3178110&pId=25483675");
         String recipeName = doc.title();
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 

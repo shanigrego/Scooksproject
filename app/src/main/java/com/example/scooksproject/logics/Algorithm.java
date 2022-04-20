@@ -13,6 +13,9 @@ import java.util.Set;
 
 public class Algorithm {
 
+    //TODO לשים עשרים שניות הפרש בין הסיום של הסטופר לבין סיום שלב הביניים
+    //TODO לטפל במצב שבו יש - בין מספרים
+
     private class AlgoRecipe
     {
         private List<Instruction> instructionsList;
@@ -34,11 +37,21 @@ public class Algorithm {
 
         return null;
     }
+
+    private static double getFreeTime(List<Instruction> instList){
+        double sumFreeTime = 0;
+
+        for (Instruction inst : instList) {
+            sumFreeTime += inst.getFreeTime();
+        }
+        return sumFreeTime;
+    }
+
     private static AlgoRecipe convertRecipeToAlgoRecipe(Recipe recipe)
     {
         double timeOfWork=getTimeOfWork(recipe.getTimeOfWorkNeeded());
         List<Instruction> listOfInstructions=convertListStringToInstructionList(recipe.getRecipeInstructions(),recipe.getTotalTimeRecipe(),timeOfWork);
-
+        double freeTime=getFreeTime(listOfInstructions);
 
       return null;
     }
@@ -51,30 +64,142 @@ public class Algorithm {
         double instructionPrepareTime = preperationTime / recipeInstructionsStr.size();
         for (String content : recipeInstructionsStr) {
 
-              list.add(getInstructionFromStr(content));
+              list.add(getInstructionFromStr(content,instructionPrepareTime));
         }
 
         return list;
     }
 
-    private static Instruction getInstructionFromStr(String content) {
+    private static Instruction getInstructionFromStr(String content,double instructionPrepareTime) {
 
-     //   List<String> timeUnitList=createTimeUnitDict();
-       // for (String unit:timeUnitList) {
-         //   if(content.contains(unit))
-           // {
-             //   content.split(unit);
-            //}
+        List<String> timeUnitList=createTimeUnitList();
+        String[] splitContent=content.split(" ");
+        String part=null;
+        double freeTimeWork=0;
+        for (int i=0; i< splitContent.length;i++) {
+            part=splitContent[i];
+            for (String timeUnit:timeUnitList) {
+                if(part.equals(timeUnit))
+                {
+                  freeTimeWork+=getTimeInstruction(splitContent,i,part);
+                }
 
-        //}
+            }
 
+        }
+
+        for (String unit:timeUnitList) {
+            if(content.contains(unit))
+            {
+                content.split(unit);
+            }
+
+        }
         return null;
+    }
+
+    private static String handlePrefix(String str)
+    {
+        if(str.startsWith("-כ"))
+        {
+            str=str.substring(2);
+        }
+        return str;
+    }
+    private static double handleCharBetweenNumbers(String str)
+    {
+        double number=0;
+        String[] numbers=null;
+        if(str.contains("-"))
+        {
+            numbers=str.split("-");
+            number=Math.min(Integer.parseInt(numbers[0]),Integer.parseInt(numbers[1]));
+        }
+
+        return number;
+    }
+    private static double getTimeInstruction(String[] splitContent, int i, String part) {
+
+        double freeTime=0;
+        Dictionary<String,Double> dict=createTimeInstructionDict();
+        String str=null;
+        switch (part)
+        {
+          case "דקות":
+              //רק לפני
+              str=splitContent[i-1];
+              str=handlePrefix(str);
+              freeTime=handleCharBetweenNumbers(str);
+              if(freeTime == 0)
+              {
+                  if(isAllNumbers(str))
+                  {
+                    freeTime=Integer.parseInt(str);
+                  }
+                  else if(str.startsWith("ו"))
+                  {
+                   freeTime+= dict.get(str);
+                   freeTime+=dict.get(splitContent[i-2]);
+                  }
+              }
+              break;
+          case "שעות":
+              // רק לפני
+              str=splitContent[i-1];
+              str=handlePrefix(str);
+              if(isAllNumbers(str))
+              {
+                  freeTime=Integer.parseInt(str);
+              }
+              break;
+          case "שעה":
+              //גם לפני
+
+              break;
+          case "שעתיים":
+
+              break;
+
+      }
+      return freeTime;
+    }
+
+    private static boolean isAllNumbers(String str) {
+
+        boolean res=true;
+        for (int i=0; i< str.length(); i++) {
+            if(!isNumber(str.charAt(i)))
+            {
+                res=false;
+            }
+        }
+        return res;
+    }
+
+    private static boolean isNumber(char ch) {
+        boolean res = false;
+        if (ch >= '0' && ch <= '9') {
+            res = true;
+        }
+        return res;
+    }
+
+    private static List<String> createTimeUnitList() {
+        List<String> timeUnitList=new LinkedList<>();
+
+        timeUnitList.add("דקות");
+        timeUnitList.add("שעות");
+        timeUnitList.add("שעה");
+        timeUnitList.add("שעתיים");
+
+    return timeUnitList;
     }
 
     private static Dictionary<String,Double> createTimeStringToDoubleDict() {
         Dictionary<String, Double> dict = new Hashtable<>();
+
         dict.put("חצי שעה",30.0);
-        dict.put( "שעה",60.0);
+        dict.put("שעה",60.0);
         dict.put("שלושת רבע שעה",105.0);
         dict.put("רבע שעה",15.0);
         dict.put("שעה ורבע",75.0);
@@ -93,6 +218,25 @@ public class Algorithm {
         dict.put("שלוש שעות",180.0);
         dict.put("שלוש וחצי שעות",210.0);
 
+
+        return dict;
+    }
+    private static Dictionary<String,Double> createTimeInstructionDict() {
+        Dictionary<String, Double> dict = new Hashtable<>();
+
+        dict.put("חצי",30.0);
+        dict.put("וחצי",30.0);
+        dict.put("כמה",0.0);
+        dict.put("שלושת רבע",45.0);
+        dict.put("ושלושת רבע",45.0);
+        dict.put("רבע",15.0);
+        dict.put("ורבע",15.0);
+        dict.put("שלושים",30.0);
+        dict.put("ושלושים",30.0);
+        dict.put("ארבעים",40.0);
+        dict.put("וארבעים",40.0);
+        dict.put("ועשרים",20.0);
+        dict.put("עשרים",20.0);
 
         return dict;
     }
