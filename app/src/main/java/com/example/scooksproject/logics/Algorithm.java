@@ -3,6 +3,7 @@ package com.example.scooksproject.logics;
 import com.example.scooksproject.Ingredient;
 import com.example.scooksproject.Instruction;
 import com.example.scooksproject.Recipe;
+import com.google.android.gms.common.internal.constants.ListAppsActivityContract;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -18,14 +19,30 @@ public class Algorithm {
     public static Recipe scooksAlgorithm(List<Recipe> recipeList)
     {
         Recipe resRecipe=null;
+        List<Ingredient> ingredientList=getIngredientsFromAllRecipe(recipeList);
+        List<Instruction> instructionList=runAlgorithm(recipeList);
+
+        List<Recipe> notUsedRecipesList=new LinkedList<>(recipeList);
         Recipe maxFreeTimeRecipe = getMaxFreeTimeRecipe(recipeList);
-        List<Ingredient> ingredientList=new LinkedList<>();
-        List<Instruction> 
 
 
+        resRecipe=new Recipe();
         return resRecipe;
     }
+    private static List<Instruction> runAlgorithm(List<Recipe> recipeList)
+    {
 
+
+
+    return null;
+    }
+    public static List<Ingredient> getIngredientsFromAllRecipe(List<Recipe> recipeList)
+    {
+        List<Ingredient> list = new LinkedList<>();
+
+
+        return list;
+    }
     private static Recipe getMaxFreeTimeRecipe(List<Recipe> recipeList) {
 
         double max=recipeList.get(0).getTotalFreeTime();

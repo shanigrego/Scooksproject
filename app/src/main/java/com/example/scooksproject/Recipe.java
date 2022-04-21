@@ -21,7 +21,7 @@ public class Recipe implements Serializable {
     private List<Instruction> recipeInstructions;
     private double timeOfWorkNeeded;
     private double totalFreeTime;
-
+    private boolean isUsed;
 
     //Required for firebase
     //Do not erase!!!
@@ -30,6 +30,14 @@ public class Recipe implements Serializable {
 
     public double getTotalFreeTime() {
         return totalFreeTime;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
+    }
+
+    public void setUsed(boolean used) {
+        isUsed = used;
     }
 
     public Recipe(String name, String timeOfWorkNeededStr, String totalTimeRecipe, String difficultLevel,
@@ -41,6 +49,7 @@ public class Recipe implements Serializable {
         this.ingredients = ingredients;
         this.recipeInstructionsStr = recipeInstructionsStr;
         this.recipeImg = recipeImg;
+        this.isUsed=false;
     }
 
     public String getName() {
