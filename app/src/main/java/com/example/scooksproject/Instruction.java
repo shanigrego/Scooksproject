@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Instruction implements Serializable {
     private String content;
-    private double workTime;
-    private double freeTime;
+    private int workTime;
+    private int freeTime;
     private boolean isSelected;
 
     public Instruction() { }
 
-    public Instruction(String content, double workTime, double freeTime) {
+    public Instruction(String content, int workTime, int freeTime) {
         this.content = content;
         this.workTime = workTime;
         this.freeTime = freeTime;
@@ -22,12 +22,12 @@ public class Instruction implements Serializable {
 
     public void setContent(String content) { this.content = content; }
 
-    public double getWorkTime() { return workTime; }
+    public int getWorkTime() { return workTime; }
 
-    public void setWorkTime(double workTime) { this.workTime = workTime; }
+    public void setWorkTime(int workTime) { this.workTime = workTime; }
 
-    public double getFreeTime() { return freeTime; }
+    public int getFreeTime() { return freeTime; }
 
-    public void setFreeTime(double freeTime) { this.freeTime = freeTime; }
+    public void setFreeTime(int freeTime) { this.freeTime = freeTime; }
 
 }
