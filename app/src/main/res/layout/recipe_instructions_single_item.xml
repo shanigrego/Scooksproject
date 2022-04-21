@@ -33,10 +33,11 @@
 
     <TextView
         android:id="@+id/stepNum"
-        android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="30dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="110dp"
         android:background="@drawable/rounded_text_view"
         android:backgroundTint="#0090FF"
         android:gravity="center"

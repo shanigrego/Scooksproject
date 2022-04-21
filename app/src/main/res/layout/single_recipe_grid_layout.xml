@@ -34,7 +34,7 @@
 
 
     <ImageView
-        android:id="@+id/chefIconSelectionRecipe"
+        android:id="@+id/chefIconSelectionRecipeUnChosen"
         android:layout_width="25.5dp"
         android:layout_height="25.5dp"
         android:src="@drawable/chef_white"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="@+id/favouriteGridViewBtn" />
 
  <ImageView
-        android:id="@+id/chefIconSelectionRecipePink"
+        android:id="@+id/chefIconSelectionRecipeChosen"
         android:layout_width="25.5dp"
         android:layout_height="25.5dp"
         android:src="@drawable/chef_green"

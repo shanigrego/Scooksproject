@@ -47,7 +47,7 @@ public class RecipeInstructionsFragment extends Fragment {
             addItem("");
             addItem("");
         }
-        adapter = new RecipeInstructionsListAdapter(getContext(), items);
+        adapter = new RecipeInstructionsListAdapter(getContext(), items, false);
         listView.setAdapter(adapter);
         addStepTV = view.findViewById(R.id.addStep);
         backArrow = view.findViewById(R.id.recipeInstructionsBackArraow);

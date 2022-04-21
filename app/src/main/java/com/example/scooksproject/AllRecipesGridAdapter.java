@@ -2,8 +2,6 @@ package com.example.scooksproject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -26,16 +23,16 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     private List<Recipe> allRecipes;
     private boolean isFav;
     private List<Recipe> favouriteRecipesList;
+    private List<Recipe> chosenRecipes;
     private Recipe currentRecipe;
-    private ImageView chefIcon;
-    private ImageView chefIconPink;
-    private boolean chosenForMeal;
+    private ImageView chefIconUnChosen;
+    private ImageView chefIconChosen;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
         this.allRecipes = allRecipes;
         favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", context.getFilesDir());
-        chosenForMeal = false;
+        chosenRecipes = MealRecipesFragment.getChosenRecipes();
     }
 
     @Override
@@ -64,38 +61,26 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
-            chefIcon = convertView.findViewById(R.id.chefIconSelectionRecipe);
-            chefIconPink = convertView.findViewById(R.id.chefIconSelectionRecipePink);
+            chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
+            chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
             currentRecipe = allRecipes.get(position);
             isFav = isFavourite() == null ? false : true;
 
+
+
+
+            //Chef Icon initialization
+            if(isChosenForMeal())
+                toggleChosenForMeal(true, false);
+            chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true));
+            chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false));
+
+            //Favourites Button initialization
             if (isFavourite() != null)
                 setFavouriteBtnColor(R.color.pink, favouritesBtn);
 
-            //Chef Icon initialization
-            chefIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    chosenForMeal = !chosenForMeal;
-                    chefIcon.setVisibility(View.INVISIBLE);
-                    chefIconPink.setVisibility(View.VISIBLE);
-                }
-            });
-
-            chefIconPink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    chosenForMeal = !chosenForMeal;
-                    chefIcon.setVisibility(View.VISIBLE);
-                    chefIconPink.setVisibility(View.INVISIBLE);
-                }
-            });
-
-
-            //Favourites Button initialization
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
                 int color;
-
                 @Override
                 public void onClick(View v) {
                     isFav = !isFav;
@@ -109,6 +94,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
                     setFavouriteBtnColor(color, favouritesBtn);
                 }
             });
+
             recipeImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -143,5 +129,29 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return null;
     }
 
+    private boolean isChosenForMeal(){
+        for (Recipe recipe :
+                chosenRecipes) {
+            if (currentRecipe.getName().equals(recipe.getName()))
+                return true;
+        }
+        return false;
+    }
 
+    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes){
+        if(isChosen){
+            if(addToChosenRecipes) {
+                chosenRecipes.add(currentRecipe);
+               // MealRecipesFragment.addRecipe(currentRecipe);
+            }
+            chefIconUnChosen.setVisibility(View.INVISIBLE);
+            chefIconChosen.setVisibility(View.VISIBLE);
+        }
+        else{
+            chosenRecipes.remove(currentRecipe);
+
+            chefIconUnChosen.setVisibility(View.VISIBLE);
+            chefIconChosen.setVisibility(View.INVISIBLE);
+        }
+    }
 }
