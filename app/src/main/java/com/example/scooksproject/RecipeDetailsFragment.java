@@ -1,21 +1,13 @@
 package com.example.scooksproject;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -51,8 +43,8 @@ public class RecipeDetailsFragment extends Fragment {
     private void setView() {
         name.setText(currentRecipe.getName());
         difficulty.setText(currentRecipe.getDifficultLevel());
-        preparationTime.setText(currentRecipe.getTimeOfWorkNeeded());
-        makingTime.setText(currentRecipe.getTotalTimeRecipe());
+        preparationTime.setText(currentRecipe.getTimeOfWorkNeededStr());
+        makingTime.setText(currentRecipe.getTotalTimeRecipeStr());
         ingredientsList.setAdapter(ingredientsListAdapter);
         instructionsList.setAdapter(instructionsListAdapter);
 
@@ -74,6 +66,6 @@ public class RecipeDetailsFragment extends Fragment {
         makingTime = view.findViewById(R.id.makingTimeTV);
         backBtn = view.findViewById(R.id.recipeDetailsBackBtn);
         ingredientsListAdapter = new IngredientListViewAdapter(getContext(), currentRecipe.getIngredients(), true);
-        instructionsListAdapter = new RecipeInstructionsListAdapter(getContext(), currentRecipe.getRecipeInstructions(), true);
+        instructionsListAdapter = new RecipeInstructionsListAdapter(getContext(), currentRecipe.getRecipeInstructionsStr());
     }
 }

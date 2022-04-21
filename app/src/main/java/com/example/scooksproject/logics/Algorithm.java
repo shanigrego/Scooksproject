@@ -1,41 +1,45 @@
 package com.example.scooksproject.logics;
 
+import com.example.scooksproject.Ingredient;
 import com.example.scooksproject.Instruction;
 import com.example.scooksproject.Recipe;
 
 import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class Algorithm {
 
     //TODO לשים עשרים שניות הפרש בין הסיום של הסטופר לבין סיום שלב הביניים
     //TODO לטפל במצב שבו יש - בין מספרים
 
-    private class AlgoRecipe
-    {
-        private List<Instruction> instructionsList;
-        private double totalFreeTime;
-        private double totalWorkTime;
-
-    }
 
     public static Recipe scooksAlgorithm(List<Recipe> recipeList)
     {
-        List<AlgoRecipe> algoRecipeList=new LinkedList<>();
+        Recipe resRecipe=null;
+        Recipe maxFreeTimeRecipe = getMaxFreeTimeRecipe(recipeList);
+        List<Ingredient> ingredientList=new LinkedList<>();
+        List<Instruction> 
+
+
+        return resRecipe;
+    }
+
+    private static Recipe getMaxFreeTimeRecipe(List<Recipe> recipeList) {
+
+        double max=recipeList.get(0).getTotalFreeTime();
+        Recipe maxRecipe=recipeList.get(0);
+
         for (Recipe recipe:recipeList) {
-            algoRecipeList.add(convertRecipeToAlgoRecipe(recipe));
 
-
+            if(recipe.getTotalFreeTime() > max)
+            {
+                maxRecipe=recipe;
+                max=recipe.getTotalFreeTime();
+            }
         }
-
-
-
-        return null;
+        return maxRecipe;
     }
 
     private static double getFreeTime(List<Instruction> instList){
@@ -47,14 +51,14 @@ public class Algorithm {
         return sumFreeTime;
     }
 
-    private static AlgoRecipe convertRecipeToAlgoRecipe(Recipe recipe)
-    {
-        double timeOfWork=getTimeOfWork(recipe.getTimeOfWorkNeeded());
-        List<Instruction> listOfInstructions=convertListStringToInstructionList(recipe.getRecipeInstructions(),recipe.getTotalTimeRecipe(),timeOfWork);
-        double freeTime=getFreeTime(listOfInstructions);
-
-      return null;
-    }
+//    private static AlgoRecipe convertRecipeToAlgoRecipe(Recipe recipe)
+//    {
+//        double timeOfWork=getTimeOfWork(recipe.getTimeOfWorkNeededStr());
+//        List<Instruction> listOfInstructions=convertListStringToInstructionList(recipe.getRecipeInstructionsStr(),recipe.getTotalTimeRecipeStr(),timeOfWork);
+//        double freeTime=getFreeTime(listOfInstructions);
+//
+//      return null;
+//    }
 
     private static List<Instruction> convertListStringToInstructionList(List<String> recipeInstructionsStr, String totalTime, double preperationTime)
     {
