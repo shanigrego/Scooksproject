@@ -19,25 +19,33 @@ public class Recipe implements Serializable {
     private Bitmap recipeImg;
 
     private List<Instruction> recipeInstructions;
-    private double timeOfWorkNeeded;
-    private double totalFreeTime;
-    private boolean isUsed;
+    private int timeOfWorkNeeded;
+    private int totalFreeTime;
+    private int preparationTime;
 
     //Required for firebase
     //Do not erase!!!
     public Recipe() {
     }
 
-    public double getTotalFreeTime() {
+    public void setTimeOfWorkNeeded(int timeOfWorkNeeded) {
+        this.timeOfWorkNeeded = timeOfWorkNeeded;
+    }
+
+    public void setTotalFreeTime(int totalFreeTime) {
+        this.totalFreeTime = totalFreeTime;
+    }
+
+    public void setPreparationTime(int preparationTime) {
+        this.preparationTime = preparationTime;
+    }
+
+    public int getTotalFreeTime() {
         return totalFreeTime;
     }
 
-    public boolean isUsed() {
-        return isUsed;
-    }
-
-    public void setUsed(boolean used) {
-        isUsed = used;
+    public void setRecipeInstructions(List<Instruction> recipeInstructions) {
+        this.recipeInstructions = recipeInstructions;
     }
 
     public Recipe(String name, String timeOfWorkNeededStr, String totalTimeRecipe, String difficultLevel,
@@ -49,7 +57,10 @@ public class Recipe implements Serializable {
         this.ingredients = ingredients;
         this.recipeInstructionsStr = recipeInstructionsStr;
         this.recipeImg = recipeImg;
-        this.isUsed=false;
+    }
+
+    public int getPreparationTime() {
+        return preparationTime;
     }
 
     public String getName() {
@@ -60,7 +71,7 @@ public class Recipe implements Serializable {
         return recipeInstructions;
     }
 
-    public double getTimeOfWorkNeeded() {
+    public int getTimeOfWorkNeeded() {
         return timeOfWorkNeeded;
     }
 
