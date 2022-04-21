@@ -2,36 +2,44 @@ package com.example.scooksproject;
 
 import android.graphics.Bitmap;
 
-import org.jsoup.select.Elements;
-
 import java.io.Serializable;
-import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Recipe implements Serializable {
 
     private String name;
-    private String timeOfWorkNeeded;
-    private String totalTimeRecipe;
+    private String timeOfWorkNeededStr;
+    private String totalTimeRecipeStr;
     private String difficultLevel;
     private List<Ingredient> ingredients;
-    private List<String> recipeInstructions;
+
+    private List<String> recipeInstructionsStr;
+
+
     private Bitmap recipeImg;
+
+    private List<Instruction> recipeInstructions;
+    private double timeOfWorkNeeded;
+    private double totalFreeTime;
+
 
     //Required for firebase
     //Do not erase!!!
     public Recipe() {
     }
 
-    public Recipe(String name, String timeOfWorkNeeded, String totalTimeRecipe, String difficultLevel,
-                  List<Ingredient> ingredients, List<String> recipeInstructions/*, Bitmap recipeImg*/) {
+    public double getTotalFreeTime() {
+        return totalFreeTime;
+    }
+
+    public Recipe(String name, String timeOfWorkNeededStr, String totalTimeRecipe, String difficultLevel,
+                  List<Ingredient> ingredients, List<String> recipeInstructionsStr/*, Bitmap recipeImg*/) {
         this.name = name;
-        this.timeOfWorkNeeded = timeOfWorkNeeded;
-        this.totalTimeRecipe = totalTimeRecipe;
+        this.timeOfWorkNeededStr = timeOfWorkNeededStr;
+        this.totalTimeRecipeStr = totalTimeRecipe;
         this.difficultLevel = difficultLevel;
         this.ingredients = ingredients;
-        this.recipeInstructions = recipeInstructions;
+        this.recipeInstructionsStr = recipeInstructionsStr;
         this.recipeImg = recipeImg;
     }
 
@@ -39,11 +47,19 @@ public class Recipe implements Serializable {
         return name;
     }
 
-    public String getTimeOfWorkNeeded() {
+    public List<Instruction> getRecipeInstructions() {
+        return recipeInstructions;
+    }
+
+    public double getTimeOfWorkNeeded() {
         return timeOfWorkNeeded;
     }
-    public String getTotalTimeRecipe() {
-        return totalTimeRecipe;
+
+    public String getTimeOfWorkNeededStr() {
+        return timeOfWorkNeededStr;
+    }
+    public String getTotalTimeRecipeStr() {
+        return totalTimeRecipeStr;
     }
 
     public String getDifficultLevel() {
@@ -54,8 +70,8 @@ public class Recipe implements Serializable {
         return ingredients;
     }
 
-    public List<String> getRecipeInstructions() {
-         return recipeInstructions;
+    public List<String> getRecipeInstructionsStr() {
+         return recipeInstructionsStr;
     }
     public Bitmap getRecipeImg() { return recipeImg; }
 
@@ -63,11 +79,11 @@ public class Recipe implements Serializable {
     public String toString() {
         return "Recipe{" +
                 "name='" + name + '\'' +
-                ", timeOfWorkNeeded='" + timeOfWorkNeeded + '\'' +
-                ", totalTimeRecipe='" + totalTimeRecipe + '\'' +
+                ", timeOfWorkNeeded='" + timeOfWorkNeededStr + '\'' +
+                ", totalTimeRecipe='" + totalTimeRecipeStr + '\'' +
                 ", difficultLevel='" + difficultLevel + '\'' +
                 ", ingredients=" + ingredients +
-                ", recipeInstructions=" + recipeInstructions +
+                ", recipeInstructions=" + recipeInstructionsStr +
                 '}';
     }
 }

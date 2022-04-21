@@ -18,14 +18,6 @@ public class Instruction implements Serializable {
         this.isSelected=false;
     }
 
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
     public String getContent() { return content; }
 
     public void setContent(String content) { this.content = content; }
