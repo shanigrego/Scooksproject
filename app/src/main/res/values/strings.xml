@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Scook\'s project</string>
+    <string name="meal_recipe_my_meal_header">הארוחה שלי</string>
+    <string name="meal_recipe_start_meal">התחל ארוחה</string>
+    <string name="ingredients">מצרכים</string>
+    <string name="recipe_instructions">הוראות הכנה</string>
 </resources>

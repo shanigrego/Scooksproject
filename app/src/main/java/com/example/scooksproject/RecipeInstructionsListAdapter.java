@@ -23,11 +23,13 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
     private List<String> items;
     private TextView stepNum;
     private ImageView removeBtn;
+    private boolean viewOnly;
 
-    public RecipeInstructionsListAdapter(@NonNull Context context, List<String> items) {
+    public RecipeInstructionsListAdapter(@NonNull Context context, List<String> items, boolean viewOnly) {
         super(context, R.layout.recipe_instructions_single_item, items);
         this.context = context;
         this.items = items;
+        this.viewOnly = viewOnly;
     }
 
 
@@ -42,24 +44,26 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
             stepNum = convertView.findViewById(R.id.stepNum);
             removeBtn = convertView.findViewById(R.id.removeRecipeStep);
 
+            //Step Number initialization
             stepNum.setText(Integer.toString(position + 1));
-            txtDetails.setText(items.get(position));
-            if(position != items.size() - 1){
-                    removeBtn.setVisibility(View.INVISIBLE);
+
+            //Remove Button initialization
+            removeBtn.setOnClickListener(v -> RecipeInstructionsFragment.removeItem(position));
+            if(position != items.size() - 1)
+                removeBtn.setVisibility(View.INVISIBLE);
+
+            if(viewOnly){
+                removeBtn.setVisibility(View.INVISIBLE);
+                txtDetails.setEnabled(false);
+                txtDetails.setTextColor(context.getResources().getColor(R.color.black));
             }
-            removeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RecipeInstructionsFragment.removeItem(position);
-                 }
-            });
+
+            //Instruction Details initialization
+            txtDetails.setText(items.get(position));
             txtDetails.setHint(" הזן את מהלך שלב " + (position + 1) + "\n בהכנת המתכון ");
-            txtDetails.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus) {
-                        items.set(position, txtDetails.getText().toString());
-                    }
+            txtDetails.setOnFocusChangeListener((v, hasFocus) -> {
+                if(!hasFocus) {
+                    items.set(position, txtDetails.getText().toString());
                 }
             });
         }

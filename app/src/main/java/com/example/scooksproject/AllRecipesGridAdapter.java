@@ -23,13 +23,16 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     private List<Recipe> allRecipes;
     private boolean isFav;
     private List<Recipe> favouriteRecipesList;
+    private List<Recipe> chosenRecipes;
     private Recipe currentRecipe;
+    private ImageView chefIconUnChosen;
+    private ImageView chefIconChosen;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
         this.allRecipes = allRecipes;
         favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", context.getFilesDir());
-
+        chosenRecipes = MealRecipesFragment.getChosenRecipes();
     }
 
     @Override
@@ -58,14 +61,26 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+            chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
+            chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
             currentRecipe = allRecipes.get(position);
             isFav = isFavourite() == null ? false : true;
 
+
+
+
+            //Chef Icon initialization
+            if(isChosenForMeal())
+                toggleChosenForMeal(true, false);
+            chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true));
+            chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false));
+
+            //Favourites Button initialization
             if (isFavourite() != null)
                 setFavouriteBtnColor(R.color.pink, favouritesBtn);
+
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
                 int color;
-
                 @Override
                 public void onClick(View v) {
                     isFav = !isFav;
@@ -79,6 +94,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
                     setFavouriteBtnColor(color, favouritesBtn);
                 }
             });
+
             recipeImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -113,5 +129,29 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return null;
     }
 
+    private boolean isChosenForMeal(){
+        for (Recipe recipe :
+                chosenRecipes) {
+            if (currentRecipe.getName().equals(recipe.getName()))
+                return true;
+        }
+        return false;
+    }
 
+    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes){
+        if(isChosen){
+            if(addToChosenRecipes) {
+                chosenRecipes.add(currentRecipe);
+               // MealRecipesFragment.addRecipe(currentRecipe);
+            }
+            chefIconUnChosen.setVisibility(View.INVISIBLE);
+            chefIconChosen.setVisibility(View.VISIBLE);
+        }
+        else{
+            chosenRecipes.remove(currentRecipe);
+
+            chefIconUnChosen.setVisibility(View.VISIBLE);
+            chefIconChosen.setVisibility(View.INVISIBLE);
+        }
+    }
 }

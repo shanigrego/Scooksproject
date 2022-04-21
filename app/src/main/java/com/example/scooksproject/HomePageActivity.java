@@ -43,18 +43,14 @@ public class HomePageActivity extends AppCompatActivity {
         return chefButton;
     }
 
-    public static LinearLayout getScrollView() {
-        return scrollView;
-    }
-
-    public static void HideBottomNavigationBar(){
+    public static void HideBottomNavigationBar() {
         bottomAppBar.setVisibility(View.INVISIBLE);
         chefButton.setVisibility(View.INVISIBLE);
         bottomNavigationView.setVisibility(View.INVISIBLE);
         scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    public static void ShowBottomNavigationBar(){
+    public static void ShowBottomNavigationBar() {
         bottomAppBar.setVisibility(View.VISIBLE);
         chefButton.setVisibility(View.VISIBLE);
         bottomNavigationView.setVisibility(View.VISIBLE);
@@ -68,28 +64,31 @@ public class HomePageActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBar);
         chefButton = findViewById(R.id.chefButton);
         bottomNavigationView.setBackground(null);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
-                switch (item.getItemId()) {
-                    case (R.id.recipeBookIcon):
-                        fragment = new RecipeBookFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-                        break;
-                    case (R.id.groceryList):
-                        fragment = new GroceriesListFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-                        break;
-                    case (R.id.favouritesNavBtn):
-                        fragment = new FavouritesFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-                        break;
-                    default:
-                        break;
-                }
-                return true;
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment fragment;
+            switch (item.getItemId()) {
+                case (R.id.recipeBookIcon):
+                    fragment = new RecipeBookFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                    break;
+                case (R.id.groceryList):
+                    fragment = new GroceriesListFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                    break;
+                case (R.id.favouritesNavBtn):
+                    fragment = new FavouritesFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+                    break;
+                default:
+                    break;
             }
+            return true;
+        });
+
+        chefButton.setOnClickListener(btn -> {
+            Fragment fragment = new MealRecipesFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
         });
     }
 }

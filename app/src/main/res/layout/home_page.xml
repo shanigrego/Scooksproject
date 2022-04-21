@@ -44,8 +44,8 @@
         android:id="@+id/chefButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icons_chef"
-        app:maxImageSize="50dp"
+        android:src="@drawable/chef"
+        app:maxImageSize="33.5dp"
         android:backgroundTint="@color/white"
         app:layout_anchor="@id/bottomAppBar"/>
 

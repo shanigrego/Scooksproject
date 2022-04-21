@@ -66,6 +66,6 @@ public class RecipeDetailsFragment extends Fragment {
         makingTime = view.findViewById(R.id.makingTimeTV);
         backBtn = view.findViewById(R.id.recipeDetailsBackBtn);
         ingredientsListAdapter = new IngredientListViewAdapter(getContext(), currentRecipe.getIngredients(), true);
-        instructionsListAdapter = new RecipeInstructionsListAdapter(getContext(), currentRecipe.getRecipeInstructionsStr());
+        instructionsListAdapter = new RecipeInstructionsListAdapter(getContext(), currentRecipe.getRecipeInstructionsStr(),true);
     }
 }

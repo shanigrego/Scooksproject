@@ -45,23 +45,19 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
             EditText amountIngredient = convertView.findViewById(R.id.amountIngredient);
             ImageView removeIngredient = convertView.findViewById(R.id.removeIngredient);
             Button measureUnit = convertView.findViewById(R.id.measureUnitIngredient);
-            if(viewOnly == true)
-                setButtonsForViewOnly(amountIngredient, measureUnit, removeIngredient);
+
+            if (viewOnly)
+                setButtonsForViewOnly(amountIngredient, measureUnit, removeIngredient, ingredientName);
 
             //Amount Ingredient initialization
             String amount = String.valueOf(ingredients.get(position).getAmount());
-            if(!amount.equals("0.0"))
+            if (!amount.equals("0.0"))
                 amountIngredient.setText(String.valueOf(ingredients.get(position).getAmount()));
             else
                 amountIngredient.setHint("0");
 
             //Remove Button initialization
-            removeIngredient.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    IngredientsFragment.removeItem(position);
-                }
-            });
+            removeIngredient.setOnClickListener(v -> IngredientsFragment.removeItem(position));
 
             //Ingredient Name initialization
             ingredientName.setText(ingredients.get(position).getName());
@@ -73,42 +69,41 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
             measureUnit = convertView.findViewById(R.id.measureUnitIngredient);
             measureUnit.setText(ingredients.get(position).getMeasureUnit());
             Button finalMeasureUnit = measureUnit;
-            measureUnit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PopupMenu popupMenu = new PopupMenu(getContext(), v);
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            String measureUnitChosen;
-                            switch (item.getItemId()) {
-                                case R.id.gram:
-                                    measureUnitChosen = "גרם";
-                                    break;
-                                case R.id.cups:
-                                    measureUnitChosen = "כוסות";
-                                    break;
-                                default:
-                                    measureUnitChosen = "כפיות";
-                                    break;
-                            }
-                            finalMeasureUnit.setText(measureUnitChosen);
-                            ingredients.get(position).setMeasureUnit(measureUnitChosen);
-                            return true;
-                        }
-                    });
-                    popupMenu.inflate(R.menu.popup_menu_amount);
-                    popupMenu.show();
-                }
+
+            measureUnit.setOnClickListener(v -> {
+                if (viewOnly)
+                    return;
+
+                PopupMenu popupMenu = new PopupMenu(getContext(), v);
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    String measureUnitChosen;
+                    switch (item.getItemId()) {
+                        case R.id.gram:
+                            measureUnitChosen = "גרם";
+                            break;
+                        case R.id.cups:
+                            measureUnitChosen = "כוסות";
+                            break;
+                        default:
+                            measureUnitChosen = "כפיות";
+                            break;
+                    }
+                    finalMeasureUnit.setText(measureUnitChosen);
+                    ingredients.get(position).setMeasureUnit(measureUnitChosen);
+                    return true;
+                });
+                popupMenu.inflate(R.menu.popup_menu_amount);
+                popupMenu.show();
             });
         }
         return convertView;
     }
 
-    private void setButtonsForViewOnly(EditText amountIngredient, Button measureUnit, ImageView removeIngredient) {
+    private void setButtonsForViewOnly(EditText amountIngredient, Button measureUnit, ImageView removeIngredient, EditText ingredientName) {
         amountIngredient.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
         measureUnit.setBackgroundResource(android.R.color.transparent);
         removeIngredient.setVisibility(View.INVISIBLE);
+        ingredientName.setEnabled(false);
     }
 
     @Override

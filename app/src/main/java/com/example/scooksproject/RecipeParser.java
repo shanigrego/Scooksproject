@@ -59,7 +59,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
 
         Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-recipes/recipes_column-cakes/Recipe-c295510002adf71026.htm?sCh=131539cdf3178110&pId=25483675");
-        String recipeName = doc.title();
+        String recipeName = doc.title().split(":")[1];
+//        String recipeName = doc.getElementsByClass("miniHeaderNew not_for_print");
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 
         Elements titleContainer = doc.getElementsByClass("titleContainer");

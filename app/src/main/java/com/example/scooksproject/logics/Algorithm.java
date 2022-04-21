@@ -100,7 +100,7 @@ public class Algorithm {
         for (int i=0; i< splitContent.length;i++) {
             part=splitContent[i];
             for (String timeUnit:timeUnitList) {
-                if(part.equals(timeUnit))
+                if(part.contains(timeUnit))
                 {
                   freeTimeWork+=getTimeInstruction(splitContent,i,part);
                 }

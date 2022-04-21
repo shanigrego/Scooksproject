@@ -4,31 +4,31 @@
 
     <item
         android:id="@+id/groceryList"
+        android:icon="@drawable/grocery_list"
         android:title="רשימת קניות"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/grocery_list"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/favouritesNavBtn"
+        android:icon="@drawable/favourites"
         android:title="מועדפים"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/favourites"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/holder"
         android:title=""
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/recipeBookIcon"
+        android:icon="@drawable/recipe_book"
         android:title="ספר מתכונים"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/recipe_book"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/home"
+        android:icon="@drawable/home"
         android:title="בית"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/home"/>
+        app:showAsAction="ifRoom" />
 
 </menu>
