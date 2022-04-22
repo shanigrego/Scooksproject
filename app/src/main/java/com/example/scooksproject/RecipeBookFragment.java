@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class RecipeBookFragment extends Fragment {
     private AllRecipesGridAdapter filteredAdapter;
     private ArrayList<Recipe> allRecipes;
     private EditText searchET;
-    ArrayList<Recipe> filteredItems;
+    private ArrayList<Recipe> filteredItems;
 
     @Nullable
     @Override
@@ -47,7 +48,9 @@ public class RecipeBookFragment extends Fragment {
         return view;
     }
 
-    void initComponents(){
+
+
+    private void initComponents(){
 
         myRecpiesButton.setOnClickListener(new View.OnClickListener() {
             Fragment fragment = new MyRecipiesFragment();

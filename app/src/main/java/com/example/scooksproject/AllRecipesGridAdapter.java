@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
@@ -61,16 +63,15 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+
             chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
             chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
             currentRecipe = allRecipes.get(position);
             isFav = isFavourite() == null ? false : true;
 
 
-
-
             //Chef Icon initialization
-            if(isChosenForMeal())
+            if (isChosenForMeal())
                 toggleChosenForMeal(true, false);
             chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true));
             chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false));
@@ -81,6 +82,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
 
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
                 int color;
+
                 @Override
                 public void onClick(View v) {
                     isFav = !isFav;
@@ -129,7 +131,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return null;
     }
 
-    private boolean isChosenForMeal(){
+    private boolean isChosenForMeal() {
         for (Recipe recipe :
                 chosenRecipes) {
             if (currentRecipe.getName().equals(recipe.getName()))
@@ -138,20 +140,30 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return false;
     }
 
-    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes){
-        if(isChosen){
-            if(addToChosenRecipes) {
-                chosenRecipes.add(currentRecipe);
-               // MealRecipesFragment.addRecipe(currentRecipe);
-            }
+    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes) {
+        if (isChosen) {
+            if (addToChosenRecipes)
+                MealRecipesFragment.addRecipe(currentRecipe);
             chefIconUnChosen.setVisibility(View.INVISIBLE);
             chefIconChosen.setVisibility(View.VISIBLE);
-        }
-        else{
-            chosenRecipes.remove(currentRecipe);
-
+        } else {
+            MealRecipesFragment.removeRecipe(currentRecipe);
             chefIconUnChosen.setVisibility(View.VISIBLE);
             chefIconChosen.setVisibility(View.INVISIBLE);
+            HomePageActivity.showSnackBar();
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        if (getCount() > 0)
+            return getCount();
+        else
+            return super.getViewTypeCount();
     }
 }

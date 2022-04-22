@@ -11,6 +11,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,8 @@ public class HomePageActivity extends AppCompatActivity {
     private static LinearLayout scrollView;
     private static com.google.android.material.bottomappbar.BottomAppBar bottomAppBar;
     private static com.google.android.material.floatingactionbutton.FloatingActionButton chefButton;
+    private static View snackBarView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +60,11 @@ public class HomePageActivity extends AppCompatActivity {
         scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     }
 
+    public static void showSnackBar(){
+        Snackbar.make(snackBarView, "הוסר מתכון", Snackbar.LENGTH_LONG).setAction("ביטול", item -> {
+            //TODO
+        }).show();
+    }
 
     private void initComponents() {
         scrollView = findViewById(R.id.scrollViewLinearLayout);
@@ -64,6 +72,7 @@ public class HomePageActivity extends AppCompatActivity {
         bottomAppBar = findViewById(R.id.bottomAppBar);
         chefButton = findViewById(R.id.chefButton);
         bottomNavigationView.setBackground(null);
+        snackBarView = findViewById(android.R.id.content);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment fragment;

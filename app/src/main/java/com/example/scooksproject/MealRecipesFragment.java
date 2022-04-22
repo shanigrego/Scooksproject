@@ -21,9 +21,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MealRecipesFragment extends Fragment {
 
-    private GridView gridView;
+    private static GridView gridView;
     private MaterialButton startMealBtn;
-    private AllRecipesGridAdapter adapter;
+    private static AllRecipesGridAdapter adapter;
     private static List<Recipe> chosenRecipes;
 
     public static List<Recipe> getChosenRecipes() {
@@ -144,5 +144,13 @@ public class MealRecipesFragment extends Fragment {
 
     public static void addRecipe(Recipe recipe){
         chosenRecipes.add(recipe);
+        if(adapter != null)
+            gridView.setAdapter(adapter);
+    }
+
+    public static void removeRecipe(Recipe recipe){
+        chosenRecipes.remove(recipe);
+        if(adapter != null)
+            gridView.setAdapter(adapter);
     }
 }
