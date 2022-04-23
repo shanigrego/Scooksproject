@@ -25,6 +25,7 @@ import java.util.Set;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.scooksproject.Exceptions.NoNumberBeforeHoursException;
 import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
 
 
@@ -53,31 +54,43 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return allRecipes;
     }
 
-    public static void uploadRecipe() {
+    public static void uploadRecipe(Recipe recipe) {
         DataBase db = DataBase.getInstance();
-        db.uploadRecipe(allRecipes.get(0));
+        db.uploadRecipe(recipe);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
 
-        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
+        Recipe recipe= null;
+        try {
+            recipe = getRecipeFromUrl("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
+        } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
+            e.printStackTrace();
+        }
+        allRecipes.add(recipe);
+        uploadRecipe(recipe);
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Recipe getRecipeFromUrl(String urlRecipe) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
+        Document doc = getDocumentAccordingToUrl(urlRecipe);
         String recipeName = doc.title().split(":")[1];
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
-
         Elements titleContainer = doc.getElementsByClass("titleContainer");
 
         String workTimeStr =titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String preparationTimeStr = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+
         Elements image=doc.getElementsByClass("imgInside");
         String urlString= image.get(0).childNode(1).attributes().get("src");
-        URL url = null;
+        URL urlImg = null;
         Bitmap bmp = null;
         try {
-            url = new URL(urlString);
-            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            urlImg = new URL(urlString);
+            bmp = BitmapFactory.decodeStream(urlImg.openConnection().getInputStream());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -86,18 +99,12 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
         List<String> recipeInstructionsStr = getRecipeInstructions(doc);
         int workTime=getTimeOfWork(workTimeStr);
-        List<Instruction> recipeInstructionList = null;
-        try {
-            recipeInstructionList = convertListStringToInstructionList(recipeInstructionsStr,workTime);
-        } catch (NoNumberBeforeMinutesException e) {
-            e.printStackTrace();
-        }
+        List<Instruction> recipeInstructionList = convertListStringToInstructionList(recipeInstructionsStr,workTime);
         int totalFreeTime=getFreeTime(recipeInstructionList);
         int preparationTime=getPreparationTime(recipeInstructionList);
+
         Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr/*, bmp*/,recipeInstructionList,workTime,totalFreeTime,preparationTime);
-        allRecipes.add(recipe);
-        uploadRecipe();
-        return null;
+        return recipe;
     }
 
     public static int getPreparationTime(List<Instruction> recipeInstructionList) {
@@ -126,6 +133,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return instructionsList;
     }
 
+
     private List<Ingredient> createIngredientListFromDoc(Document doc) {
         Elements ingredients = doc.getElementsByClass("ingredients");
         Element ingred = ingredients.get(0);
@@ -147,7 +155,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return createIngredientList(listOfIngredientsString);
     }
 
-    private Document getRecipeAccordingToUrl(String url) {
+    private Document getDocumentAccordingToUrl(String url) {
         Document doc = null;
         try {
             doc = Jsoup.connect(url).get();
@@ -172,7 +180,6 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         String measureUnit = "", name = "";
         int i = 0;
         Set<String> measureUnitDict = createMeasureUnitDict();
-        //Set<String> measureAmount = createMeasureAmountDict();
         Dictionary<String, Double> amountStrToDoubleDict = createAmountToDoubleDict();
         String[] arraySplit = ingredientAsString.split(" ");
         amount+=handleCharBetweenNumbers(arraySplit[0]);
@@ -180,20 +187,19 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         {
             i++;
         }
-        if (isAllNumbers(arraySplit[i]) || arraySplit[i].charAt(0) == '½') {
-            if (arraySplit[i].charAt(0) == '½')
-                amount = 0.5;
-            else
-                amount = Double.parseDouble(arraySplit[i]);
+        if (isAllNumbers(arraySplit[i]))
+        {
+            amount = Double.parseDouble(arraySplit[i]);
             i++;
-        } else {
+        }
+        else {
             while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
                 amount += amountStrToDoubleDict.get(arraySplit[i]);
                 i++;
             }
         }
 
-        while (measureUnitDict.contains(arraySplit[i]) || (arraySplit[i].contains("מ")&& arraySplit[i].contains("ל"))) {
+        while ((measureUnitDict.contains(arraySplit[i]) || (arraySplit[i].contains("מ")&& arraySplit[i].contains("ל")))&& (i< arraySplit.length)) {
 
             if(measureUnitDict.contains(arraySplit[i]))
             {
@@ -207,7 +213,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
             else
                 break;
         }
-        while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
+        while (amountStrToDoubleDict.get(arraySplit[i]) != null && i< arraySplit.length) {
             amount += amountStrToDoubleDict.get(arraySplit[i]);
             i++;
         }
@@ -217,7 +223,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         for (; i < arraySplit.length; i++) {
             if (arraySplit[i].contains("(")) {
                 while (i < arraySplit.length && !arraySplit[i].contains(")"))
-                    i++;
+                       i++;
                 i++;
             }
             if (i < arraySplit.length)
@@ -241,22 +247,6 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
         return dict;
     }
-
-
-
-    private Set<String> createMeasureAmountDict() {
-        Set<String> DictionaryUnitOfMeasure = new HashSet<>();
-        //List<String> DictionaryUnitOfMeasure= new LinkedList<>();
-        DictionaryUnitOfMeasure.add("חצי");
-        DictionaryUnitOfMeasure.add("רבע");
-        DictionaryUnitOfMeasure.add("שלושת");
-        DictionaryUnitOfMeasure.add("רבעי");
-        DictionaryUnitOfMeasure.add("אחד");
-        DictionaryUnitOfMeasure.add("וחצי");
-        DictionaryUnitOfMeasure.add("ושלושת");
-        return DictionaryUnitOfMeasure;
-    }
-
     private static boolean isNumber(char ch) {
         boolean res = false;
         if (ch >= '0' && ch <= '9') {
@@ -291,7 +281,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
     }
 
 
-    public static List<Instruction> convertListStringToInstructionList(List<String> recipeInstructionsStr, int timeWorkNeeded) throws NoNumberBeforeMinutesException {
+    public static List<Instruction> convertListStringToInstructionList(List<String> recipeInstructionsStr, int timeWorkNeeded) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
 
         List<Instruction> list = new LinkedList<>();
 
@@ -304,7 +294,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return list;
     }
 
-    private static Instruction getInstructionFromStr(String content,int instructionWorkTime) throws NoNumberBeforeMinutesException {
+    private static Instruction getInstructionFromStr(String content,int instructionWorkTime) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
 
         List<String> timeUnitList=createTimeUnitList();
         String[] splitContent=content.split(" ");
@@ -355,10 +345,9 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
     }
     static int[] arr=new int[4];
 
-    private static void setTimeInstructionInArr(String[] splitContent, int i, String part) throws NoNumberBeforeMinutesException {
+    private static void setTimeInstructionInArr(String[] splitContent, int i, String part) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
 
       int freeTime=0;
-      //TODO create defualt dict
         Dictionary<String,Integer> dict=createTimeInstructionDict();
         String str=null,strAfter=null;
         switch (part) {
@@ -390,26 +379,31 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 }
                 arr[0] = Math.max(arr[0], freeTime);
                 freeTime = arr[0];
-
                 break;
             case "שעות":
                 // ואחרי לפני
                 str = splitContent[i - 1];
-
                 str = handlePrefix(str);
-                if (isAllNumbers(str)) {
-                    freeTime = Integer.parseInt(str) * 60;
+                freeTime = handleCharBetweenNumbers(str);
+                if(freeTime==0) {
+                    if (isAllNumbers(str)) {
+                        freeTime = Integer.parseInt(str) * 60;
+                    }
                 }
-
                 if (i + 1 < splitContent.length) {
                     strAfter = splitContent[i + 1];
-                    if (strAfter.charAt(0) == 'ו') {
+                    if (strAfter.charAt(0) == 'ו')
+                    {
                         strAfter = strAfter.substring(1);
                         if (strAfter.charAt(0) == '-')
                             strAfter = strAfter.substring(1);
                         if (dict.get(strAfter)!=null)
                             freeTime += dict.get(strAfter);
                     }
+                }
+                if(freeTime==0)
+                {
+                    throw new NoNumberBeforeHoursException();
                 }
 
                 arr[1] = Math.max(arr[1], freeTime);
@@ -418,7 +412,9 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 //גם לפני
                 str = splitContent[i - 1];
                 str = handlePrefix(str);
-                freeTime = dict.get(str);
+                if(dict.get(str)!=null) {
+                    freeTime = dict.get(str);
+                }
                 if (str.equals("רבע") && i > 2 && splitContent[i - 2].equals("שלושת")) {
                     freeTime += 45;
                 }
@@ -432,6 +428,10 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                         if (dict.get(strAfter)!=null)
                             freeTime += dict.get(strAfter)+60;
                      }
+                }
+                if(freeTime==0)
+                {
+                    freeTime=60;
                 }
                 arr[2] = Math.max(arr[2], freeTime);
                 break;
