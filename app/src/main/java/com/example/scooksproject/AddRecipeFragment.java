@@ -65,13 +65,17 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         String recipeNameStr = recipeName.getText().toString();
         if (!checkRecipeName(recipeNameStr))
             return;
-        String preperationTime = preperationTimeBtn.getText().toString();
-        String totalTime = makingTimeBtn.getText().toString();
+        String preperationTimeStr= preperationTimeBtn.getText().toString();
+        String preparationTimeStr = makingTimeBtn.getText().toString();
         String difficulty = levelBtn.getText().toString();
-        List<String> recipeInstructions = RecipeInstructionsFragment.getItems();
+        List<String> recipeInstructionsStr = RecipeInstructionsFragment.getItems();
         List<Ingredient> ingredients = IngredientsFragment.getIngredients();
+        int workTime=RecipeParser.getTimeOfWork(preperationTimeStr);
+        List<Instruction> recipeInstructions=RecipeParser.convertListStringToInstructionList(recipeInstructionsStr,workTime);
+        int totalFreeTime=RecipeParser.getFreeTime(recipeInstructions);
+        int preparationTime=RecipeParser.getPreparationTime(recipeInstructions);
 
-        Recipe recipe = new Recipe(recipeNameStr, preperationTime, totalTime, difficulty, ingredients, recipeInstructions/*, null*/);
+        Recipe recipe = new Recipe(recipeNameStr, preperationTimeStr, preparationTimeStr, difficulty, ingredients, recipeInstructionsStr/*, null*/,recipeInstructions,workTime,totalFreeTime,preparationTime);
         //DataBase.getInstance().uploadRecipe(recipe);
         StorageManager.WriteToFile("MyOwnRecipes.txt",recipe,getContext().getFilesDir(), true);
     }
