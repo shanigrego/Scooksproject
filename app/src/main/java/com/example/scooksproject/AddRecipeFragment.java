@@ -35,6 +35,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.scooksproject.Exceptions.NoNumberBeforeHoursException;
 import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
 
 public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
@@ -76,7 +77,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         List<Instruction> recipeInstructions= null;
         try {
             recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr,workTime);
-        } catch (NoNumberBeforeMinutesException e) {
+        } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
             Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         int totalFreeTime=RecipeParser.getFreeTime(recipeInstructions);
