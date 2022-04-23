@@ -8,6 +8,7 @@ import com.google.android.gms.common.internal.constants.ListAppsActivityContract
 
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,14 +86,8 @@ public class Algorithm {
         return dict;
     }
     private static String getTotalTimeAllRecipes( List<Instruction> instructionList) {
-        int totalTimeAllRecipes=0,hours,minutes;
 
-        for (Instruction inst:instructionList) {
-            totalTimeAllRecipes+=inst.getFreeTime()+inst.getWorkTime();
-        }
-        hours=totalTimeAllRecipes/60;
-        minutes=totalTimeAllRecipes-(hours*60);
-        return convertTimeToString(hours,minutes);
+        return null;
     }
 
     private static String convertTimeToString(int hours, int minutes) {
@@ -132,15 +127,17 @@ public class Algorithm {
     private static List<Instruction> runAlgorithm(List<Recipe> notUsedRecipeList)
     {
         List<Instruction> resInstructionList=new LinkedList<>();
-      while(notUsedRecipeList.size()!=1)
+      while(notUsedRecipeList.size()>1)
       {
           Recipe root=getMaxFreeTimeRecipe(notUsedRecipeList);
           handleAllInstructions(root.getRecipeInstructions(),notUsedRecipeList,resInstructionList);
           notUsedRecipeList.remove(root);
       }
-        resInstructionList.addAll(notUsedRecipeList.get(0).getRecipeInstructions());
-        notUsedRecipeList.remove(notUsedRecipeList.get(0));
-    return resInstructionList;
+      if(notUsedRecipeList.size()==1) {
+          resInstructionList.addAll(notUsedRecipeList.get(0).getRecipeInstructions());
+          notUsedRecipeList.remove(notUsedRecipeList.get(0));
+      }
+      return resInstructionList;
     }
     //הפונקציה שעוברת על כל ההורואת הנחה ומפעילה את המעטפת על הההורואת עם זמן המתנה
     public static void handleAllInstructions(List<Instruction> instructionList,List<Recipe> notUsedRecipeList,List<Instruction> resInstruction)

@@ -7,15 +7,19 @@ public class Instruction implements Serializable {
     private String content;
     private int workTime;
     private int freeTime;
-    private boolean isSelected;
+    private int index;
 
     public Instruction() { }
 
-    public Instruction(String content, int workTime, int freeTime) {
+    public Instruction(int index,String content, int workTime, int freeTime) {
         this.content = content;
         this.workTime = workTime;
         this.freeTime = freeTime;
-        this.isSelected=false;
+        this.index=index;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public String getContent() { return content; }

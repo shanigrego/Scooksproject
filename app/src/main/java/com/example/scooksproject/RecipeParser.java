@@ -35,11 +35,10 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     //call this function from other classes
     public void parseAllRecipes() {
-       // parseSingleRecipe("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704");
-        //parseSingleRecipe("https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink");
-        parseSingleRecipe("https://www.wikipedia.org/");
-//        parseSingleRecipe("https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm");
-  //      parseSingleRecipe("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
+        execute("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704"
+        ,"https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink"
+      ,"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm"
+       ,"https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
     }
 
     //parse a single recipe
@@ -62,14 +61,16 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
 
-        Recipe recipe= null;
-        try {
-            recipe = getRecipeFromUrl("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
-        } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
-            e.printStackTrace();
+        for (String url:urls) {
+            Recipe recipe= null;
+            try {
+                recipe = getRecipeFromUrl(url);
+            } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
+                e.printStackTrace();
+            }
+            allRecipes.add(recipe);
+            uploadRecipe(recipe);
         }
-        allRecipes.add(recipe);
-        uploadRecipe(recipe);
         return null;
     }
 
@@ -124,11 +125,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         recipeInstructions.removeIf(element -> !element.childNodes().get(0).toString().contains("small"));
 
         List<String> instructionsList = new LinkedList<>();
-        for (Element element :
-                recipeInstructions) {
-            String a = element.childNodes().get(0).childNodes().get(0).toString();
-            String b = element.childNodes().get(1).toString();
-            instructionsList.add(a + ". " + b);
+        for (Element element : recipeInstructions) {
+            instructionsList.add(element.childNodes().get(1).toString());
         }
         return instructionsList;
     }
@@ -286,15 +284,15 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         List<Instruction> list = new LinkedList<>();
 
         int instructionWorkTime = timeWorkNeeded / recipeInstructionsStr.size();
-        for (String content : recipeInstructionsStr) {
+        for (int i=0; i<recipeInstructionsStr.size(); i++) {
 
-            list.add(getInstructionFromStr(content,instructionWorkTime));
+            list.add(getInstructionFromStr(recipeInstructionsStr.get(i),instructionWorkTime,i+1));
         }
 
         return list;
     }
 
-    private static Instruction getInstructionFromStr(String content,int instructionWorkTime) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
+    private static Instruction getInstructionFromStr(String content,int instructionWorkTime,int index) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
 
         List<String> timeUnitList=createTimeUnitList();
         String[] splitContent=content.split(" ");
@@ -320,7 +318,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         if(freeTimeWork<10)
             freeTimeWork=0;
 
-        return new Instruction(content,instructionWorkTime,freeTimeWork);
+
+        return new Instruction(index,content,instructionWorkTime,freeTimeWork);
     }
 
     private static String handlePrefix(String str)
@@ -359,6 +358,10 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 if (freeTime == 0) {
                     if (isAllNumbers(str)) {
                         freeTime = Integer.parseInt(str);
+                    }
+                    else if(dict.get(str)!=null)
+                    {
+                        freeTime+= dict.get(str);
                     }
                     else if (str.charAt(0) == 'ו') {
                         str = str.substring(1);
@@ -502,6 +505,11 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
         dict.put("חצי",30);
         dict.put("כמה",0);
+        dict.put("כחמש",5);
+        dict.put("כעשר",5);
+        dict.put("עשר",5);
+
+
         dict.put("שלושת רבע",45);
         dict.put("רבע",15);
         dict.put("שלושים",30);
