@@ -1,5 +1,6 @@
 package com.example.scooksproject;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +23,12 @@ import androidx.fragment.app.Fragment;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private Button recipeBookBtn;
     private static BottomNavigationView bottomNavigationView;
+    @SuppressLint("StaticFieldLeak")
     private static LinearLayout scrollView;
     private static com.google.android.material.bottomappbar.BottomAppBar bottomAppBar;
     private static com.google.android.material.floatingactionbutton.FloatingActionButton chefButton;
+    @SuppressLint("StaticFieldLeak")
     private static View snackBarView;
 
 
