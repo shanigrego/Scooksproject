@@ -2,6 +2,7 @@ package com.example.scooksproject.logics;
 
 import com.example.scooksproject.Ingredient;
 import com.example.scooksproject.Instruction;
+import com.example.scooksproject.R;
 import com.example.scooksproject.Recipe;
 import com.google.android.gms.common.internal.constants.ListAppsActivityContract;
 
@@ -22,15 +23,112 @@ public class Algorithm {
     {
 
         Recipe resRecipe=null;
-        List<Ingredient> ingredientList=getIngredientsFromAllRecipe(recipeList);
-
         List<Recipe> notUsedRecipesList=new LinkedList<>(recipeList);
         List<Instruction> instructionList=runAlgorithm(notUsedRecipesList);
-        //Recipe maxFreeTimeRecipe = getMaxFreeTimeRecipe(recipeList);
+        List<Ingredient> ingredientList=getIngredientsFromAllRecipe(recipeList);
+        String timeOfWorkNeeded=getTimeWorkAllRecipes(instructionList);
+        String totalTimeRecipe=getTotalTimeAllRecipes(instructionList);
+        String difficultLevel=getDifficultLevelAllRecipes(recipeList);
+        List<String> instructionListStr=getStrFormInstructionList(instructionList);
 
-        resRecipe=new Recipe();
+        resRecipe=new Recipe("תוכנית עבודה",timeOfWorkNeeded,totalTimeRecipe,difficultLevel,ingredientList,instructionListStr,instructionList,0,0,0);
         return resRecipe;
     }
+
+    private static List<String> getStrFormInstructionList(List<Instruction> instructionList) {
+      List<String> res=new LinkedList<>();
+        for (Instruction instr:instructionList) {
+            res.add(instr.getContent());
+        }
+        return res;
+    }
+
+    private static String getDifficultLevelAllRecipes(List<Recipe> recipeList) {
+        Dictionary<String, Integer> dict=createDifficultLevelDict();
+        Dictionary<Integer, String> opsDict=createDifficultLevelDictOps();
+        int difficultArr[]=new int[recipeList.size()];
+        for (int i=0; i< recipeList.size(); i++) {
+            if(dict.get(recipeList.get(i).getDifficultLevel())!=null)
+               difficultArr[i]=dict.get(recipeList.get(i).getDifficultLevel());
+            else
+                difficultArr[i]=1;
+        }
+        int max=maxInArr(difficultArr);
+
+        return opsDict.get(max);
+    }
+    private static int maxInArr(int arr[])
+    {
+        int max=arr[0];
+        for(int i=0; i<arr.length; i++)
+        {
+            max=Math.max(max,arr[i]);
+        }
+        return max;
+    }
+    private static Dictionary<String,Integer> createDifficultLevelDict() {
+        Dictionary<String, Integer> dict = new Hashtable<>();
+
+        dict.put("כל אחד יכול",1);
+        dict.put("בינוני",2);
+        dict.put("נדרשת מיומנות",3);
+
+        return dict;
+    }
+    private static Dictionary<Integer, String> createDifficultLevelDictOps() {
+        Dictionary<Integer, String> dict = new Hashtable<>();
+
+        dict.put(1,"כל אחד יכול");
+        dict.put(2,"בינוני");
+        dict.put(3,"נדרשת מיומנות");
+
+        return dict;
+    }
+    private static String getTotalTimeAllRecipes( List<Instruction> instructionList) {
+        int totalTimeAllRecipes=0,hours,minutes;
+
+        for (Instruction inst:instructionList) {
+            totalTimeAllRecipes+=inst.getFreeTime()+inst.getWorkTime();
+        }
+        hours=totalTimeAllRecipes/60;
+        minutes=totalTimeAllRecipes-(hours*60);
+        return convertTimeToString(hours,minutes);
+    }
+
+    private static String convertTimeToString(int hours, int minutes) {
+        String res="";
+        switch (hours)
+        {
+            case 0:
+                res+=minutes+" דקות ";
+                break;
+            case 1:
+                res+=" שעה";
+                if(minutes!=0) {
+                    res += " ו- " +minutes+" דקות ";
+                }
+                break;
+            default:
+                res+=hours;
+                res+=" שעות ";
+                if(minutes!=0) {
+                    res += " ו- " +minutes+" דקות ";
+                }
+                break;
+        }
+        return res;
+    }
+
+    private static String getTimeWorkAllRecipes( List<Instruction> instructionList) {
+       int timeWorkAllRecipes=0,hours,minutes;
+        for (Instruction inst:instructionList) {
+            timeWorkAllRecipes+=inst.getWorkTime();
+        }
+        hours=timeWorkAllRecipes/60;
+        minutes=timeWorkAllRecipes-(hours*60);
+        return convertTimeToString(hours,minutes);
+    }
+
     private static List<Instruction> runAlgorithm(List<Recipe> notUsedRecipeList)
     {
         List<Instruction> resInstructionList=new LinkedList<>();

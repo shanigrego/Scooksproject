@@ -52,6 +52,7 @@ public class RecipeBookFragment extends Fragment {
 
     private void initComponents(){
 
+        //My Recipes Button initialization
         myRecpiesButton.setOnClickListener(new View.OnClickListener() {
             Fragment fragment = new MyRecipiesFragment();
             @Override
@@ -60,6 +61,7 @@ public class RecipeBookFragment extends Fragment {
             }
         });
 
+        //Search Bar initialization
         searchET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

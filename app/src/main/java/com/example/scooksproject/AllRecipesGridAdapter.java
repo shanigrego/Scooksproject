@@ -24,11 +24,9 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     private Context context;
     private List<Recipe> allRecipes;
     private boolean isFav;
-    private List<Recipe> favouriteRecipesList;
-    private List<Recipe> chosenRecipes;
-    private Recipe currentRecipe;
-    private ImageView chefIconUnChosen;
-    private ImageView chefIconChosen;
+    private final List<Recipe> favouriteRecipesList;
+    private final List<Recipe> chosenRecipes;
+    //private Recipe currentRecipe;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
@@ -64,20 +62,22 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             recipeName.setText(allRecipes.get(position).getName());
             ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
 
+            ImageView chefIconUnChosen;
+            ImageView chefIconChosen;
             chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
             chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
-            currentRecipe = allRecipes.get(position);
-            isFav = isFavourite() == null ? false : true;
+            Recipe currentRecipe = allRecipes.get(position);
+            isFav = isFavourite(currentRecipe) != null;
 
 
             //Chef Icon initialization
-            if (isChosenForMeal())
-                toggleChosenForMeal(true, false);
-            chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true));
-            chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false));
+            if (isChosenForMeal(currentRecipe))
+                toggleChosenForMeal(true, false, chefIconChosen, chefIconUnChosen, currentRecipe);
+            chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true, chefIconChosen, chefIconUnChosen, currentRecipe));
+            chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false, chefIconChosen, chefIconUnChosen, currentRecipe));
 
             //Favourites Button initialization
-            if (isFavourite() != null)
+            if (isFavourite(currentRecipe) != null)
                 setFavouriteBtnColor(R.color.pink, favouritesBtn);
 
             favouritesBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,31 +86,28 @@ public class AllRecipesGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     isFav = !isFav;
-                    if (isFav == true) {
+                    if (isFav) {
                         color = R.color.pink;
                         StorageManager.WriteToFile("Fav1.txt", allRecipes.get(position), context.getFilesDir(), true);
                     } else {
                         color = R.color.white;
-                        removeRecipeFromFavourites();
+                        removeRecipeFromFavourites(currentRecipe);
                     }
                     setFavouriteBtnColor(color, favouritesBtn);
                 }
             });
 
-            recipeImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
-                    FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
-                }
+            recipeImage.setOnClickListener(v -> {
+                Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
+                FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
             });
         }
         return convertView;
     }
 
-    private void removeRecipeFromFavourites() {
-        favouriteRecipesList.remove(isFavourite());
+    private void removeRecipeFromFavourites(Recipe currentRecipe) {
+        favouriteRecipesList.remove(isFavourite(currentRecipe));
         StorageManager.WriteToFile("Fav1.txt", favouriteRecipesList, context.getFilesDir(), false);
         notifyDataSetChanged();
     }
@@ -122,7 +119,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         );
     }
 
-    private Recipe isFavourite() {
+    private Recipe isFavourite(Recipe currentRecipe) {
         for (Recipe recipe :
                 favouriteRecipesList) {
             if (recipe.getName().equals(currentRecipe.getName()))
@@ -131,7 +128,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return null;
     }
 
-    private boolean isChosenForMeal() {
+    private boolean isChosenForMeal(Recipe currentRecipe) {
         for (Recipe recipe :
                 chosenRecipes) {
             if (currentRecipe.getName().equals(recipe.getName()))
@@ -140,7 +137,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return false;
     }
 
-    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes) {
+    private void toggleChosenForMeal(boolean isChosen, boolean addToChosenRecipes, ImageView chefIconChosen, ImageView chefIconUnChosen, Recipe currentRecipe) {
         if (isChosen) {
             if (addToChosenRecipes)
                 MealRecipesFragment.addRecipe(currentRecipe);
