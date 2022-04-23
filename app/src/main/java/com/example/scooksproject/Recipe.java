@@ -36,20 +36,24 @@ public class Recipe implements Serializable {
         this.totalFreeTime = totalFreeTime;
     }
 
+    public int getTotalFreeTime() {
+        return totalFreeTime;
+    }
+    public int getPreparationTime()
+    {
+        return this.preparationTime;
+    }
+
+    public void setInstructions(List<Instruction> recipeInstructions) {
+        this.recipeInstructions = recipeInstructions;
+    }
+
     public void setPreparationTime(int preparationTime) {
         this.preparationTime = preparationTime;
     }
 
-    public int getTotalFreeTime() {
-        return totalFreeTime;
-    }
-
-    public void setRecipeInstructions(List<Instruction> recipeInstructions) {
-        this.recipeInstructions = recipeInstructions;
-    }
-
     public Recipe(String name, String timeOfWorkNeededStr, String totalTimeRecipe, String difficultLevel,
-                  List<Ingredient> ingredients, List<String> recipeInstructionsStr/*, Bitmap recipeImg*/) {
+                  List<Ingredient> ingredients, List<String> recipeInstructionsStr/*, Bitmap recipeImg*/, List<Instruction> recipeInstructions, int timeOfWorkNeeded, int totalFreeTime, int preparationTime) {
         this.name = name;
         this.timeOfWorkNeededStr = timeOfWorkNeededStr;
         this.totalTimeRecipeStr = totalTimeRecipe;
@@ -57,11 +61,13 @@ public class Recipe implements Serializable {
         this.ingredients = ingredients;
         this.recipeInstructionsStr = recipeInstructionsStr;
         this.recipeImg = recipeImg;
+
+        this.recipeInstructions=recipeInstructions;
+        this.timeOfWorkNeeded=timeOfWorkNeeded;
+        this.totalFreeTime=totalFreeTime;
+        this.preparationTime=preparationTime;
     }
 
-    public int getPreparationTime() {
-        return preparationTime;
-    }
 
     public String getName() {
         return name;

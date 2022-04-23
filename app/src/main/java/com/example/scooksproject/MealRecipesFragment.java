@@ -15,9 +15,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 public class MealRecipesFragment extends Fragment {
 
@@ -67,8 +65,8 @@ public class MealRecipesFragment extends Fragment {
         instructionList1.add(recipe1inst2);
         instructionList1.add(recipe1inst3);
         instructionList1.add(recipe1inst4);
-        Recipe recipe1=new Recipe("recipe 1","20","35","כל אחד יכול",null,null);
-        recipe1.setRecipeInstructions(instructionList1);
+        Recipe recipe1=new Recipe("recipe 1","20","35","כל אחד יכול",null,null,null,0,0,0);
+        recipe1.setInstructions(instructionList1);
         recipe1.setPreparationTime(35);
         recipe1.setTimeOfWorkNeeded(20);
         recipe1.setTotalFreeTime(15);
@@ -78,8 +76,8 @@ public class MealRecipesFragment extends Fragment {
         Instruction recipe2inst2=new Instruction("Recipe 2 Press2",0,10);
         instructionList2.add(recipe2inst1);
         instructionList2.add(recipe2inst2);
-        Recipe recipe2=new Recipe("recipe 2","10","20","כל אחד יכול",null,null);
-        recipe2.setRecipeInstructions(instructionList2);
+        Recipe recipe2=new Recipe("recipe 2","10","20","כל אחד יכול",null,null,null,0,0,0);
+        recipe2.setInstructions(instructionList2);
         recipe2.setPreparationTime(20);
         recipe2.setTimeOfWorkNeeded(10);
         recipe2.setTotalFreeTime(10);
@@ -87,8 +85,8 @@ public class MealRecipesFragment extends Fragment {
         List<Instruction> instructionList3=new LinkedList<>();
         Instruction recipe3inst1=new Instruction("Recipe 3 Press1",20,0);
         instructionList3.add(recipe3inst1);
-        Recipe recipe3=new Recipe("recipe 3","20","20","כל אחד יכול",null,null);
-        recipe3.setRecipeInstructions(instructionList3);
+        Recipe recipe3=new Recipe("recipe 3","20","20","כל אחד יכול",null,null,null,0,0,0);
+        recipe3.setInstructions(instructionList3);
         recipe3.setPreparationTime(20);
         recipe3.setTimeOfWorkNeeded(20);
         recipe3.setTotalFreeTime(0);
@@ -97,8 +95,8 @@ public class MealRecipesFragment extends Fragment {
         List<Instruction> instructionList4=new LinkedList<>();
         Instruction recipe4inst1=new Instruction("Recipe 4 Press1",10,0);
         instructionList4.add(recipe4inst1);
-        Recipe recipe4=new Recipe("recipe 4","10","10","כל אחד יכול",null,null);
-        recipe4.setRecipeInstructions(instructionList4);
+        Recipe recipe4=new Recipe("recipe 4","10","10","כל אחד יכול",null,null,null,0,0,0);
+        recipe4.setInstructions(instructionList4);
         recipe4.setPreparationTime(10);
         recipe4.setTimeOfWorkNeeded(10);
         recipe4.setTotalFreeTime(0);
@@ -108,8 +106,8 @@ public class MealRecipesFragment extends Fragment {
         Instruction recipe5inst2=new Instruction("Recipe 5 Press2",0,10);
         instructionList5.add(recipe5inst1);
         instructionList5.add(recipe5inst2);
-        Recipe recipe5=new Recipe("recipe 5","5","15","כל אחד יכול",null,null);
-        recipe5.setRecipeInstructions(instructionList5);
+        Recipe recipe5=new Recipe("recipe 5","5","15","כל אחד יכול",null,null,null,0,0,0);
+        recipe5.setInstructions(instructionList5);
         recipe5.setPreparationTime(15);
         recipe5.setTimeOfWorkNeeded(5);
         recipe5.setTotalFreeTime(10);
@@ -121,8 +119,8 @@ public class MealRecipesFragment extends Fragment {
         instructionList6.add(recipe6inst1);
         instructionList6.add(recipe6inst2);
         instructionList6.add(recipe6inst3);
-        Recipe recipe6=new Recipe("recipe 6","15","60","כל אחד יכול",null,null);
-        recipe6.setRecipeInstructions(instructionList6);
+        Recipe recipe6=new Recipe("recipe 6","15","60","כל אחד יכול",null,null,null,0,0,0);
+        recipe6.setInstructions(instructionList6);
         recipe6.setPreparationTime(60);
         recipe6.setTimeOfWorkNeeded(15);
         recipe6.setTotalFreeTime(45);

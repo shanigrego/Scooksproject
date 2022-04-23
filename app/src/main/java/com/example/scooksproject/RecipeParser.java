@@ -58,17 +58,16 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... urls) {
 
 
-        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-recipes/recipes_column-cakes/Recipe-c295510002adf71026.htm?sCh=131539cdf3178110&pId=25483675");
+        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704");
         String recipeName = doc.title().split(":")[1];
 //        String recipeName = doc.getElementsByClass("miniHeaderNew not_for_print");
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 
         Elements titleContainer = doc.getElementsByClass("titleContainer");
 
-        String preparationTime =titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+        String workTimeStr =titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+        String preparationTimeStr = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
 
-
-        String totalTimeRecipe = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
         Elements image=doc.getElementsByClass("imgInside");
         String urlString= image.get(0).childNode(1).attributes().get("src");
@@ -83,13 +82,24 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }
 
-        List<String> recipeInstructions = getRecipeInstructions(doc);
-        Recipe recipe = new Recipe(recipeName, preparationTime, totalTimeRecipe, difficultLevel, listOfIngredients, recipeInstructions/*, bmp*/);
+        List<String> recipeInstructionsStr = getRecipeInstructions(doc);
+        int workTime=getTimeOfWork(workTimeStr);
+        List<Instruction> recipeInstructionList =convertListStringToInstructionList(recipeInstructionsStr,workTime);
+         int totalFreeTime=getFreeTime(recipeInstructionList);
+        int preparationTime=getPreparationTime(recipeInstructionList);
+        Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr/*, bmp*/,recipeInstructionList,workTime,totalFreeTime,preparationTime);
         allRecipes.add(recipe);
         uploadRecipe();
         return null;
     }
 
+    public static int getPreparationTime(List<Instruction> recipeInstructionList) {
+    int res=0;
+        for (Instruction instr:recipeInstructionList) {
+            res+=instr.getFreeTime()+instr.getWorkTime();
+        }
+        return res;
+    }
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -158,6 +168,11 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         //Set<String> measureAmount = createMeasureAmountDict();
         Dictionary<String, Double> amountStrToDoubleDict = createAmountToDoubleDict();
         String[] arraySplit = ingredientAsString.split(" ");
+        amount+=handleCharBetweenNumbers(arraySplit[0]);
+        if(amount!=0)
+        {
+            i++;
+        }
         if (isNumber(arraySplit[i].charAt(0)) || arraySplit[i].charAt(0) == '½') {
             if (arraySplit[i].charAt(0) == '½')
                 amount = 0.5;
@@ -170,10 +185,20 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 i++;
             }
         }
-        while (measureUnitDict.contains(arraySplit[i])) {
 
-            measureUnit += arraySplit[i];
-            i++;
+        while (measureUnitDict.contains(arraySplit[i]) || (arraySplit[i].contains("מ")&& arraySplit[i].contains("ל"))) {
+
+            if(measureUnitDict.contains(arraySplit[i]))
+            {
+                measureUnit += arraySplit[i];
+                i++;
+            }
+            else if(arraySplit[i].length()==3 && !arraySplit[i].equals("מלח")) {
+                    measureUnit += "מל";
+                     i++;
+                }
+            else
+                break;
         }
         while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
             amount += amountStrToDoubleDict.get(arraySplit[i]);
@@ -222,7 +247,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return DictionaryUnitOfMeasure;
     }
 
-    private boolean isNumber(char ch) {
+    private static boolean isNumber(char ch) {
         boolean res = false;
         if (ch >= '0' && ch <= '9') {
             res = true;
@@ -242,6 +267,235 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         DictionaryUnitOfMeasure.add("פחית");
         DictionaryUnitOfMeasure.add("מכל");
         DictionaryUnitOfMeasure.add("מיכל");
+        DictionaryUnitOfMeasure.add("מל");
         return DictionaryUnitOfMeasure;
+    }
+
+    public static int getFreeTime(List<Instruction> instList){
+        int sumFreeTime = 0;
+
+        for (Instruction inst : instList) {
+            sumFreeTime += inst.getFreeTime();
+        }
+        return sumFreeTime;
+    }
+
+
+    public static List<Instruction> convertListStringToInstructionList(List<String> recipeInstructionsStr, int timeWorkNeeded)
+    {
+
+        List<Instruction> list = new LinkedList<>();
+
+        int instructionWorkTime = timeWorkNeeded / recipeInstructionsStr.size();
+        for (String content : recipeInstructionsStr) {
+
+            list.add(getInstructionFromStr(content,instructionWorkTime));
+        }
+
+        return list;
+    }
+
+    private static Instruction getInstructionFromStr(String content,int instructionWorkTime) {
+
+        List<String> timeUnitList=createTimeUnitList();
+        String[] splitContent=content.split(" ");
+        String part=null;
+        int freeTimeWork=0;
+
+        for(int j=0; j<arr.length; j++)
+            arr[j]=0;
+
+        for (int i=0; i< splitContent.length;i++) {
+            part=splitContent[i];
+            for (String timeUnit:timeUnitList) {
+                if(part.contains(timeUnit))
+                {
+                    setTimeInstructionInArr(splitContent,i,timeUnit);
+                }
+            }
+        }
+        for(int i=0;i< arr.length; i++ )
+        {
+            freeTimeWork+=arr[i];
+        }
+        if(freeTimeWork<10)
+            freeTimeWork=0;
+
+        return new Instruction(content,instructionWorkTime,freeTimeWork);
+    }
+
+    private static String handlePrefix(String str)
+    {
+        if(str.charAt(0)=='כ' && str.charAt(1)=='-')
+        {
+            str=str.substring(2);
+        }
+        return str;
+    }
+    private static int handleCharBetweenNumbers(String str)
+    {
+        int number=0;
+        String[] numbers=null;
+        if(str.contains("-"))
+        {
+            numbers=str.split("-");
+            number=Math.max(Integer.parseInt(numbers[0]),Integer.parseInt(numbers[1]));
+        }
+
+        return number;
+    }
+    static int[] arr=new int[4];
+
+    private static void setTimeInstructionInArr(String[] splitContent, int i, String part) {
+
+      int freeTime=0;
+      //TODO create defualt dict
+        Dictionary<String,Integer> dict=createTimeInstructionDict();
+        String str=null,strAfter=null;
+        switch (part) {
+            case "דקות":
+                //רק לפני
+                str = splitContent[i - 1];
+                str = handlePrefix(str);
+                freeTime = handleCharBetweenNumbers(str);
+                if (freeTime == 0) {
+                    if (isAllNumbers(str)) {
+                        freeTime = Integer.parseInt(str);
+                    } else if (str.charAt(0) == 'ו') {
+                        str = str.substring(1);
+                        if (str.charAt(0) == '-')
+                            str = str.substring(1);
+                        freeTime += dict.get(str);
+                        freeTime += dict.get(splitContent[i - 2]);
+                    }
+                }
+                arr[0] = Math.max(arr[0], freeTime);
+                freeTime = arr[0];
+                break;
+            case "שעות":
+                // ואחרי לפני
+                str = splitContent[i - 1];
+
+                str = handlePrefix(str);
+                if (isAllNumbers(str)) {
+                    freeTime = Integer.parseInt(str) * 60;
+                }
+
+                if (i + 1 < splitContent.length) {
+                    strAfter = splitContent[i + 1];
+                    if (strAfter.charAt(0) == 'ו') {
+                        strAfter = strAfter.substring(1);
+                        if (strAfter.charAt(0) == '-')
+                            strAfter = strAfter.substring(1);
+                        if (strAfter.equals("וחצי"))
+                            freeTime += 30;
+                        if (str.equals("ורבע"))
+                            freeTime += 15;
+                    }
+                }
+
+                arr[1] = Math.max(arr[1], freeTime);
+                freeTime = arr[1];
+                break;
+            case "שעה":
+                //גם לפני
+                str = splitContent[i - 1];
+                str = handlePrefix(str);
+                freeTime = dict.get(str);
+                if (str.equals("רבע") && i > 2 && splitContent[i - 2].equals("שלושת")) {
+                    freeTime += 30;
+                }
+                if (i + 1 < splitContent.length) {
+                    strAfter = splitContent[i + 1];
+                    if (strAfter.equals("וחצי"))
+                        freeTime += 90;
+                    if (str.equals("ורבע"))
+                        freeTime += 75;
+
+                }
+                arr[2] = Math.max(arr[2], freeTime);
+                break;
+            case "שעתיים":
+                if (i + 1 < splitContent.length) {
+                    strAfter = splitContent[i + 1];
+                    freeTime = dict.get(strAfter);
+                    freeTime += 120;
+                }
+                arr[3] = Math.max(arr[3], freeTime);
+                break;
+
+        }
+    }
+
+    private static boolean isAllNumbers(String str) {
+
+        boolean res=true;
+        for (int i=0; i< str.length(); i++) {
+            if(!isNumber(str.charAt(i)))
+            {
+                res=false;
+            }
+        }
+        return res;
+    }
+
+    private static List<String> createTimeUnitList() {
+        List<String> timeUnitList=new LinkedList<>();
+
+        timeUnitList.add("דקות");
+        timeUnitList.add("שעות");
+        timeUnitList.add("שעה");
+        timeUnitList.add("שעתיים");
+
+        return timeUnitList;
+    }
+
+    private static Dictionary<String,Integer> createTimeStringToDoubleDict() {
+        Dictionary<String, Integer> dict = new Hashtable<>();
+
+        dict.put("חצי שעה",30);
+        dict.put("שעה",60);
+        dict.put("שלושת רבע שעה",105);
+        dict.put("רבע שעה",15);
+        dict.put("שעה ורבע",75);
+        dict.put("שעה וחצי",90);
+        dict.put("שעה וארבעים דקות",100);
+        dict.put("שעה ועשרים דקות",80);
+
+        dict.put("ארבעים דקות",40);
+        dict.put("ארבעים וחמש דקות",45);
+        dict.put("עשרים דקות",20);
+        dict.put("חמש דקות",5);
+        dict.put("עשר דקות",10);
+
+        dict.put("שעתיים",120);
+        dict.put("שעתיים וחצי",150);
+        dict.put("שלוש שעות",180);
+        dict.put("שלוש וחצי שעות",210);
+
+
+        return dict;
+    }
+    private static Dictionary<String,Integer> createTimeInstructionDict() {
+        Dictionary<String, Integer> dict = new Hashtable<>();
+
+        dict.put("חצי",30);
+        dict.put("כמה",0);
+        dict.put("שלושת רבע",45);
+        dict.put("רבע",15);
+        dict.put("שלושים",30);
+        dict.put("ארבעים",40);
+        dict.put("עשרים",20);
+
+        return dict;
+    }
+    public static int getTimeOfWork(String timeString) {
+
+        if (timeString.startsWith("עד"))
+        {
+            timeString=timeString.substring(2);
+        }
+
+        return createTimeStringToDoubleDict().get(timeString);
     }
 }
