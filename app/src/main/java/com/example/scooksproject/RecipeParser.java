@@ -31,14 +31,12 @@ import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
 public class RecipeParser extends AsyncTask<String, Void, String> {
 
 
-
     //call this function from other classes
     public void parseAllRecipes() {
-       // parseSingleRecipe("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704");
-        //parseSingleRecipe("https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink");
-        parseSingleRecipe("https://www.wikipedia.org/");
-//        parseSingleRecipe("https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm");
-  //      parseSingleRecipe("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
+        execute("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704");
+//                "https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink");
+                //"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm");
+        //      parseSingleRecipe("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
     }
 
     //parse a single recipe
@@ -60,50 +58,54 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
+        for (String urlRecipe :
+                urls) {
 
-        Document doc = getRecipeAccordingToUrl("https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
-        String recipeName = doc.title().split(":")[1];
-        List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
+            Document doc = getRecipeAccordingToUrl(urlRecipe);
+            String recipeName = doc.title().split(":")[1] + " בדיקה";
+            List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
 
-        Elements titleContainer = doc.getElementsByClass("titleContainer");
+            Elements titleContainer = doc.getElementsByClass("titleContainer");
 
-        String workTimeStr =titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-        String preparationTimeStr = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            String workTimeStr = titleContainer.get(0).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            String preparationTimeStr = titleContainer.get(1).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
 
-        String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
-        Elements image=doc.getElementsByClass("imgInside");
-        String urlString= image.get(0).childNode(1).attributes().get("src");
-        URL url = null;
-        Bitmap bmp = null;
-        try {
-            url = new URL(urlString);
-            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
+            Elements image = doc.getElementsByClass("imgInside");
+            String urlString = image.get(0).childNode(1).attributes().get("src");
+            URL url = null;
+            Bitmap bmp = null;
+            try {
+                url = new URL(urlString);
+                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            List<String> recipeInstructionsStr = getRecipeInstructions(doc);
+            int workTime = getTimeOfWork(workTimeStr);
+            List<Instruction> recipeInstructionList = null;
+            try {
+                recipeInstructionList = convertListStringToInstructionList(recipeInstructionsStr, workTime);
+            } catch (NoNumberBeforeMinutesException e) {
+                e.printStackTrace();
+            }
+            int totalFreeTime = getFreeTime(recipeInstructionList);
+            int preparationTime = getPreparationTime(recipeInstructionList);
+            Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr/*, bmp*/, recipeInstructionList, workTime, totalFreeTime, preparationTime);
+            allRecipes.add(recipe);
+            uploadRecipe();
         }
-
-        List<String> recipeInstructionsStr = getRecipeInstructions(doc);
-        int workTime=getTimeOfWork(workTimeStr);
-        List<Instruction> recipeInstructionList = null;
-        try {
-            recipeInstructionList = convertListStringToInstructionList(recipeInstructionsStr,workTime);
-        } catch (NoNumberBeforeMinutesException e) {
-            e.printStackTrace();
-        }
-        int totalFreeTime=getFreeTime(recipeInstructionList);
-        int preparationTime=getPreparationTime(recipeInstructionList);
-        Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr/*, bmp*/,recipeInstructionList,workTime,totalFreeTime,preparationTime);
-        allRecipes.add(recipe);
-        uploadRecipe();
         return null;
+
     }
 
     public static int getPreparationTime(List<Instruction> recipeInstructionList) {
-    int res=0;
-        for (Instruction instr:recipeInstructionList) {
-            res+=instr.getFreeTime()+instr.getWorkTime();
+        int res = 0;
+        for (Instruction instr : recipeInstructionList) {
+            res += instr.getFreeTime() + instr.getWorkTime();
         }
         return res;
     }
@@ -175,9 +177,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         //Set<String> measureAmount = createMeasureAmountDict();
         Dictionary<String, Double> amountStrToDoubleDict = createAmountToDoubleDict();
         String[] arraySplit = ingredientAsString.split(" ");
-        amount+=handleCharBetweenNumbers(arraySplit[0]);
-        if(amount!=0)
-        {
+        amount += handleCharBetweenNumbers(arraySplit[0]);
+        if (amount != 0) {
             i++;
         }
         if (isAllNumbers(arraySplit[i]) || arraySplit[i].charAt(0) == '½') {
@@ -193,18 +194,15 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
             }
         }
 
-        while (measureUnitDict.contains(arraySplit[i]) || (arraySplit[i].contains("מ")&& arraySplit[i].contains("ל"))) {
+        while (measureUnitDict.contains(arraySplit[i]) || (arraySplit[i].contains("מ") && arraySplit[i].contains("ל"))) {
 
-            if(measureUnitDict.contains(arraySplit[i]))
-            {
+            if (measureUnitDict.contains(arraySplit[i])) {
                 measureUnit += arraySplit[i];
                 i++;
-            }
-            else if(arraySplit[i].length()==3 && !arraySplit[i].equals("מלח")) {
-                    measureUnit += "מל";
-                     i++;
-                }
-            else
+            } else if (arraySplit[i].length() == 3 && !arraySplit[i].equals("מלח")) {
+                measureUnit += "מל";
+                i++;
+            } else
                 break;
         }
         while (amountStrToDoubleDict.get(arraySplit[i]) != null) {
@@ -241,7 +239,6 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
         return dict;
     }
-
 
 
     private Set<String> createMeasureAmountDict() {
@@ -281,7 +278,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return DictionaryUnitOfMeasure;
     }
 
-    public static int getFreeTime(List<Instruction> instList){
+    public static int getFreeTime(List<Instruction> instList) {
         int sumFreeTime = 0;
 
         for (Instruction inst : instList) {
@@ -298,69 +295,65 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         int instructionWorkTime = timeWorkNeeded / recipeInstructionsStr.size();
         for (String content : recipeInstructionsStr) {
 
-            list.add(getInstructionFromStr(content,instructionWorkTime));
+            list.add(getInstructionFromStr(content, instructionWorkTime));
         }
 
         return list;
     }
 
-    private static Instruction getInstructionFromStr(String content,int instructionWorkTime) throws NoNumberBeforeMinutesException {
+    private static Instruction getInstructionFromStr(String content, int instructionWorkTime) throws NoNumberBeforeMinutesException {
 
-        List<String> timeUnitList=createTimeUnitList();
-        String[] splitContent=content.split(" ");
-        String part=null;
-        int freeTimeWork=0;
+        List<String> timeUnitList = createTimeUnitList();
+        String[] splitContent = content.split(" ");
+        String part = null;
+        int freeTimeWork = 0;
 
-        for(int j=0; j<arr.length; j++)
-            arr[j]=0;
+        for (int j = 0; j < arr.length; j++)
+            arr[j] = 0;
 
-        for (int i=0; i< splitContent.length;i++) {
-            part=splitContent[i];
-            for (String timeUnit:timeUnitList) {
-                if(part.contains(timeUnit))
-                {
-                    setTimeInstructionInArr(splitContent,i,timeUnit);
+        for (int i = 0; i < splitContent.length; i++) {
+            part = splitContent[i];
+            for (String timeUnit : timeUnitList) {
+                if (part.contains(timeUnit)) {
+                    setTimeInstructionInArr(splitContent, i, timeUnit);
                 }
             }
         }
-        for(int i=0;i< arr.length; i++ )
-        {
-            freeTimeWork+=arr[i];
+        for (int i = 0; i < arr.length; i++) {
+            freeTimeWork += arr[i];
         }
-        if(freeTimeWork<10)
-            freeTimeWork=0;
+        if (freeTimeWork < 10)
+            freeTimeWork = 0;
 
-        return new Instruction(content,instructionWorkTime,freeTimeWork);
+        return new Instruction(content, instructionWorkTime, freeTimeWork);
     }
 
-    private static String handlePrefix(String str)
-    {
-        if((str.charAt(0)=='כ'|| str.charAt(0)=='ל') && str.charAt(1)=='-')
-        {
-            str=str.substring(2);
+    private static String handlePrefix(String str) {
+        if ((str.charAt(0) == 'כ' || str.charAt(0) == 'ל') && str.charAt(1) == '-') {
+            str = str.substring(2);
         }
         return str;
     }
-    private static int handleCharBetweenNumbers(String str)
-    {
-        int number=0;
-        String[] numbers=null;
-        if(str.contains("-"))
-        {
-            numbers=str.split("-");
-            number=Math.max(Integer.parseInt(numbers[0]),Integer.parseInt(numbers[1]));
+
+    private static int handleCharBetweenNumbers(String str) {
+        int number = 0;
+        String[] numbers = null;
+        if (str.contains("-")) {
+            numbers = str.split("-");
+            number = Math.max(Integer.parseInt(numbers[0]), Integer.parseInt(numbers[1]));
         }
 
         return number;
     }
-    static int[] arr=new int[4];
+
+    static int[] arr = new int[4];
 
     private static void setTimeInstructionInArr(String[] splitContent, int i, String part) throws NoNumberBeforeMinutesException {
 
-      int freeTime=0;
-      //TODO create defualt dict
-        Dictionary<String,Integer> dict=createTimeInstructionDict();
-        String str=null,strAfter=null;
+        int freeTime = 0;
+        //TODO create defualt dict
+        Dictionary<String, Integer> dict = createTimeInstructionDict();
+        String str = null, strAfter = null;
         switch (part) {
             case "דקות":
                 //רק לפני
@@ -370,23 +363,20 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 if (freeTime == 0) {
                     if (isAllNumbers(str)) {
                         freeTime = Integer.parseInt(str);
-                    }
-                    else if (str.charAt(0) == 'ו') {
+                    } else if (str.charAt(0) == 'ו') {
                         str = str.substring(1);
                         if (str.charAt(0) == '-')
                             str = str.substring(1);
-                        if(dict.get(str)!=null) {
+                        if (dict.get(str) != null) {
                             freeTime += dict.get(str);
                         }
-                        if(dict.get(splitContent[i-2])!=null)
-                        {
-                        freeTime += dict.get(splitContent[i - 2]);
+                        if (dict.get(splitContent[i - 2]) != null) {
+                            freeTime += dict.get(splitContent[i - 2]);
                         }
                     }
                 }
-                if(freeTime==0)
-                {
-                  throw new NoNumberBeforeMinutesException();
+                if (freeTime == 0) {
+                    //throw new NoNumberBeforeMinutesException();
                 }
                 arr[0] = Math.max(arr[0], freeTime);
                 freeTime = arr[0];
@@ -407,7 +397,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                         strAfter = strAfter.substring(1);
                         if (strAfter.charAt(0) == '-')
                             strAfter = strAfter.substring(1);
-                        if (dict.get(strAfter)!=null)
+                        if (dict.get(strAfter) != null)
                             freeTime += dict.get(strAfter);
                     }
                 }
@@ -424,21 +414,20 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 }
                 if (i + 1 < splitContent.length) {
                     strAfter = splitContent[i + 1];
-                    if (strAfter.charAt(0) == 'ו')
-                    {
+                    if (strAfter.charAt(0) == 'ו') {
                         strAfter = strAfter.substring(1);
                         if (strAfter.charAt(0) == '-')
                             strAfter = strAfter.substring(1);
-                        if (dict.get(strAfter)!=null)
-                            freeTime += dict.get(strAfter)+60;
-                     }
+                        if (dict.get(strAfter) != null)
+                            freeTime += dict.get(strAfter) + 60;
+                    }
                 }
                 arr[2] = Math.max(arr[2], freeTime);
                 break;
             case "שעתיים":
                 if (i + 1 < splitContent.length) {
                     strAfter = splitContent[i + 1];
-                    if(dict.get(strAfter)!=null)
+                    if (dict.get(strAfter) != null)
                         freeTime = dict.get(strAfter);
                     freeTime += 120;
                 }
@@ -450,18 +439,17 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     private static boolean isAllNumbers(String str) {
 
-        boolean res=true;
-        for (int i=0; i< str.length(); i++) {
-            if(!isNumber(str.charAt(i)))
-            {
-                res=false;
+        boolean res = true;
+        for (int i = 0; i < str.length(); i++) {
+            if (!isNumber(str.charAt(i))) {
+                res = false;
             }
         }
         return res;
     }
 
     private static List<String> createTimeUnitList() {
-        List<String> timeUnitList=new LinkedList<>();
+        List<String> timeUnitList = new LinkedList<>();
 
         timeUnitList.add("דקות");
         timeUnitList.add("שעות");
@@ -471,50 +459,51 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         return timeUnitList;
     }
 
-    private static Dictionary<String,Integer> createTimeStringToDoubleDict() {
+    private static Dictionary<String, Integer> createTimeStringToDoubleDict() {
         Dictionary<String, Integer> dict = new Hashtable<>();
 
-        dict.put("חצי שעה",30);
-        dict.put("שעה",60);
-        dict.put("שלושת רבע שעה",105);
-        dict.put("רבע שעה",15);
-        dict.put("שעה ורבע",75);
-        dict.put("שעה וחצי",90);
-        dict.put("שעה וארבעים דקות",100);
-        dict.put("שעה ועשרים דקות",80);
+        dict.put("חצי שעה", 30);
+        dict.put("שעה", 60);
+        dict.put("שלושת רבע שעה", 105);
+        dict.put("רבע שעה", 15);
+        dict.put("שעה ורבע", 75);
+        dict.put("שעה וחצי", 90);
+        dict.put("שעה וארבעים דקות", 100);
+        dict.put("שעה ועשרים דקות", 80);
 
-        dict.put("ארבעים דקות",40);
-        dict.put("ארבעים וחמש דקות",45);
-        dict.put("עשרים דקות",20);
-        dict.put("חמש דקות",5);
-        dict.put("עשר דקות",10);
+        dict.put("ארבעים דקות", 40);
+        dict.put("ארבעים וחמש דקות", 45);
+        dict.put("עשרים דקות", 20);
+        dict.put("חמש דקות", 5);
+        dict.put("עשר דקות", 10);
 
-        dict.put("שעתיים",120);
-        dict.put("שעתיים וחצי",150);
-        dict.put("שלוש שעות",180);
-        dict.put("שלוש וחצי שעות",210);
+        dict.put("שעתיים", 120);
+        dict.put("שעתיים וחצי", 150);
+        dict.put("שלוש שעות", 180);
+        dict.put("שלוש וחצי שעות", 210);
 
 
         return dict;
     }
-    private static Dictionary<String,Integer> createTimeInstructionDict() {
+
+    private static Dictionary<String, Integer> createTimeInstructionDict() {
         Dictionary<String, Integer> dict = new Hashtable<>();
 
-        dict.put("חצי",30);
-        dict.put("כמה",0);
-        dict.put("שלושת רבע",45);
-        dict.put("רבע",15);
-        dict.put("שלושים",30);
-        dict.put("ארבעים",40);
-        dict.put("עשרים",20);
+        dict.put("חצי", 30);
+        dict.put("כמה", 0);
+        dict.put("שלושת רבע", 45);
+        dict.put("רבע", 15);
+        dict.put("שלושים", 30);
+        dict.put("ארבעים", 40);
+        dict.put("עשרים", 20);
 
         return dict;
     }
+
     public static int getTimeOfWork(String timeString) {
 
-        if (timeString.startsWith("עד"))
-        {
-            timeString=timeString.substring(2);
+        if (timeString.startsWith("עד")) {
+            timeString = timeString.substring(2);
         }
 
         return createTimeStringToDoubleDict().get(timeString);

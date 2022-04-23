@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.example.scooksproject.logics.Algorithm;
 import com.google.android.material.button.MaterialButton;
@@ -19,10 +20,10 @@ import androidx.fragment.app.Fragment;
 
 public class MealRecipesFragment extends Fragment {
 
-    private static GridView gridView;
-    private MaterialButton startMealBtn;
+    private static NonScrollListView nonScrollView;
     private static AllRecipesGridAdapter adapter;
     private static List<Recipe> chosenRecipes;
+    private ImageView backBtn;
 
     public static List<Recipe> getChosenRecipes() {
         if(chosenRecipes == null)
@@ -35,20 +36,30 @@ public class MealRecipesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.meal_recipes_fragment, null);
         initComponents(view);
+
         return view;
     }
 
     private void initComponents(View view) {
-        gridView = view.findViewById(R.id.mealRecipeGridView);
-        startMealBtn = view.findViewById(R.id.mealRecipeStartBtn);
+        nonScrollView = view.findViewById(R.id.mealRecipeGridView);
+        MaterialButton startMealBtn = view.findViewById(R.id.mealRecipeStartBtn);
+        backBtn = view.findViewById(R.id.mealRecipesBackBtn);
 
         adapter = new AllRecipesGridAdapter(getContext(), chosenRecipes);
-        Algorithm.scooksAlgorithm(chosenRecipes);
-
+        HomePageActivity.HideBottomNavigationBar();
+        //Algorithm.scooksAlgorithm(chosenRecipes);
         List<Recipe> tryRecipes=getTesterRecipes();
-        gridView.setAdapter(adapter);
+        nonScrollView.setAdapter(adapter);
+
+        //Start Meal Button initialization
         startMealBtn.setOnClickListener(item->{
             Algorithm.scooksAlgorithm(chosenRecipes);
+        });
+
+        //Back Button initialization
+        backBtn.setOnClickListener(item->{
+            Fragment fragment = new RecipeBookFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
         });
     }
 
@@ -144,12 +155,12 @@ public class MealRecipesFragment extends Fragment {
     public static void addRecipe(Recipe recipe){
         chosenRecipes.add(recipe);
         if(adapter != null)
-            gridView.setAdapter(adapter);
+            nonScrollView.setAdapter(adapter);
     }
 
     public static void removeRecipe(Recipe recipe){
         chosenRecipes.remove(recipe);
         if(adapter != null)
-            gridView.setAdapter(adapter);
+            nonScrollView.setAdapter(adapter);
     }
 }

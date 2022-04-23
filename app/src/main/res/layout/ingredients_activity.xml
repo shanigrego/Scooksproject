@@ -14,9 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:gravity="center"
-            android:text="רשימת מצרכים"
+            android:text="@string/ingredients_list_header"
             android:textColor="@color/white"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
         <ImageView
             android:id="@+id/recipeIngredientsBackArraow"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/arrow_back"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             app:tint="@color/white" />
 
     </RelativeLayout>

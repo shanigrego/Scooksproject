@@ -4,4 +4,5 @@
     <string name="meal_recipe_start_meal">התחל ארוחה</string>
     <string name="ingredients">מצרכים</string>
     <string name="recipe_instructions">הוראות הכנה</string>
+    <string name="ingredients_list_header">רשימת מצרכים</string>
 </resources>
