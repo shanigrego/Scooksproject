@@ -43,11 +43,12 @@ public class MealRecipesFragment extends Fragment {
         startMealBtn = view.findViewById(R.id.mealRecipeStartBtn);
 
         adapter = new AllRecipesGridAdapter(getContext(), chosenRecipes);
+        Algorithm.scooksAlgorithm(chosenRecipes);
 
         List<Recipe> tryRecipes=getTesterRecipes();
         gridView.setAdapter(adapter);
         startMealBtn.setOnClickListener(item->{
-            Algorithm.scooksAlgorithm(tryRecipes);
+            Algorithm.scooksAlgorithm(chosenRecipes);
         });
     }
 

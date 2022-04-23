@@ -35,6 +35,8 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
+
 public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private EditText recipeName;
@@ -71,7 +73,12 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         List<String> recipeInstructionsStr = RecipeInstructionsFragment.getItems();
         List<Ingredient> ingredients = IngredientsFragment.getIngredients();
         int workTime=RecipeParser.getTimeOfWork(preperationTimeStr);
-        List<Instruction> recipeInstructions=RecipeParser.convertListStringToInstructionList(recipeInstructionsStr,workTime);
+        List<Instruction> recipeInstructions= null;
+        try {
+            recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr,workTime);
+        } catch (NoNumberBeforeMinutesException e) {
+            Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         int totalFreeTime=RecipeParser.getFreeTime(recipeInstructions);
         int preparationTime=RecipeParser.getPreparationTime(recipeInstructions);
 
