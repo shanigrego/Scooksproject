@@ -1,5 +1,6 @@
 package com.example.scooksproject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -21,12 +24,10 @@ import androidx.fragment.app.FragmentManager;
 
 public class AllRecipesGridAdapter extends BaseAdapter {
 
-    private Context context;
-    private List<Recipe> allRecipes;
-    private boolean isFav;
+    private final Context context;
+    private final List<Recipe> allRecipes;
     private final List<Recipe> favouriteRecipesList;
     private final List<Recipe> chosenRecipes;
-    //private Recipe currentRecipe;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
@@ -50,60 +51,81 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.single_recipe_grid_layout, null);
+            initComponents(convertView, position);
+        }
+        return convertView;
+    }
 
-            ImageView recipeImage = convertView.findViewById(R.id.gridLayoutRecipeImage);
-            recipeImage.setBackgroundResource(R.drawable.rice_image);
-            TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
-            recipeName.setText(allRecipes.get(position).getName());
-            ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+    private void initComponents(View convertView, int position) {
 
-            ImageView chefIconUnChosen;
-            ImageView chefIconChosen;
-            chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
-            chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
-            Recipe currentRecipe = allRecipes.get(position);
-            isFav = isFavourite(currentRecipe) != null;
+        ProgressBar progressBar = convertView.findViewById(R.id.recipeImgaeProgreeBar);
+        ImageView recipeImage = convertView.findViewById(R.id.gridLayoutRecipeImage);
+        TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
+        recipeName.setText(allRecipes.get(position).getName());
+        ImageView favouritesBtn = convertView.findViewById(R.id.favouriteGridViewBtn);
+        TextView imageErrorTV = convertView.findViewById(R.id.recipeImageErrorTV);
 
+        ImageView chefIconUnChosen;
+        ImageView chefIconChosen;
+        chefIconUnChosen = convertView.findViewById(R.id.chefIconSelectionRecipeUnChosen);
+        chefIconChosen = convertView.findViewById(R.id.chefIconSelectionRecipeChosen);
+        Recipe currentRecipe = allRecipes.get(position);
 
-            //Chef Icon initialization
-            if (isChosenForMeal(currentRecipe))
-                toggleChosenForMeal(true, false, chefIconChosen, chefIconUnChosen, currentRecipe);
-            chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true, chefIconChosen, chefIconUnChosen, currentRecipe));
-            chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false, chefIconChosen, chefIconUnChosen, currentRecipe));
-
-            //Favourites Button initialization
-            if (isFavourite(currentRecipe) != null)
-                setFavouriteBtnColor(R.color.pink, favouritesBtn);
-
-            favouritesBtn.setOnClickListener(new View.OnClickListener() {
-                int color;
+        //Image loading
+        if (currentRecipe.getRecipeImg() != null)
+            Picasso.get().load(currentRecipe.getRecipeImg()).centerCrop().fit().into(recipeImage, new Callback() {
+                @Override
+                public void onSuccess() {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
 
                 @Override
-                public void onClick(View v) {
-                    isFav = !isFav;
-                    if (isFav) {
-                        color = R.color.pink;
-                        StorageManager.WriteToFile("Fav1.txt", allRecipes.get(position), context.getFilesDir(), true);
-                    } else {
-                        color = R.color.white;
-                        removeRecipeFromFavourites(currentRecipe);
-                    }
-                    setFavouriteBtnColor(color, favouritesBtn);
+                public void onError(Exception e) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    imageErrorTV.setText("לא ניתן לטעון את התמונה");
                 }
             });
 
-            recipeImage.setOnClickListener(v -> {
-                Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
-                FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
-            });
-        }
-        return convertView;
+
+        //Chef Icon initialization
+        if (isChosenForMeal(currentRecipe))
+            toggleChosenForMeal(true, false, chefIconChosen, chefIconUnChosen, currentRecipe);
+        chefIconUnChosen.setOnClickListener(v -> toggleChosenForMeal(true, true, chefIconChosen, chefIconUnChosen, currentRecipe));
+        chefIconChosen.setOnClickListener(v -> toggleChosenForMeal(false, false, chefIconChosen, chefIconUnChosen, currentRecipe));
+
+        //Favourites Button initialization
+        final boolean[] isFav = {isFavourite(currentRecipe) != null};
+        if (isFavourite(currentRecipe) != null)
+            setFavouriteBtnColor(R.color.pink, favouritesBtn);
+        favouritesBtn.setOnClickListener(new View.OnClickListener() {
+            int color;
+
+            @Override
+            public void onClick(View v) {
+                isFav[0] = !isFav[0];
+                if (isFav[0]) {
+                    color = R.color.pink;
+                    StorageManager.WriteToFile("Fav1.txt", allRecipes.get(position), context.getFilesDir(), true);
+                } else {
+                    color = R.color.white;
+                    removeRecipeFromFavourites(currentRecipe);
+                }
+                setFavouriteBtnColor(color, favouritesBtn);
+            }
+        });
+
+        //Recipe Image initialization
+        recipeImage.setOnClickListener(v -> {
+            Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
+            FragmentManager fm = ((FragmentActivity) context).getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
+        });
     }
 
     private void removeRecipeFromFavourites(Recipe currentRecipe) {

@@ -34,7 +34,7 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_details_fragment, null);
-        HomePageActivity.HideBottomNavigationBar();
+        HomePageActivity.hideBottomNavigationBar();
         initComponents(view);
         setView();
         return view;

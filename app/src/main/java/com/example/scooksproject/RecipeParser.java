@@ -86,11 +86,11 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         String difficultLevel = titleContainer.get(2).childNodes().get(0).childNodes().get(1).childNodes().get(0).toString();
 
         Elements image=doc.getElementsByClass("imgInside");
-        String urlString= image.get(0).childNode(1).attributes().get("src");
+        String imageUrlString= image.get(0).childNode(1).attributes().get("src");
         URL urlImg = null;
         Bitmap bmp = null;
         try {
-            urlImg = new URL(urlString);
+            urlImg = new URL(imageUrlString);
             bmp = BitmapFactory.decodeStream(urlImg.openConnection().getInputStream());
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -104,7 +104,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         int totalFreeTime=getFreeTime(recipeInstructionList);
         int preparationTime=getPreparationTime(recipeInstructionList);
 
-        Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr/*, bmp*/,recipeInstructionList,workTime,totalFreeTime,preparationTime);
+        Recipe recipe = new Recipe(recipeName, workTimeStr, preparationTimeStr, difficultLevel, listOfIngredients, recipeInstructionsStr, imageUrlString,recipeInstructionList,workTime,totalFreeTime,preparationTime);
         return recipe;
     }
 

@@ -32,7 +32,7 @@ public class Algorithm {
         String difficultLevel=getDifficultLevelAllRecipes(recipeList);
         List<String> instructionListStr=getStrFormInstructionList(instructionList);
 
-        resRecipe=new Recipe("תוכנית עבודה",timeOfWorkNeeded,totalTimeRecipe,difficultLevel,ingredientList,instructionListStr,instructionList,0,0,0);
+        resRecipe=new Recipe("תוכנית עבודה",timeOfWorkNeeded,totalTimeRecipe,difficultLevel,ingredientList,instructionListStr,null ,instructionList,0,0,0);
         return resRecipe;
     }
 

@@ -1,14 +1,11 @@
 package com.example.scooksproject;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupMenu;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,18 +15,18 @@ import androidx.fragment.app.Fragment;
 
 public class GroceriesListFragment extends Fragment {
 
-    private static ListView listView;
     private static ArrayList<String> items;
+    @SuppressLint("StaticFieldLeak")
     private static GroceriesListAdapter adapter;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.groceries_list_fragment, null);
-        listView = view.findViewById(R.id.groceriesListView);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.groceries_list_fragment, null);
+        ListView listView = view.findViewById(R.id.groceriesListView);
         items = new ArrayList<>();
-        adapter = new GroceriesListAdapter(getContext(), items);
+        adapter = new GroceriesListAdapter(requireContext(), items);
         addItem("שמן");
         addItem("ביצים");
         addItem("מלפפון חמוץ גודל M");
@@ -43,9 +40,9 @@ public class GroceriesListFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public static void removeItem(int index) {
+/*    public static void removeItem(int index) {
         items.remove(index);
         adapter.notifyDataSetChanged();
-    }
+    }*/
 }
 

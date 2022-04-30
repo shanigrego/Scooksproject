@@ -1,13 +1,12 @@
 package com.example.scooksproject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ import androidx.annotation.Nullable;
 
 public class GroceriesListAdapter extends ArrayAdapter<String> {
 
-    private Context context;
-    private ArrayList<String> items;
+    private final Context context;
+    private final ArrayList<String> items;
     TextView groceryName;
 
     public GroceriesListAdapter(@NonNull Context context, ArrayList<String> items) {
@@ -27,6 +26,7 @@ public class GroceriesListAdapter extends ArrayAdapter<String> {
         this.items = items;
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
