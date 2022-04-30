@@ -48,7 +48,7 @@ public class MealRecipesFragment extends Fragment {
         HomePageActivity.hideBottomNavigationBar();
         List<Recipe> tryRecipes = getTesterRecipes();
         nonScrollView.setAdapter(adapter);
-
+        chosenRecipes=getTesterRecipes();
         //Start Meal Button initialization
         startMealBtn.setOnClickListener(item -> {
             Algorithm.scooksAlgorithm(chosenRecipes);
@@ -79,10 +79,10 @@ public class MealRecipesFragment extends Fragment {
 
         List<Instruction> instructionList1 = new LinkedList<>();
         Instruction recipe1inst1 = new Instruction(1, "Recipe 1 Press1", 5, 0);
-        Instruction recipe1inst2 = new Instruction(2, "Recipe 1 Press2", 5, 0);
+        Instruction recipe1inst2 = new Instruction(2, "Recipe 1 Press2", 0, 10);
 
-        Instruction recipe1inst3 = new Instruction(1, "Recipe 1 Press3", 0, 15);
-        Instruction recipe1inst4 = new Instruction(2, "Recipe 1 Press4", 10, 0);
+        Instruction recipe1inst3 = new Instruction(3, "Recipe 1 Press3", 15, 0);
+        Instruction recipe1inst4 = new Instruction(4, "Recipe 1 Press4", 0, 5);
         instructionList1.add(recipe1inst1);
         instructionList1.add(recipe1inst2);
         instructionList1.add(recipe1inst3);
@@ -137,15 +137,24 @@ public class MealRecipesFragment extends Fragment {
         List<Instruction> instructionList6 = new LinkedList<>();
         Instruction recipe6inst1 = new Instruction(1, "Recipe 6 Press1", 10, 0);
         Instruction recipe6inst2 = new Instruction(2, "Recipe 6 Press2", 0, 45);
-        Instruction recipe6inst3 = new Instruction(3, "Recipe 6 Press3", 5, 0);
+      //  Instruction recipe6inst3 = new Instruction(3, "Recipe 6 Press3", 5, 0);
         instructionList6.add(recipe6inst1);
         instructionList6.add(recipe6inst2);
-        instructionList6.add(recipe6inst3);
-        Recipe recipe6 = new Recipe("recipe 6", "15", "60", "כל אחד יכול", null, null, null, null, 0, 0, 0);
-        recipe6.setInstructions(instructionList6);
-        recipe6.setPreparationTime(60);
-        recipe6.setTimeOfWorkNeeded(15);
-        recipe6.setTotalFreeTime(45);
+        //instructionList6.add(recipe6inst3);
+//        Recipe recipe6 = new Recipe("recipe 6", "15", "60", "כל אחד יכול", null, null, null, null, 0, 0, 0);
+//        recipe6.setInstructions(instructionList6);
+//        recipe6.setPreparationTime(60);
+//        recipe6.setTimeOfWorkNeeded(15);
+//        recipe6.setTotalFreeTime(45);
+        Recipe recipe6=new Recipe("recipe 6","10","55","כל אחד יכול",null,null,null,instructionList6,10,45,55);
+        Instruction recipe7inst = new Instruction(1, "Recipe 7 Press1", 30, 0);
+        Instruction recipe8inst = new Instruction(1, "Recipe 8 Press1", 20, 0);
+        List<Instruction>instructionList7=new LinkedList<>();
+        List<Instruction>instructionList8=new LinkedList<>();
+        instructionList7.add(recipe7inst);
+        instructionList8.add(recipe8inst);
+        Recipe recipe7 = new Recipe("recipe 7", "30","30","כל אחד יכול",null,null,null,instructionList7,30,0,30);
+        Recipe recipe8 = new Recipe("recipe 8", "20","20","כל אחד יכול",null,null,null,instructionList8,20,0,20);
 
         test.add(recipe1);
         test.add(recipe2);
@@ -153,6 +162,8 @@ public class MealRecipesFragment extends Fragment {
         test.add(recipe4);
         test.add(recipe5);
         test.add(recipe6);
+        test.add(recipe7);
+        test.add(recipe8);
 
         return test;
     }

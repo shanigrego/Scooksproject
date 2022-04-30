@@ -16,157 +16,157 @@ public class Algorithm {
     //TODO לשים עשרים שניות הפרש בין הסיום של הסטופר לבין סיום שלב הביניים
 
 
+    public static Recipe scooksAlgorithm(List<Recipe> recipeList) {
 
+        Recipe resRecipe = null;
+        List<Recipe> notUsedRecipesList = new LinkedList<>(recipeList);
+        List<Instruction> instructionList=new LinkedList<>();
+        runAlgorithm(notUsedRecipesList,instructionList);
+        List<Ingredient> ingredientList = getIngredientsFromAllRecipe(recipeList);
+        String timeOfWorkNeeded = getTimeWorkAllRecipes(instructionList);
+        String totalTimeRecipe = getTotalTimeAllRecipes(instructionList);
+        String difficultLevel = getDifficultLevelAllRecipes(recipeList);
+        List<String> instructionListStr = getStrFormInstructionList(instructionList);
 
-    public static Recipe scooksAlgorithm(List<Recipe> recipeList)
-    {
-
-        Recipe resRecipe=null;
-        List<Recipe> notUsedRecipesList=new LinkedList<>(recipeList);
-        List<Instruction> instructionList=runAlgorithm(notUsedRecipesList);
-        List<Ingredient> ingredientList=getIngredientsFromAllRecipe(recipeList);
-        String timeOfWorkNeeded=getTimeWorkAllRecipes(instructionList);
-        String totalTimeRecipe=getTotalTimeAllRecipes(instructionList);
-        String difficultLevel=getDifficultLevelAllRecipes(recipeList);
-        List<String> instructionListStr=getStrFormInstructionList(instructionList);
-
-        resRecipe=new Recipe("תוכנית עבודה",timeOfWorkNeeded,totalTimeRecipe,difficultLevel,ingredientList,instructionListStr,null ,instructionList,0,0,0);
+        resRecipe = new Recipe("תוכנית עבודה", timeOfWorkNeeded, totalTimeRecipe, difficultLevel, ingredientList, instructionListStr, null, instructionList, 0, 0, 0);
         return resRecipe;
     }
 
     private static List<String> getStrFormInstructionList(List<Instruction> instructionList) {
-      List<String> res=new LinkedList<>();
-        for (Instruction instr:instructionList) {
+        List<String> res = new LinkedList<>();
+        for (Instruction instr : instructionList) {
             res.add(instr.getContent());
         }
         return res;
     }
 
     private static String getDifficultLevelAllRecipes(List<Recipe> recipeList) {
-        Dictionary<String, Integer> dict=createDifficultLevelDict();
-        Dictionary<Integer, String> opsDict=createDifficultLevelDictOps();
-        int difficultArr[]=new int[recipeList.size()];
-        for (int i=0; i< recipeList.size(); i++) {
-            if(dict.get(recipeList.get(i).getDifficultLevel())!=null)
-               difficultArr[i]=dict.get(recipeList.get(i).getDifficultLevel());
+        Dictionary<String, Integer> dict = createDifficultLevelDict();
+        Dictionary<Integer, String> opsDict = createDifficultLevelDictOps();
+        int difficultArr[] = new int[recipeList.size()];
+        for (int i = 0; i < recipeList.size(); i++) {
+            if (dict.get(recipeList.get(i).getDifficultLevel()) != null)
+                difficultArr[i] = dict.get(recipeList.get(i).getDifficultLevel());
             else
-                difficultArr[i]=1;
+                difficultArr[i] = 1;
         }
-        int max=maxInArr(difficultArr);
+        int max = maxInArr(difficultArr);
 
         return opsDict.get(max);
     }
-    private static int maxInArr(int arr[])
-    {
-        int max=arr[0];
-        for(int i=0; i<arr.length; i++)
-        {
-            max=Math.max(max,arr[i]);
+
+    private static int maxInArr(int arr[]) {
+        int max = arr[0];
+        for (int i = 0; i < arr.length; i++) {
+            max = Math.max(max, arr[i]);
         }
         return max;
     }
-    private static Dictionary<String,Integer> createDifficultLevelDict() {
+
+    private static Dictionary<String, Integer> createDifficultLevelDict() {
         Dictionary<String, Integer> dict = new Hashtable<>();
 
-        dict.put("כל אחד יכול",1);
-        dict.put("בינוני",2);
-        dict.put("נדרשת מיומנות",3);
+        dict.put("כל אחד יכול", 1);
+        dict.put("בינוני", 2);
+        dict.put("נדרשת מיומנות", 3);
 
         return dict;
     }
+
     private static Dictionary<Integer, String> createDifficultLevelDictOps() {
         Dictionary<Integer, String> dict = new Hashtable<>();
 
-        dict.put(1,"כל אחד יכול");
-        dict.put(2,"בינוני");
-        dict.put(3,"נדרשת מיומנות");
+        dict.put(1, "כל אחד יכול");
+        dict.put(2, "בינוני");
+        dict.put(3, "נדרשת מיומנות");
 
         return dict;
     }
-    private static String getTotalTimeAllRecipes( List<Instruction> instructionList) {
+
+    private static String getTotalTimeAllRecipes(List<Instruction> instructionList) {
 
         return null;
     }
 
     private static String convertTimeToString(int hours, int minutes) {
-        String res="";
-        switch (hours)
-        {
+        String res = "";
+        switch (hours) {
             case 0:
-                res+=minutes+" דקות ";
+                res += minutes + " דקות ";
                 break;
             case 1:
-                res+=" שעה";
-                if(minutes!=0) {
-                    res += " ו- " +minutes+" דקות ";
+                res += " שעה";
+                if (minutes != 0) {
+                    res += " ו- " + minutes + " דקות ";
                 }
                 break;
             default:
-                res+=hours;
-                res+=" שעות ";
-                if(minutes!=0) {
-                    res += " ו- " +minutes+" דקות ";
+                res += hours;
+                res += " שעות ";
+                if (minutes != 0) {
+                    res += " ו- " + minutes + " דקות ";
                 }
                 break;
         }
         return res;
     }
 
-    private static String getTimeWorkAllRecipes( List<Instruction> instructionList) {
-       int timeWorkAllRecipes=0,hours,minutes;
-        for (Instruction inst:instructionList) {
-            timeWorkAllRecipes+=inst.getWorkTime();
+    private static String getTimeWorkAllRecipes(List<Instruction> instructionList) {
+        int timeWorkAllRecipes = 0, hours, minutes;
+        for (Instruction inst : instructionList) {
+            timeWorkAllRecipes += inst.getWorkTime();
         }
-        hours=timeWorkAllRecipes/60;
-        minutes=timeWorkAllRecipes-(hours*60);
-        return convertTimeToString(hours,minutes);
+        hours = timeWorkAllRecipes / 60;
+        minutes = timeWorkAllRecipes - (hours * 60);
+        return convertTimeToString(hours, minutes);
     }
 
-    private static List<Instruction> runAlgorithm(List<Recipe> notUsedRecipeList)
-    {
-        List<Instruction> resInstructionList=new LinkedList<>();
-      while(notUsedRecipeList.size()>1)
-      {
-          Recipe root=getMaxFreeTimeRecipe(notUsedRecipeList);
-          handleAllInstructions(root.getRecipeInstructions(),notUsedRecipeList,resInstructionList);
-          notUsedRecipeList.remove(root);
-      }
-      if(notUsedRecipeList.size()==1) {
-          resInstructionList.addAll(notUsedRecipeList.get(0).getRecipeInstructions());
-          notUsedRecipeList.remove(notUsedRecipeList.get(0));
-      }
-      return resInstructionList;
+    private static void runAlgorithm(List<Recipe> notUsedRecipeList,List<Instruction> resInstructionList) {
+        while (notUsedRecipeList.size() > 1) {
+            Recipe root = getMaxFreeTimeRecipe(notUsedRecipeList);
+            notUsedRecipeList.remove(root);
+            List<Instruction> rootInstruction = root.getRecipeInstructions();
+            handleInstructions(rootInstruction, notUsedRecipeList, resInstructionList);
+            Instruction inst = rootInstruction.get(rootInstruction.size() - 1);
+            resInstructionList.add(inst);
+            if (inst.getFreeTime() > 0) {
+                runAlgorithm(notUsedRecipeList,resInstructionList);
+            }
+        }
+        if (notUsedRecipeList.size() == 1) {
+            resInstructionList.addAll(notUsedRecipeList.get(0).getRecipeInstructions());
+            notUsedRecipeList.remove(notUsedRecipeList.get(0));
+        }
     }
+
     //הפונקציה שעוברת על כל ההורואת הנחה ומפעילה את המעטפת על הההורואת עם זמן המתנה
-    public static void handleAllInstructions(List<Instruction> instructionList,List<Recipe> notUsedRecipeList,List<Instruction> resInstruction)
-    {
-        for (Instruction instr:instructionList) {
-            handleSingleInstruction(instr,resInstruction,notUsedRecipeList);
+    public static void handleInstructions(List<Instruction> instructionList, List<Recipe> notUsedRecipeList, List<Instruction> resInstruction) {
+//        for (Instruction instr:instructionList) {
+//            handleSingleInstruction(instr,resInstruction,notUsedRecipeList);
+//        }
+        for (int i = 0; i < instructionList.size() - 1; i++) {
+            handleSingleInstruction(instructionList.get(i), resInstruction, notUsedRecipeList);
         }
     }
-    private static void handleSingleInstruction(Instruction instr,List<Instruction> resInstruction,List<Recipe> notUsedRecipeList)
-    {
+
+    private static void handleSingleInstruction(Instruction instr, List<Instruction> resInstruction, List<Recipe> notUsedRecipeList) {
         resInstruction.add(instr);
-        if(instr.getFreeTime()>0)
-        {
-            helper(instr.getFreeTime(), notUsedRecipeList,resInstruction);
+        if (instr.getFreeTime() > 0) {
+            helper(instr.getFreeTime(), notUsedRecipeList, resInstruction);
         }
     }
 
-    private static void helper(int freeTime , List<Recipe> notUsedRecipe,List<Instruction> resInstruction) {
+    private static void helper(int freeTime, List<Recipe> notUsedRecipe, List<Instruction> resInstruction) {
 
-        if(notUsedRecipe.size()==0)
-        {
+        if (notUsedRecipe.size() == 0) {
             return;
         }
-        List<Recipe> knapsackCandidate=  knapsackHelper(freeTime,notUsedRecipe);
-        if(knapsackCandidate==null)
+        List<Recipe> knapsackCandidate = knapsackHelper(freeTime, notUsedRecipe);
+        if (knapsackCandidate == null)
             return;
-        Recipe maxFreeTimeRecipe=getMaxFreeTimeRecipe(knapsackCandidate);
-        if(maxFreeTimeRecipe.getTotalFreeTime()==0)
-        {
-            chooseRecipe(knapsackCandidate,resInstruction,notUsedRecipe);
-
+        Recipe maxFreeTimeRecipe = getMaxFreeTimeRecipe(knapsackCandidate);
+        if (maxFreeTimeRecipe.getTotalFreeTime() == 0) {
+            chooseRecipe(knapsackCandidate, resInstruction, notUsedRecipe);
             return;
         }
         else
@@ -174,27 +174,33 @@ public class Algorithm {
             //we used this recipe
             notUsedRecipe.remove(maxFreeTimeRecipe);
 
-            Instruction instr=null;
-            int size=maxFreeTimeRecipe.getRecipeInstructions().size();
-
-            for (int i=0;i<size;i++) {
-
-                instr=maxFreeTimeRecipe.getRecipeInstructions().get(i);
-
-                if(i!=size-1)
-                {
-                   handleSingleInstruction(instr,resInstruction,notUsedRecipe);
-                }
-                else
-                {
-                    resInstruction.add(instr);
-                    if(instr.getFreeTime()>0) {
-                        int newFreeTime = freeTime - (maxFreeTimeRecipe.getPreparationTime() - instr.getFreeTime());
-
-                        helper(newFreeTime,notUsedRecipe,resInstruction);
-                    }
-                }
+            Instruction instr = null;
+            int size = maxFreeTimeRecipe.getRecipeInstructions().size();
+            handleInstructions(maxFreeTimeRecipe.getRecipeInstructions(), notUsedRecipe, resInstruction);
+            instr = maxFreeTimeRecipe.getRecipeInstructions().get(size - 1);
+            resInstruction.add(instr);
+            if (instr.getFreeTime() > 0) {
+                int newFreeTime = freeTime - (maxFreeTimeRecipe.getPreparationTime() - instr.getFreeTime());
+                helper(newFreeTime, notUsedRecipe, resInstruction);
             }
+
+//            for (int i=0;i<size;i++) {
+//
+//                instr=maxFreeTimeRecipe.getRecipeInstructions().get(i);
+//
+//                if(i!=size-1)
+//                {
+//                   handleSingleInstruction(instr,resInstruction,notUsedRecipe);
+//                }
+//                else
+//                {
+//                    resInstruction.add(instr);
+//                    if(instr.getFreeTime()>0) {
+//                        int newFreeTime = freeTime - (maxFreeTimeRecipe.getPreparationTime() - instr.getFreeTime());
+//
+//                        helper(newFreeTime,notUsedRecipe,resInstruction);
+//                    }
+//                }
         }
 
 
