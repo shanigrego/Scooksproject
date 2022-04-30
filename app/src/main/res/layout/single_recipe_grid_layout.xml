@@ -17,12 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.549" />
 
-
     <ImageView
         android:id="@+id/favouriteGridViewBtn"
         android:layout_width="29dp"
         android:layout_height="29dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="12dp"
         android:src="@drawable/favourite"
         android:tint="@android:color/white"
@@ -32,39 +31,58 @@
         app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
         tools:ignore="UseAppTint" />
 
-
     <ImageView
         android:id="@+id/chefIconSelectionRecipeUnChosen"
         android:layout_width="25.5dp"
         android:layout_height="25.5dp"
+        android:layout_marginStart="15dp"
         android:src="@drawable/chef_white"
-        android:layout_marginLeft="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/favouriteGridViewBtn"
         app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
         app:layout_constraintTop_toTopOf="@+id/favouriteGridViewBtn" />
 
- <ImageView
+    <ImageView
         android:id="@+id/chefIconSelectionRecipeChosen"
         android:layout_width="25.5dp"
         android:layout_height="25.5dp"
+        android:layout_marginStart="15dp"
         android:src="@drawable/chef_green"
         android:visibility="invisible"
-        android:layout_marginLeft="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/favouriteGridViewBtn"
         app:layout_constraintStart_toStartOf="@+id/gridLayoutRecipeImage"
         app:layout_constraintTop_toTopOf="@+id/favouriteGridViewBtn" />
+
+
+    <ProgressBar
+        android:id="@+id/recipeImgaeProgreeBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintLeft_toLeftOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintRight_toRightOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintTop_toTopOf="@+id/gridLayoutRecipeImage" />
+
+    <TextView
+        android:id="@+id/recipeImageErrorTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintLeft_toLeftOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintRight_toRightOf="@+id/gridLayoutRecipeImage"
+        app:layout_constraintTop_toTopOf="@+id/gridLayoutRecipeImage" />
 
     <TextView
         android:id="@+id/gridLayoutRecipeName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="fsdfsdf"
+        android:layout_height="40dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/gridLayoutRecipeImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="20dp"
-        android:textSize="15dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

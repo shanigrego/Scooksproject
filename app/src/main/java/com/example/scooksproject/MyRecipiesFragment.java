@@ -35,7 +35,7 @@ public class MyRecipiesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.my_recipies, null);
-        HomePageActivity.ShowBottomNavigationBar();
+        HomePageActivity.showBottomNavigationBar();
         initComponents(view);
         myRecipesGridView.setAdapter(adapter);
 
@@ -62,6 +62,7 @@ public class MyRecipiesFragment extends Fragment {
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             RecipeBookFragment fragment = new RecipeBookFragment();
+
             @Override
             public void onClick(View v) {
                 getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("back").commit();
@@ -77,7 +78,7 @@ public class MyRecipiesFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filteredItems.clear();
-                if(!s.toString().isEmpty()) {
+                if (!s.toString().isEmpty()) {
                     for (Recipe recipe :
                             myRecipes) {
                         if (recipe.getName().contains(s))
@@ -85,8 +86,7 @@ public class MyRecipiesFragment extends Fragment {
                     }
                     filteredAdapter = new AllRecipesGridAdapter(getContext(), filteredItems);
                     myRecipesGridView.setAdapter(filteredAdapter);
-                }
-                else{
+                } else {
                     myRecipesGridView.setAdapter(adapter);
                 }
             }

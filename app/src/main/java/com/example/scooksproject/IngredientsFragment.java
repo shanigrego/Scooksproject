@@ -10,9 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
@@ -39,7 +37,7 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
         com.google.android.material.textview.MaterialTextView addIngredient = view.findViewById(R.id.addSingleIngredientBtn);
 //        HomePageActivity.getBottomAppBar().setVisibility(View.INVISIBLE);
 //        HomePageActivity.getChefButton().setVisibility(View.INVISIBLE);
-        HomePageActivity.HideBottomNavigationBar();
+        HomePageActivity.hideBottomNavigationBar();
 
         addIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +50,7 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
             @Override
             public void onClick(View v) {
                 saveData();
-                HomePageActivity.getBottomAppBar().setVisibility(View.VISIBLE);
-                HomePageActivity.getChefButton().setVisibility(View.VISIBLE);
+                HomePageActivity.showBottomNavigationBar();
                 Fragment fragment = new AddRecipeFragment();
                 getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
             }

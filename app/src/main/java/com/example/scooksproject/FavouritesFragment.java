@@ -1,5 +1,6 @@
 package com.example.scooksproject;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,30 +19,20 @@ import androidx.fragment.app.Fragment;
 
 public class FavouritesFragment extends Fragment {
 
-    private GridView favouritesGridView;
-    private ListAdapter adapter;
-    private List<Recipe> favouriteRecipesList;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favourites_fragment, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.favourites_fragment, null);
         initComponents(view);
+        HomePageActivity.showBottomNavigationBar();
 
         return view;
     }
 
-    private  void initComponents(View view){
-        favouritesGridView = view.findViewById(R.id.favouritesGridView);
-        favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt",getContext().getFilesDir());
-        adapter = new AllRecipesGridAdapter(getContext(),favouriteRecipesList);
+    private void initComponents(View view) {
+        GridView favouritesGridView = view.findViewById(R.id.favouritesGridView);
+        List<Recipe> favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", getContext().getFilesDir());
+        ListAdapter adapter = new AllRecipesGridAdapter(getContext(), favouriteRecipesList);
         favouritesGridView.setAdapter(adapter);
-    }
-
-    private void setFavouriteBtnColor(int color, ImageView favouritesBtn){
-        DrawableCompat.setTint(
-                DrawableCompat.wrap(favouritesBtn.getDrawable()),
-                ContextCompat.getColor(getContext(), color)
-        );
     }
 }

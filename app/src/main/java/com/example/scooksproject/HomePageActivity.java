@@ -2,20 +2,14 @@ package com.example.scooksproject;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.DatabaseReference;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -40,29 +34,32 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
+    //Being uses. Do not erase!
     public static BottomAppBar getBottomAppBar() {
         return bottomAppBar;
     }
 
+    //Being uses. Do not erase!
     public static FloatingActionButton getChefButton() {
         return chefButton;
     }
 
-    public static void HideBottomNavigationBar() {
+    //Being uses. Do not erase!
+    public static void hideBottomNavigationBar() {
         bottomAppBar.setVisibility(View.INVISIBLE);
         chefButton.setVisibility(View.INVISIBLE);
         bottomNavigationView.setVisibility(View.INVISIBLE);
         scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    public static void ShowBottomNavigationBar() {
+    public static void showBottomNavigationBar() {
         bottomAppBar.setVisibility(View.VISIBLE);
         chefButton.setVisibility(View.VISIBLE);
         bottomNavigationView.setVisibility(View.VISIBLE);
         scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     }
 
-    public static void showSnackBar(){
+    public static void showSnackBar() {
         Snackbar.make(snackBarView, "הוסר מתכון", Snackbar.LENGTH_LONG).setAction("ביטול", item -> {
             //TODO
         }).show();

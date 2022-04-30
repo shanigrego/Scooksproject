@@ -40,7 +40,7 @@ public class RecipeInstructionsFragment extends Fragment {
         View view = inflater.inflate(R.layout.recipe_instructions_list, null);
         listView = view.findViewById(R.id.recipeStepsListView);
         submitBtn = view.findViewById(R.id.submitRecipeInstructions);
-        HomePageActivity.HideBottomNavigationBar();
+        HomePageActivity.hideBottomNavigationBar();
         if (items == null) {
             items = new ArrayList<>();
             addItem("");

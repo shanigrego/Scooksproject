@@ -32,7 +32,7 @@ public class RecipeBookFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_book_activity, null);
-        HomePageActivity.ShowBottomNavigationBar();
+        HomePageActivity.showBottomNavigationBar();
 
         myRecpiesButton = view.findViewById(R.id.myRecipeFloatingBtn);
         allRecipesGridView = view.findViewById(R.id.allRecipesGridView);
