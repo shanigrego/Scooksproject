@@ -2,16 +2,14 @@ package com.example.scooksproject.logics;
 
 import com.example.scooksproject.Ingredient;
 import com.example.scooksproject.Instruction;
-import com.example.scooksproject.R;
 import com.example.scooksproject.Recipe;
-import com.google.android.gms.common.internal.constants.ListAppsActivityContract;
 
-import java.util.Collections;
 import java.util.Dictionary;
-import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Algorithm {
 
@@ -157,6 +155,10 @@ public class Algorithm {
 
     private static void helper(int freeTime , List<Recipe> notUsedRecipe,List<Instruction> resInstruction) {
 
+        if(notUsedRecipe.size()==0)
+        {
+            return;
+        }
         List<Recipe> knapsackCandidate=  knapsackHelper(freeTime,notUsedRecipe);
         if(knapsackCandidate==null)
             return;
@@ -208,10 +210,6 @@ public class Algorithm {
     public static List<Recipe> knapsackHelper(int freeTime , List<Recipe> notUsedRecipe)
     {
        Item[] items=createItemFromRecipeList(notUsedRecipe);
-//        Item[] items=new Item[2];
-//        items[0]=new Item("recipe1",30,50);
-//        items[1]=new Item("recipe1",30,50);
-//        Knapsack knapsack = new Knapsack(items, 46);
         Knapsack knapsack = new Knapsack(items, freeTime);
         knapsack.display();
         Solution solution = knapsack.solve();
@@ -262,11 +260,13 @@ public class Algorithm {
 
     public static List<Ingredient> getIngredientsFromAllRecipe(List<Recipe> recipeList)
     {
-        List<Ingredient> list = new LinkedList<>();
-
-
-        return list;
+        List<Ingredient> listRes = new LinkedList<>();
+        for (Recipe rec:recipeList) {
+            listRes.addAll(rec.getIngredients());
+        }
+        return listRes;
     }
+
     private static Recipe getMaxFreeTimeRecipe(List<Recipe> recipeList) {
 
         double max=recipeList.get(0).getTotalFreeTime();
