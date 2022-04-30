@@ -2,7 +2,9 @@ package com.example.scooksproject;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -34,12 +36,12 @@ public class HomePageActivity extends AppCompatActivity {
 
     }
 
-    //Being uses. Do not erase!
+    //Being used. Do not erase!
     public static BottomAppBar getBottomAppBar() {
         return bottomAppBar;
     }
 
-    //Being uses. Do not erase!
+    //Being used. Do not erase!
     public static FloatingActionButton getChefButton() {
         return chefButton;
     }
@@ -59,11 +61,14 @@ public class HomePageActivity extends AppCompatActivity {
         scrollView.setLayoutParams(new CoordinatorLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     }
 
-    public static void showSnackBar() {
-        Snackbar.make(snackBarView, "הוסר מתכון", Snackbar.LENGTH_LONG).setAction("ביטול", item -> {
-            //TODO
+    public static void showSnackBar(Recipe lastDeletedRecipe, ImageView chefIconChosen, ImageView chefIconUnChosen) {
+        Snackbar.make(snackBarView, "", Snackbar.LENGTH_LONG).setAction("ביטול", item -> {
+            MealRecipesFragment.addRecipe(lastDeletedRecipe);
+            chefIconChosen.setVisibility(View.VISIBLE);
+            chefIconUnChosen.setVisibility(View.INVISIBLE);
         }).show();
     }
+
 
     private void initComponents() {
         scrollView = findViewById(R.id.scrollViewLinearLayout);
@@ -73,6 +78,10 @@ public class HomePageActivity extends AppCompatActivity {
         bottomNavigationView.setBackground(null);
         snackBarView = findViewById(android.R.id.content);
 
+        // SnackBar initialization
+        snackBarView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+
+        // Bottom Navigation View initialization
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment fragment;
             switch (item.getItemId()) {
@@ -94,6 +103,7 @@ public class HomePageActivity extends AppCompatActivity {
             return true;
         });
 
+        // Chef Button initialization
         chefButton.setOnClickListener(btn -> {
             Fragment fragment = new MealRecipesFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();

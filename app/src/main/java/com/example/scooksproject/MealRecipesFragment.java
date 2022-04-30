@@ -40,6 +40,7 @@ public class MealRecipesFragment extends Fragment {
     }
 
     private void initComponents(View view) {
+        final Recipe[] finalRecipe = new Recipe[1];
         nonScrollView = view.findViewById(R.id.mealRecipeGridView);
         MaterialButton startMealBtn = view.findViewById(R.id.mealRecipeStartBtn);
         backBtn = view.findViewById(R.id.mealRecipesBackBtn);
@@ -50,8 +51,13 @@ public class MealRecipesFragment extends Fragment {
         nonScrollView.setAdapter(adapter);
 
         //Start Meal Button initialization
-        startMealBtn.setOnClickListener(item -> {
-            Algorithm.scooksAlgorithm(chosenRecipes);
+        startMealBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finalRecipe[0] =  Algorithm.scooksAlgorithm(chosenRecipes);
+                Fragment fragment = new FinalRecipeFragment(finalRecipe[0]);
+                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("back").commit();
+            }
         });
 
         //Back Button initialization
