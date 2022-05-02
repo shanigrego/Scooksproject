@@ -8,7 +8,7 @@ public class Instruction implements Serializable {
     private int workTime;
     private int freeTime;
     private int index;
-
+    private String recipeName;
     public Instruction() { }
 
     public Instruction(int index,String content, int workTime, int freeTime) {
@@ -16,6 +16,15 @@ public class Instruction implements Serializable {
         this.workTime = workTime;
         this.freeTime = freeTime;
         this.index=index;
+        this.recipeName=null;
+    }
+
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
+    }
+
+    public String getRecipeName() {
+        return recipeName;
     }
 
     public int getIndex() {

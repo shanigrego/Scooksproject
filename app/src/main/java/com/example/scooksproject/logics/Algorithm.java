@@ -5,11 +5,9 @@ import com.example.scooksproject.Instruction;
 import com.example.scooksproject.Recipe;
 
 import java.util.Dictionary;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class Algorithm {
 
@@ -19,6 +17,7 @@ public class Algorithm {
     public static Recipe scooksAlgorithm(List<Recipe> recipeList) {
 
         Recipe resRecipe = null;
+        updateRecipeNameForInstructions(recipeList);
         List<Recipe> notUsedRecipesList = new LinkedList<>(recipeList);
         List<Instruction> instructionList=new LinkedList<>();
         runAlgorithm(notUsedRecipesList,instructionList);
@@ -30,6 +29,15 @@ public class Algorithm {
 
         resRecipe = new Recipe("תוכנית עבודה", timeOfWorkNeeded, totalTimeRecipe, difficultLevel, ingredientList, instructionListStr, null, instructionList, 0, 0, 0);
         return resRecipe;
+    }
+
+    private static void updateRecipeNameForInstructions(List<Recipe> recipeList) {
+
+        for (Recipe rec:recipeList) {
+            for (Instruction inst:rec.getRecipeInstructions()) {
+                inst.setRecipeName(rec.getName());
+            }
+        }
     }
 
     private static List<String> getStrFormInstructionList(List<Instruction> instructionList) {
