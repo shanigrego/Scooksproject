@@ -48,7 +48,7 @@ public class MealRecipesFragment extends Fragment {
         HomePageActivity.hideBottomNavigationBar();
         List<Recipe> tryRecipes = getTesterRecipes();
         nonScrollView.setAdapter(adapter);
-        chosenRecipes=getTesterRecipes();
+        //chosenRecipes=getTesterRecipes();
         //Start Meal Button initialization
         startMealBtn.setOnClickListener(item -> {
             Algorithm.scooksAlgorithm(chosenRecipes);
