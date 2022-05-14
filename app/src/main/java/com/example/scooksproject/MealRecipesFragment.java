@@ -49,7 +49,7 @@ public class MealRecipesFragment extends Fragment {
         HomePageActivity.hideBottomNavigationBar();
         List<Recipe> tryRecipes = getTesterRecipes();
         nonScrollView.setAdapter(adapter);
-        //chosenRecipes=getTesterRecipes();
+        chosenRecipes=getTesterRecipes();
         //Start Meal Button initialization
         startMealBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,16 +143,16 @@ public class MealRecipesFragment extends Fragment {
         List<Instruction> instructionList6 = new LinkedList<>();
         Instruction recipe6inst1 = new Instruction(1, "Recipe 6 Press1", 10, 0);
         Instruction recipe6inst2 = new Instruction(2, "Recipe 6 Press2", 0, 45);
-      //  Instruction recipe6inst3 = new Instruction(3, "Recipe 6 Press3", 5, 0);
+        Instruction recipe6inst3 = new Instruction(3, "Recipe 6 Press3", 5, 0);
         instructionList6.add(recipe6inst1);
         instructionList6.add(recipe6inst2);
-        //instructionList6.add(recipe6inst3);
+        instructionList6.add(recipe6inst3);
 //        Recipe recipe6 = new Recipe("recipe 6", "15", "60", "כל אחד יכול", null, null, null, null, 0, 0, 0);
 //        recipe6.setInstructions(instructionList6);
 //        recipe6.setPreparationTime(60);
 //        recipe6.setTimeOfWorkNeeded(15);
 //        recipe6.setTotalFreeTime(45);
-        Recipe recipe6=new Recipe("recipe 6","10","55","כל אחד יכול",null,null,null,instructionList6,10,45,55);
+        Recipe recipe6=new Recipe("recipe 6","15","60","כל אחד יכול",null,null,null,instructionList6,15,45,60);
         Instruction recipe7inst = new Instruction(1, "Recipe 7 Press1", 30, 0);
         Instruction recipe8inst = new Instruction(1, "Recipe 8 Press1", 20, 0);
         List<Instruction>instructionList7=new LinkedList<>();
