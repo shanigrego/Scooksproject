@@ -28,6 +28,8 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     private final List<Recipe> allRecipes;
     private final List<Recipe> favouriteRecipesList;
     private final List<Recipe> chosenRecipes;
+    private Recipe lastDeletedRecipe;
+    private View view;
 
     public AllRecipesGridAdapter(Context context, List<Recipe> allRecipes/*, List<Recipe> favouriteRecipesList*/) {
         this.context = context;
@@ -55,15 +57,16 @@ public class AllRecipesGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
+            HomePageActivity.showBottomNavigationBar();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.single_recipe_grid_layout, null);
             initComponents(convertView, position);
+            this.view = convertView;
         }
         return convertView;
     }
 
     private void initComponents(View convertView, int position) {
-
         ProgressBar progressBar = convertView.findViewById(R.id.recipeImgaeProgreeBar);
         ImageView recipeImage = convertView.findViewById(R.id.gridLayoutRecipeImage);
         TextView recipeName = convertView.findViewById(R.id.gridLayoutRecipeName);
@@ -120,6 +123,8 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             }
         });
 
+
+
         //Recipe Image initialization
         recipeImage.setOnClickListener(v -> {
             Fragment fragment = new RecipeDetailsFragment(allRecipes.get(position));
@@ -169,7 +174,8 @@ public class AllRecipesGridAdapter extends BaseAdapter {
             MealRecipesFragment.removeRecipe(currentRecipe);
             chefIconUnChosen.setVisibility(View.VISIBLE);
             chefIconChosen.setVisibility(View.INVISIBLE);
-            HomePageActivity.showSnackBar();
+            lastDeletedRecipe = currentRecipe;
+            HomePageActivity.showSnackBar(lastDeletedRecipe, chefIconChosen, chefIconUnChosen);
         }
     }
 
