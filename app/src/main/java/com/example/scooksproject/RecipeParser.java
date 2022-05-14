@@ -35,11 +35,29 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     //call this function from other classes
     public void parseAllRecipes() {
-        execute(//"https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704"
-        //,"https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink"
-      //,"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm"
-       //,"https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle"
-        /*,*/"https://www.mako.co.il/food-weekend/kitchen_queen_yonit_zukerman/Recipe-fb2d25b473f5761006.htm");
+        execute("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704"
+        ,"https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink"
+      ,"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm"
+       ,"https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle"
+        ,"https://www.mako.co.il/food-weekend/kitchen_queen_yonit_zukerman/Recipe-fb2d25b473f5761006.htm"
+    ,"http ://www.mako.co.il/food-recipes/recipes_column-stuffed/Recipe-8cf94e1e951e751006.htm?partner=mobileAutomaticChannel");
+    }
+
+
+    public List<String> getUrlsRecipes()
+    {
+        Document doc = getDocumentAccordingToUrl("https://www.mako.co.il/food-recipes/recipes_column-stuffed?Partner=blockscomp");
+        Elements hrefs = doc.getElementsByClass("hover");
+        List<String>hrefUrls= new LinkedList<>();
+        String endHtml;
+        String prefixHref="https://www.mako.co.il";
+
+        for (int i = 0; i <hrefs.size() ; i++) {
+            endHtml =hrefs.get(i).childNodes().get(1).childNodes().get(1).attributes().get("href");
+            String finalHtml=prefixHref+endHtml;
+            hrefUrls.add(finalHtml);
+        }
+        return hrefUrls;
     }
 
     //parse a single recipe
@@ -61,8 +79,8 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected String doInBackground(String... urls) {
-
-        for (String url:urls) {
+        List<String> recipeUrls=getUrlsRecipes();
+        for (String url:recipeUrls) {
             Recipe recipe= null;
             try {
                 recipe = getRecipeFromUrl(url);
@@ -77,6 +95,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private Recipe getRecipeFromUrl(String urlRecipe) throws NoNumberBeforeMinutesException,NoNumberBeforeHoursException {
+
         Document doc = getDocumentAccordingToUrl(urlRecipe);
         String recipeName = doc.title().split(":")[1];
         List<Ingredient> listOfIngredients = createIngredientListFromDoc(doc);
@@ -286,8 +305,9 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         List<Instruction> list = new LinkedList<>();
 
         int instructionWorkTime = timeWorkNeeded / recipeInstructionsStr.size();
-        for (int i=0; i<recipeInstructionsStr.size(); i++) {
-
+        for (int i=0; i<recipeInstructionsStr.size(); i++)
+        {
+            recipeInstructionsStr.set(i,recipeInstructionsStr.get(i).replaceAll("&nbsp;"," "));
             list.add(getInstructionFromStr(recipeInstructionsStr.get(i),instructionWorkTime,i+1));
         }
 
@@ -441,11 +461,11 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
                 arr[2] = Math.max(arr[2], freeTime);
                 break;
             case "שעתיים":
+                freeTime =120;
                 if (i + 1 < splitContent.length) {
                     strAfter = splitContent[i + 1];
                     if(dict.get(strAfter)!=null)
-                        freeTime = dict.get(strAfter);
-                    freeTime += 120;
+                        freeTime += dict.get(strAfter);
                 }
                 arr[3] = Math.max(arr[3], freeTime);
                 break;
@@ -525,7 +545,7 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
         if (timeString.startsWith("עד"))
         {
-            timeString=timeString.substring(2);
+            timeString=timeString.substring(3);
         }
 
         return createTimeStringToDoubleDict().get(timeString);

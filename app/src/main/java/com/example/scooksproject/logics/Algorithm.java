@@ -20,10 +20,12 @@ public class Algorithm {
         updateRecipeNameForInstructions(recipeList);
         List<Recipe> notUsedRecipesList = new LinkedList<>(recipeList);
         List<Instruction> instructionList=new LinkedList<>();
-        runAlgorithm(notUsedRecipesList,instructionList);
+        int totalFreeTime=runAlgorithm(notUsedRecipesList,instructionList);
         List<Ingredient> ingredientList = getIngredientsFromAllRecipe(recipeList);
-        String timeOfWorkNeeded = getTimeWorkAllRecipes(instructionList);
-        String totalTimeRecipe = getTotalTimeAllRecipes(instructionList);
+        int timeOfWorkNeededInt = getTimeWorkAllRecipes(instructionList);
+        String timeOfWorkNeeded=convertTimeToString(timeOfWorkNeededInt);
+        int totalTimeRecipeInt=timeOfWorkNeededInt+totalFreeTime;
+        String totalTimeRecipe = convertTimeToString(totalTimeRecipeInt);
         String difficultLevel = getDifficultLevelAllRecipes(recipeList);
         List<String> instructionListStr = getStrFormInstructionList(instructionList);
 
@@ -91,12 +93,9 @@ public class Algorithm {
         return dict;
     }
 
-    private static String getTotalTimeAllRecipes(List<Instruction> instructionList) {
-
-        return null;
-    }
-
-    private static String convertTimeToString(int hours, int minutes) {
+    private static String convertTimeToString(int time) {
+        int hours = time / 60;
+        int minutes = time - (hours * 60);
         String res = "";
         switch (hours) {
             case 0:
@@ -119,79 +118,85 @@ public class Algorithm {
         return res;
     }
 
-    private static String getTimeWorkAllRecipes(List<Instruction> instructionList) {
+    private static int getTimeWorkAllRecipes(List<Instruction> instructionList) {
         int timeWorkAllRecipes = 0, hours, minutes;
         for (Instruction inst : instructionList) {
             timeWorkAllRecipes += inst.getWorkTime();
         }
-        hours = timeWorkAllRecipes / 60;
-        minutes = timeWorkAllRecipes - (hours * 60);
-        return convertTimeToString(hours, minutes);
+        return timeWorkAllRecipes;
     }
 
-    private static void runAlgorithm(List<Recipe> notUsedRecipeList,List<Instruction> resInstructionList) {
+    private static int runAlgorithm(List<Recipe> notUsedRecipeList,List<Instruction> resInstructionList) {
+        int totalFreeTimeWasted=0;
         while (notUsedRecipeList.size() > 1) {
             Recipe root = getMaxFreeTimeRecipe(notUsedRecipeList);
             notUsedRecipeList.remove(root);
             List<Instruction> rootInstruction = root.getRecipeInstructions();
-            handleInstructions(rootInstruction, notUsedRecipeList, resInstructionList);
-            Instruction inst = rootInstruction.get(rootInstruction.size() - 1);
-            resInstructionList.add(inst);
-            if (inst.getFreeTime() > 0) {
-                runAlgorithm(notUsedRecipeList,resInstructionList);
+            totalFreeTimeWasted+=handleInstructions(rootInstruction, notUsedRecipeList, resInstructionList);
+            Instruction lastInst = rootInstruction.get(rootInstruction.size() - 1);
+            resInstructionList.add(lastInst);
+            if (lastInst.getFreeTime() > 0) {
+                totalFreeTimeWasted+=runAlgorithm(notUsedRecipeList,resInstructionList);
             }
         }
         if (notUsedRecipeList.size() == 1) {
             resInstructionList.addAll(notUsedRecipeList.get(0).getRecipeInstructions());
+            totalFreeTimeWasted+=notUsedRecipeList.get(0).getTotalFreeTime();
             notUsedRecipeList.remove(notUsedRecipeList.get(0));
+
         }
+        return totalFreeTimeWasted;
     }
 
     //הפונקציה שעוברת על כל ההורואת הנחה ומפעילה את המעטפת על הההורואת עם זמן המתנה
-    public static void handleInstructions(List<Instruction> instructionList, List<Recipe> notUsedRecipeList, List<Instruction> resInstruction) {
+    public static int handleInstructions(List<Instruction> instructionList, List<Recipe> notUsedRecipeList, List<Instruction> resInstruction) {
 //        for (Instruction instr:instructionList) {
 //            handleSingleInstruction(instr,resInstruction,notUsedRecipeList);
 //        }
+        int sumFreeTimeWasted=0;
         for (int i = 0; i < instructionList.size() - 1; i++) {
-            handleSingleInstruction(instructionList.get(i), resInstruction, notUsedRecipeList);
+            sumFreeTimeWasted+=handleSingleInstruction(instructionList.get(i), resInstruction, notUsedRecipeList);
         }
+        return sumFreeTimeWasted;
     }
 
-    private static void handleSingleInstruction(Instruction instr, List<Instruction> resInstruction, List<Recipe> notUsedRecipeList) {
+    private static int handleSingleInstruction(Instruction instr, List<Instruction> resInstruction, List<Recipe> notUsedRecipeList) {
         resInstruction.add(instr);
+        int freeTimeWasted=0;
         if (instr.getFreeTime() > 0) {
-            helper(instr.getFreeTime(), notUsedRecipeList, resInstruction);
+            freeTimeWasted= helper(instr.getFreeTime(), notUsedRecipeList, resInstruction);
         }
+        return freeTimeWasted;
     }
 
-    private static void helper(int freeTime, List<Recipe> notUsedRecipe, List<Instruction> resInstruction) {
-
+    private static int helper(int freeTime, List<Recipe> notUsedRecipe, List<Instruction> resInstruction) {
+        int freeTimeWasted=0;
         if (notUsedRecipe.size() == 0) {
-            return;
+            return freeTime;
         }
         List<Recipe> knapsackCandidate = knapsackHelper(freeTime, notUsedRecipe);
         if (knapsackCandidate == null)
-            return;
+            return freeTime;
         Recipe maxFreeTimeRecipe = getMaxFreeTimeRecipe(knapsackCandidate);
         if (maxFreeTimeRecipe.getTotalFreeTime() == 0) {
             chooseRecipe(knapsackCandidate, resInstruction, notUsedRecipe);
-            return;
+            return 0;
         }
-        else
-        {
+        else {
             //we used this recipe
             notUsedRecipe.remove(maxFreeTimeRecipe);
 
             Instruction instr = null;
             int size = maxFreeTimeRecipe.getRecipeInstructions().size();
-            handleInstructions(maxFreeTimeRecipe.getRecipeInstructions(), notUsedRecipe, resInstruction);
+            freeTimeWasted = handleInstructions(maxFreeTimeRecipe.getRecipeInstructions(), notUsedRecipe, resInstruction);
             instr = maxFreeTimeRecipe.getRecipeInstructions().get(size - 1);
             resInstruction.add(instr);
             if (instr.getFreeTime() > 0) {
                 int newFreeTime = freeTime - (maxFreeTimeRecipe.getPreparationTime() - instr.getFreeTime());
-                helper(newFreeTime, notUsedRecipe, resInstruction);
+                return helper(newFreeTime, notUsedRecipe, resInstruction) + freeTimeWasted;
             }
-
+            return freeTimeWasted;
+        }
 //            for (int i=0;i<size;i++) {
 //
 //                instr=maxFreeTimeRecipe.getRecipeInstructions().get(i);
@@ -201,7 +206,7 @@ public class Algorithm {
 //                   handleSingleInstruction(instr,resInstruction,notUsedRecipe);
 //                }
 //                else
-//                {
+//                 {
 //                    resInstruction.add(instr);
 //                    if(instr.getFreeTime()>0) {
 //                        int newFreeTime = freeTime - (maxFreeTimeRecipe.getPreparationTime() - instr.getFreeTime());
@@ -211,8 +216,6 @@ public class Algorithm {
 //                }
         }
 
-
-    }
 
     private static void chooseRecipe(List<Recipe> knapsackCandidate, List<Instruction> resInstruction,List<Recipe> notUsedRecipe) {
         for (Recipe recipe:knapsackCandidate) {
