@@ -35,11 +35,10 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
 
     //call this function from other classes
     public void parseAllRecipes() {
-        execute(//"https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704"
-        //,"https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink"
-      //,"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm"
-       //,"https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle"
-        /*,*/"https://www.mako.co.il/food-weekend/kitchen_queen_yonit_zukerman/Recipe-fb2d25b473f5761006.htm");
+        execute("https://www.mako.co.il/food-cooking_magazine/food-store/Recipe-910ee37d7ebfc31006.htm?sCh=c7250a2610f26110&pId=1595820704"
+        ,"https://www.mako.co.il/food-recipes/recipes_column-hospitality/Recipe-36c292336036931006.htm?Partner=interlink"
+      ,"https://www.mako.co.il/food-recipes/recipes_column-salads/Recipe-261a96650645c71026.htm"
+       ,"https://www.mako.co.il/food-cooking_magazine/mazola-recipes/Recipe-a6d3937a7418151006.htm?partner=obarticle");
     }
 
     //parse a single recipe

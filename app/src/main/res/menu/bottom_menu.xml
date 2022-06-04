@@ -26,8 +26,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/home"
-        android:icon="@drawable/home"
+        android:id="@+id/timers"
+        android:icon="@drawable/ic_baseline_timer_24"
         android:title="בית"
         app:showAsAction="ifRoom" />
 

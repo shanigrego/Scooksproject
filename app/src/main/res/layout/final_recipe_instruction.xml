@@ -6,39 +6,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/finalRecipeSingleItemBackground"
-        android:layout_width="360dp"
+        android:layout_width="300dp"
         android:layout_height="90dp"
         android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
         app:cardBackgroundColor="@color/teal_200"
         app:cardCornerRadius="20dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/finalInstructionPressedStepNum"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/buttun_green"
-                android:visibility="invisible" />
-
-            <ImageView
-                android:id="@+id/finalInstructionUnpressedStepNum"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/button_grey" />
-
-            <ImageView
-                android:id="@+id/finalTimerIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/finalInstructionUnpressedStepNum"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_baseline_access_time_24" />
 
 
             <TextView
@@ -47,13 +24,42 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@+id/finalInstructionPressedStepNum"
+                android:gravity="center"
                 android:hint="תיאור שלב"
-                android:textColor="@color/white"
-                android:gravity="center"/>
+                android:textColor="@color/white" />
 
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+    <ImageView
+        android:id="@+id/finalInstructionPressedStepNum"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/buttun_green"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        android:translationZ="90dp"
+        android:layout_alignParentEnd="true"/>
+
+    <!--        android:layout_alignParentEnd="true"-->
+
+    <ImageView
+        android:id="@+id/finalInstructionUnpressedStepNum"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/button_grey"
+        android:translationZ="90dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/finalTimerIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/finalInstructionUnpressedStepNum"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_baseline_access_time_24"
+        android:translationZ="90dp" />
+
 
 </RelativeLayout>

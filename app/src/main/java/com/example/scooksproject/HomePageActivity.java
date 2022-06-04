@@ -97,7 +97,9 @@ public class HomePageActivity extends AppCompatActivity {
                     fragment = new FavouritesFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
                     break;
-                default:
+                case (R.id.timers):
+                    fragment = new TimersFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
                     break;
             }
             return true;
