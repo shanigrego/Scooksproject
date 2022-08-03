@@ -49,21 +49,16 @@ public class RecipeBookFragment extends Fragment {
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                HomePageActivity.showBottomNavigationBar();
-               /* if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    Log.i(tag, "onKey Back listener is working!!!");
-                    getFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
-                    return true;
-                }
-                return false;*/
+        view.setOnKeyListener((v, keyCode, event) -> {
+            HomePageActivity.showBottomNavigationBar();
+           /* if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                Log.i(tag, "onKey Back listener is working!!!");
+                getFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
                 return true;
             }
+            return false;*/
+            return true;
         });
-
-
         return view;
     }
 

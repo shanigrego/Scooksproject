@@ -32,8 +32,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:height="50dp"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
-                android:hint="רמת קושי"
+                android:text="רמת קושי"
+                android:textColor="@color/black"
+                android:textStyle="bold"
                 android:onClick="showPopupMenu" />
 
             <TextView
@@ -41,88 +44,121 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:height="50dp"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
-                android:hint="זמן הכנה" />
+                android:textColor="@color/black"
+                android:text="זמן הכנה" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:height="50dp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
-                android:hint="זמן עבודה" />
+
+                android:text="זמן עבודה" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/headersLinearLayout"
-            android:orientation="horizontal">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:divider="@drawable/tall_divider"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:showDividers="middle">
 
             <TextView
                 android:id="@+id/levelTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="1dp"
+                android:layout_height="65dp"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="1"
-                android:height="50dp"
+                android:background="@drawable/circle"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
                 android:hint="רמת קושי"
                 android:onClick="showPopupMenu" />
 
             <TextView
                 android:id="@+id/preperationTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="1dp"
+                android:layout_height="65dp"
                 android:layout_weight="1"
                 android:height="50dp"
+                android:background="@drawable/circle"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
                 android:hint="זמן הכנה" />
 
             <TextView
                 android:id="@+id/makingTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="1dp"
+                android:layout_height="65dp"
+                android:layout_marginRight="20dp"
                 android:layout_weight="1"
-                android:height="50dp"
+                android:background="@drawable/circle"
+                android:fontFamily="@font/ellina"
                 android:gravity="center"
-                android:hint="זמן עבודה" />
+                android:hint="זמן עבודה"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/recipeDetailsRecipeName"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:fontFamily="@font/ellina_bold"
             android:gravity="center"
+            android:padding="10dp"
+
+            android:shadowColor="@color/background"
+            android:text="שם המתכון"
+            android:textColor="@color/purple"
             android:textSize="20sp"
-            android:textStyle="bold|italic"
-            android:hint="שם המתכון"
+            android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/headerIngredients"
-            android:layout_width="164dp"
+            android:layout_width="wrap_content"
             android:layout_height="33dp"
             android:layout_below="@+id/linearLayout"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/ellina"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
-            android:text="@string/ingredients" />
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="@string/ingredients"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/recipeDetailsSteps"
-            android:layout_width="164dp"
+            android:layout_width="wrap_content"
             android:layout_height="33dp"
             android:layout_below="@+id/recipeDetailsIngredientsList"
             android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/ellina"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
-            android:text="@string/recipe_instructions" />
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/recipe_instructions"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
 
 
         <com.example.scooksproject.NonScrollListView
@@ -130,6 +166,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/headerIngredients"
+            android:layout_marginRight="20dp"
             android:divider="@null"
             android:orientation="horizontal" />
 
@@ -139,6 +176,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/recipeDetailsSteps"
+            android:layout_marginRight="20dp"
             android:divider="@null" />
     </RelativeLayout>
 

@@ -3,19 +3,14 @@ package com.example.scooksproject;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -57,7 +52,7 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
                 amountIngredient.setHint("0");
 
             //Remove Button initialization
-            removeIngredient.setOnClickListener(v -> IngredientsFragment.removeItem(position));
+            removeIngredient.setOnClickListener(v -> AddRecipeFragment.removeIngredient(position));
 
             //Ingredient Name initialization
             ingredientName.setText(ingredients.get(position).getName());
@@ -100,7 +95,7 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
     }
 
     private void setButtonsForViewOnly(EditText amountIngredient, Button measureUnit, ImageView removeIngredient, EditText ingredientName) {
-        amountIngredient.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+        amountIngredient.setBackgroundColor(context.getResources().getColor(R.color.pink));
         measureUnit.setBackgroundResource(android.R.color.transparent);
         removeIngredient.setVisibility(View.INVISIBLE);
         ingredientName.setEnabled(false);

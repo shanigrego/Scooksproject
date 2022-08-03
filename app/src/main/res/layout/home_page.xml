@@ -27,7 +27,7 @@
         app:fabCradleRoundedCornerRadius="50dp"
         app:fabCradleMargin="10dp"
         android:fadeScrollbars="true"
-        app:hideOnScroll="true">
+        app:hideOnScroll="false">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"

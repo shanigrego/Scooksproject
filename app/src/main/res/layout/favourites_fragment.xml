@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/favouritesBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:padding="22dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/favouritesSearchET"
+        app:layout_constraintTop_toTopOf="@+id/favouritesSearchET"
+        app:layout_constraintEnd_toStartOf="@+id/favouritesSearchET"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginRight="20dp"/>
+    <EditText
+        android:id="@+id/favouritesSearchET"
+        android:layout_width="183dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="16dp"
+        android:hint="חיפוש"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="100dp"
+        android:layout_toRightOf="@id/favouritesSearchET"
+        android:src="@drawable/search"
+        app:layout_constraintBottom_toBottomOf="@+id/favouritesSearchET"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/favouritesSearchET"
+        app:layout_constraintTop_toTopOf="@+id/favouritesSearchET"
+        app:layout_constraintVertical_bias="0.578" />
 
     <GridView
         android:id="@+id/favouritesGridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="2"/>
+        android:layout_marginTop="70dp"
+        android:numColumns="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favouritesSearchET" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

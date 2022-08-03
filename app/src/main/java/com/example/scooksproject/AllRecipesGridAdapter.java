@@ -81,7 +81,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         Recipe currentRecipe = allRecipes.get(position);
 
         //Image loading
-        if (currentRecipe.getRecipeImg() != null)
+        if (!currentRecipe.getRecipeImg().isEmpty())
             Picasso.get().load(currentRecipe.getRecipeImg()).centerCrop().fit().into(recipeImage, new Callback() {
                 @Override
                 public void onSuccess() {
@@ -94,7 +94,20 @@ public class AllRecipesGridAdapter extends BaseAdapter {
                     imageErrorTV.setText("לא ניתן לטעון את התמונה");
                 }
             });
+            else {
+            Picasso.get().load(R.drawable.food).centerCrop().fit().into(recipeImage, new Callback() {
+                @Override
+                public void onSuccess() {
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
 
+                @Override
+                public void onError(Exception e) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    imageErrorTV.setText("לא ניתן לטעון את התמונה");
+                }
+            });
+        }
 
         //Chef Icon initialization
         if (isChosenForMeal(currentRecipe))

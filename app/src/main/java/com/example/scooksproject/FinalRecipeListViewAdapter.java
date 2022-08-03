@@ -111,8 +111,8 @@ public class FinalRecipeListViewAdapter extends ArrayAdapter<Instruction> {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(0, 0, 0, hourOfDay, minute);
 
-//                        scheduleAlarm(hourOfDay, minute);
-                        scheduleAlarm(0, 0, position);
+                        scheduleAlarm(hourOfDay, minute, position);
+//                        scheduleAlarm(0, 0, position);
                     }
                 }, 12, 0, true);
         timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -125,8 +125,8 @@ public class FinalRecipeListViewAdapter extends ArrayAdapter<Instruction> {
         PendingIntent pendingIntent = createPendingIntent(alarmAction,position);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-//        long timeInMillis = convertTimeToMillis(hours, minutes);
-        long timeInMillis = System.currentTimeMillis() + 10000;
+        long timeInMillis = convertTimeToMillis(hours, minutes);
+//        long timeInMillis = System.currentTimeMillis() + 10000;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent);
@@ -140,15 +140,16 @@ public class FinalRecipeListViewAdapter extends ArrayAdapter<Instruction> {
 
         int timerHour = currentHour + hours;
         int timerMinutes = currentMinutes + minutes;
+        int minutesToCountdown = minutes + hours * 60;
 
-        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes, Integer.toString(position));
+        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes, Integer.toString(position), minutesToCountdown);
         TimersFragment.addTimer(singleTimer);
 
     }
 
     private long convertTimeToMillis(int hours, int minutes){
-        return(10000);
-//        return (System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours) + TimeUnit.MINUTES.toMillis(minutes));
+//        return(10000);
+        return (System.currentTimeMillis() + TimeUnit.HOURS.toMillis(hours) + TimeUnit.MINUTES.toMillis(minutes));
     }
 
     private PendingIntent createPendingIntent(String action, int stepNum) {

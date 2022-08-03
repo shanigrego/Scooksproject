@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -23,13 +25,16 @@ import com.example.scooksproject.Exceptions.NoNumberBeforeHoursException;
 import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,6 +46,13 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     private androidx.appcompat.widget.AppCompatButton levelBtn;
     private int makingTimeHour, makingTimeMinute;
     private AddRecipeViewModel viewModel;
+    private static ListView ingredientsListView;
+    private static IngredientListViewAdapter ingredientsAdapter;
+    private static LinkedList<Ingredient> ingredients;
+    private static ListView instructionsListView;
+    private static ArrayList<String> instructions;
+    private static RecipeInstructionsListAdapter instructionsAdapter;
+    private TextView addStepTV;
 
     @Nullable
     @Override
@@ -48,6 +60,10 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         View view = inflater.inflate(R.layout.insertion_single_recipe, null);
         HomePageActivity.hideBottomNavigationBar();
         initComponents(view);
+
+        TextView addIngredient = view.findViewById(R.id.addSingleIngredientBtn);
+        addIngredient.setOnClickListener(v -> addIngredient(""));
+
         return view;
     }
 
@@ -55,27 +71,49 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         String recipeNameStr = recipeName.getText().toString();
         if (!checkRecipeName(recipeNameStr))
             return;
-        String preperationTimeStr= preperationTimeBtn.getText().toString();
+        String preperationTimeStr = preperationTimeBtn.getText().toString();
         String preparationTimeStr = makingTimeBtn.getText().toString();
         String difficulty = levelBtn.getText().toString();
-        List<String> recipeInstructionsStr = RecipeInstructionsFragment.getItems();
-        List<Ingredient> ingredients = IngredientsFragment.getIngredients();
-        int workTime=RecipeParser.getTimeOfWork(preperationTimeStr);
-        List<Instruction> recipeInstructions= null;
+        List<String> recipeInstructionsStr = RecipeInstructionsFragment.getInstructions();
+        int workTime = RecipeParser.getTimeOfWork(preperationTimeStr);
+        List<Instruction> recipeInstructions = null;
         try {
-            recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr,workTime);
+            recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr, workTime);
         } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
-            Toast.makeText(getContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        int totalFreeTime=RecipeParser.getFreeTime(recipeInstructions);
-        int preparationTime=RecipeParser.getPreparationTime(recipeInstructions);
+        int totalFreeTime = RecipeParser.getFreeTime(recipeInstructions);
+        int preparationTime = RecipeParser.getPreparationTime(recipeInstructions);
 
-        Recipe recipe = new Recipe(recipeNameStr, preperationTimeStr, preparationTimeStr, difficulty, ingredients, recipeInstructionsStr, null,recipeInstructions,workTime,totalFreeTime,preparationTime);
+        checkRecipeInstructions();
+        Recipe recipe = new Recipe(recipeNameStr, preperationTimeStr, preparationTimeStr, difficulty, ingredients, recipeInstructionsStr, null, recipeInstructions, workTime, totalFreeTime, preparationTime);
         //DataBase.getInstance().uploadRecipe(recipe);
-        StorageManager.WriteToFile("MyOwnRecipes.txt",recipe,getContext().getFilesDir(), true);
+
+        StorageManager.WriteToFile("MyOwnRecipes.txt", recipe, getContext().getFilesDir(), true);
     }
 
+    private void checkRecipeInstructions(){
+        int index = 1;
+        for (String description :
+                instructions) {
+            if (description.isEmpty()) {
+                int finalIndex = index;
+                new AlertDialog.Builder(getContext())
+                        .setTitle("תוכן שלב " + index + " ריק")
+                        .setMessage("האם תרצה למחוק שלב זה או להמשיך לערוך?")
 
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton("למחוק", (dialog, which) -> removeInstruction(finalIndex - 1))
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton("לערוך", null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+            index++;
+        }
+    }
 
     private boolean checkRecipeName(String name) {
         String enterRecipeName = "נא להכניס שם מתכון!";
@@ -94,44 +132,66 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         makingTimeBtn = view.findViewById(R.id.makingTimeET);
         preperationTimeBtn = view.findViewById(R.id.preperationTimeET);
         levelBtn = view.findViewById(R.id.levelEV);
-        Button addIngredientsBtn = view.findViewById(R.id.addIngredientsBtn);
-        Button addWorkingProccessBtn = view.findViewById(R.id.addWorkingProccessBtn);
+        ingredientsListView = view.findViewById(R.id.ingredientsListView);
+        instructionsListView = view.findViewById(R.id.recipeStepsListView);
+
+        if (instructions == null) {
+            instructions = new ArrayList<>();
+            addInstruction("");
+            addInstruction("");
+            addInstruction("");
+        }
+        instructionsAdapter = new RecipeInstructionsListAdapter(getContext(), instructions, false);
+        instructionsListView.setAdapter(instructionsAdapter);
+        addStepTV = view.findViewById(R.id.addStep);
+        addStepTV.setOnClickListener(v -> addInstruction(""/*txtDetails.getText().toString()*/));
+
+        if (ingredients == null)
+            ingredients = new LinkedList<>();
+        ingredientsAdapter = new IngredientListViewAdapter(getContext(), ingredients, false);
+        ingredientsListView.setAdapter(ingredientsAdapter);
+
+//        Button addIngredientsBtn = view.findViewById(R.id.addIngredientsBtn);
+//        Button addWorkingProcessBtn = view.findViewById(R.id.addWorkingProccessBtn);
         Button submitRecipe = view.findViewById(R.id.submitRecipeBtn);
         ImageView backBtn = view.findViewById(R.id.backBtn);
-        addWorkingProccessBtn = view.findViewById(R.id.addWorkingProccessBtn);
 
 
-        addWorkingProccessBtn.setOnClickListener(new View.OnClickListener() {
-            final RecipeInstructionsFragment recipeInstructionsFragment = new RecipeInstructionsFragment();
-
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, recipeInstructionsFragment).addToBackStack("tag").commit();
-            }
-        });
+//        addWorkingProcessBtn.setOnClickListener(new View.OnClickListener() {
+//            final RecipeInstructionsFragment recipeInstructionsFragment = new RecipeInstructionsFragment();
+//
+//            @Override
+//            public void onClick(View v) {
+//                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, recipeInstructionsFragment).addToBackStack("tag").commit();
+//            }
+//        });
 
         submitRecipe.setOnClickListener(v -> submitRecipeFunc());
 
-        addIngredientsBtn.setOnClickListener(new View.OnClickListener() {
-
-            final Fragment fragment = new IngredientsFragment();
-
-            @Override
-            public void onClick(View v) {
-                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-            }
-        });
+//        addIngredientsBtn.setOnClickListener(new View.OnClickListener() {
+//
+//            final Fragment fragment = new IngredientsFragment();
+//
+//            @Override
+//            public void onClick(View v) {
+//                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
+//            }
+//        });
 
         //Recipe Name initialization
         recipeName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 viewModel.setRecipeName(s.toString());
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
         recipeName.setText(viewModel.getRecipeName());
 
@@ -177,13 +237,13 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 //                                try {
 //                                    Date date = f24Hours.parse(time);
 //                                    SimpleDateFormat f12Hours = new SimpleDateFormat("HH:mm");
-                                    if (makingTimeMinute == 0) {
-                                        makingTimeBtn.setText(makingTimeHour + " שעות");
-                                        if (makingTimeHour == 2) {
-                                            makingTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
-                                        }
-                                    } else
-                                        makingTimeBtn.setText(makingTimeHour + " שעות ו" + makingTimeMinute + " דקות");
+                                if (makingTimeMinute == 0) {
+                                    makingTimeBtn.setText(makingTimeHour + " שעות");
+                                    if (makingTimeHour == 2) {
+                                        makingTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
+                                    }
+                                } else
+                                    makingTimeBtn.setText(makingTimeHour + " שעות ו" + makingTimeMinute + " דקות");
 //                                } catch (ParseException e) {
 //                                    e.printStackTrace();
 //                                }
@@ -245,10 +305,79 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 
             @Override
             public void onClick(View v) {
+                saveDataInstructions();
                 getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
             }
         });
     }
+
+    public static void addIngredient(String str) {
+        ingredients.add(new Ingredient(
+                str,
+                0,
+                "גרם"
+        ));
+        saveData();
+        ingredientsListView.setAdapter(ingredientsAdapter);
+        ingredientsListView.getLayoutParams().height += 69;
+    }
+
+    public static void removeIngredient(int index) {
+        ingredients.remove(index);
+        ingredientsListView.setAdapter(ingredientsAdapter);
+        ingredientsListView.getLayoutParams().height -= 69;
+    }
+
+    public static void addInstruction(String str) {
+        instructions.add(str);
+        instructionsListView.setAdapter(instructionsAdapter);
+    }
+
+    public static void removeInstruction(int index) {
+        instructions.remove(index);
+        instructionsListView.setAdapter(instructionsAdapter);
+    }
+
+    private void saveDataInstructions(){
+        View view1;
+        EditText instructionsDetails;
+        for (int i = 0; i < instructionsListView.getCount(); i++) {
+            view1 = instructionsListView.getChildAt(i);
+            instructionsDetails = view1.findViewById(R.id.txtDetails);
+            instructions.set(i, instructionsDetails.getText().toString());
+        }
+    }
+
+//    @Override
+//    public boolean onMenuItemClick(MenuItem item) {
+//        return false;
+//    }
+
+    private static void saveData() {
+        View view1;
+        EditText ingName, ingAmount;
+        Button ingMeasureUnit;
+        for (int i = 0; i < ingredientsListView.getCount(); i++) {
+            view1 = ingredientsListView.getChildAt(i);
+            ingName = view1.findViewById(R.id.nameIngredient);
+            if (!ingName.getText().toString().isEmpty()) {
+                ingAmount = view1.findViewById(R.id.amountIngredient);
+                ingMeasureUnit = view1.findViewById(R.id.measureUnitIngredient);
+                ingredients.get(i).setName(ingName.getText().toString());
+                ingredients.get(i).setMeasureUnit(ingMeasureUnit.getText().toString());
+                if (ingAmount.getText().toString().isEmpty())
+                    ingredients.get(i).setAmount(0);
+                else
+                    ingredients.get(i).setAmount(Double.parseDouble(ingAmount.getText().toString()));
+            }
+        }
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        return false;
+    }
+}
 
 //    public void showPopupMenu(View v) {
 //        PopupMenu popupMenu = new PopupMenu(getContext(), v);
@@ -257,9 +386,3 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 //        popupMenu.show();
 //        popupMenu.setOnMenuItemClickListener(item -> false);
 //    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return false;
-    }
-}

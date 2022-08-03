@@ -19,8 +19,8 @@ import androidx.fragment.app.Fragment;
 
 public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
-    private static ListView listView;
-    private static IngredientListViewAdapter adapter;
+    private static ListView ingredientsListView;
+    private static IngredientListViewAdapter ingredientsAdapter;
     private static LinkedList<Ingredient> ingredients;
     private ImageView backBtn;
 
@@ -32,19 +32,14 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.ingredients_activity, null);
-        initComponents(view);
-        com.google.android.material.textview.MaterialTextView addIngredient = view.findViewById(R.id.addSingleIngredientBtn);
 //        HomePageActivity.getBottomAppBar().setVisibility(View.INVISIBLE);
 //        HomePageActivity.getChefButton().setVisibility(View.INVISIBLE);
         HomePageActivity.hideBottomNavigationBar();
+        View view = inflater.inflate(R.layout.ingredients_activity, null);
+        initComponents(view);
+        com.google.android.material.textview.MaterialTextView addIngredient = view.findViewById(R.id.addSingleIngredientBtn);
 
-        addIngredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem("");
-            }
-        });
+        addIngredient.setOnClickListener(v -> addItem(""));
 
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +55,11 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
     }
 
     private void initComponents(View view) {
-        listView = view.findViewById(R.id.ingredientsListView);
+        ingredientsListView = view.findViewById(R.id.ingredientsListView);
         if (ingredients == null)
             ingredients = new LinkedList<>();
-        adapter = new IngredientListViewAdapter(getContext(), ingredients, false);
-        listView.setAdapter(adapter);
+        ingredientsAdapter = new IngredientListViewAdapter(getContext(), ingredients, false);
+        ingredientsListView.setAdapter(ingredientsAdapter);
         backBtn = view.findViewById(R.id.recipeIngredientsBackArraow);
 
     }
@@ -76,12 +71,12 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
                 "גרם"
         ));
         saveData();
-        listView.setAdapter(adapter);
+        ingredientsListView.setAdapter(ingredientsAdapter);
     }
 
     public static void removeItem(int index) {
         ingredients.remove(index);
-        listView.setAdapter(adapter);
+        ingredientsListView.setAdapter(ingredientsAdapter);
     }
 
     @Override
@@ -93,8 +88,8 @@ public class IngredientsFragment extends Fragment implements PopupMenu.OnMenuIte
         View view1;
         EditText ingName, ingAmount;
         Button ingMeasureUnit;
-        for (int i = 0; i < listView.getCount(); i++) {
-            view1 = listView.getChildAt(i);
+        for (int i = 0; i < ingredientsListView.getCount(); i++) {
+            view1 = ingredientsListView.getChildAt(i);
             ingName = view1.findViewById(R.id.nameIngredient);
             if (!ingName.getText().toString().isEmpty()) {
                 ingAmount = view1.findViewById(R.id.amountIngredient);

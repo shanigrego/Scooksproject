@@ -2,9 +2,14 @@
     <string name="app_name">Scook\'s project</string>
     <string name="meal_recipe_my_meal_header">הארוחה שלי</string>
     <string name="meal_recipe_start_meal">התחל ארוחה</string>
-    <string name="ingredients">מצרכים</string>
-    <string name="recipe_instructions">הוראות הכנה</string>
+    <string name="ingredients">מצרכים:</string>
+    <string name="recipe_instructions">הוראות הכנה:</string>
     <string name="ingredients_list_header">רשימת מצרכים</string>
     <string name="channel_name">התראת שעון</string>
     <string name="channel_description">התראות שעונים למתכון</string>
+    <string name="addIngredients">הוספת מצרכים:</string>
+    <string name="addInstructions">הוספת אופן ההכנה</string>
+    <string name="finish">סיום</string>
+    <string name="add">+</string>
+    <string name="addRecipeInstructions">הוספת הוראות הכנה:</string>
 </resources>

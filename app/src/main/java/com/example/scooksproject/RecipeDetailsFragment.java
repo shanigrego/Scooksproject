@@ -48,12 +48,9 @@ public class RecipeDetailsFragment extends Fragment {
         ingredientsList.setAdapter(ingredientsListAdapter);
         instructionsList.setAdapter(instructionsListAdapter);
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new RecipeBookFragment();
-                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-            }
+        backBtn.setOnClickListener(v -> {
+            Fragment fragment = new RecipeBookFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
         });
     }
 
@@ -65,7 +62,7 @@ public class RecipeDetailsFragment extends Fragment {
         preparationTime = view.findViewById(R.id.preperationTimeTV);
         makingTime = view.findViewById(R.id.makingTimeTV);
         backBtn = view.findViewById(R.id.recipeDetailsBackBtn);
-        ingredientsListAdapter = new IngredientListViewAdapter(getContext(), currentRecipe.getIngredients(), true);
+        ingredientsListAdapter = new IngredientsNonEditAdapter(getContext(), currentRecipe.getIngredients());
         instructionsListAdapter = new RecipeInstructionsListAdapter(getContext(), currentRecipe.getRecipeInstructionsStr(),true);
     }
 }

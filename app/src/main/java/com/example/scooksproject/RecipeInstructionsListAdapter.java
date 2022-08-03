@@ -2,7 +2,6 @@ package com.example.scooksproject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -48,7 +46,7 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
             stepNum.setText(Integer.toString(position + 1));
 
             //Remove Button initialization
-            removeBtn.setOnClickListener(v -> RecipeInstructionsFragment.removeItem(position));
+            removeBtn.setOnClickListener(v -> RecipeInstructionsFragment.removeInstruction(position));
             if(position != items.size() - 1)
                 removeBtn.setVisibility(View.INVISIBLE);
 

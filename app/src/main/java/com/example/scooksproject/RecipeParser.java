@@ -90,6 +90,9 @@ public class RecipeParser extends AsyncTask<String, Void, String> {
         URL urlImg = null;
         Bitmap bmp = null;
         try {
+            if(imageUrlString.isEmpty()){
+                imageUrlString = "https://unsplash.com/photos/08bOYnH_r_E";
+            }
             urlImg = new URL(imageUrlString);
             bmp = BitmapFactory.decodeStream(urlImg.openConnection().getInputStream());
         } catch (MalformedURLException e) {

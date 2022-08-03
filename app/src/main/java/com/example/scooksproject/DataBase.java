@@ -79,13 +79,5 @@ public class DataBase {
         databaseReference.child(recipe.getName()).setValue(recipe);
         StorageReference fileReference = storageReference.child(recipe.getName());
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        /*Bitmap bitmap = recipe.getRecipeImg();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-        fileReference.putBytes(data).addOnFailureListener(item->{
-            Log.e("FileUpload", "Unable to upload recipe img");
-        }).addOnSuccessListener(item -> {
-            Log.i("FileUpload", "Recipe image upload successfully");
-        });*/
     }
 }

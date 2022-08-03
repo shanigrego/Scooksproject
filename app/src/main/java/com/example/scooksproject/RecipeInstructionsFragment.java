@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,104 +17,92 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 
 public class RecipeInstructionsFragment extends Fragment {
 
-    private static ListView listView;
-    private static ArrayList<String> items;
-    private static RecipeInstructionsListAdapter adapter;
+    private static ListView instructionsListView;
+    private static ArrayList<String> instructions;
+    private static RecipeInstructionsListAdapter instructionsAdapter;
     private TextView addStepTV;
     private ImageView backArrow;
     private Button submitBtn;
 
-    public static ArrayList<String> getItems() {
-        return items;
+    public static ArrayList<String> getInstructions() {
+        return instructions;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recipe_instructions_list, null);
-        listView = view.findViewById(R.id.recipeStepsListView);
+        instructionsListView = view.findViewById(R.id.recipeStepsListView);
         submitBtn = view.findViewById(R.id.submitRecipeInstructions);
         HomePageActivity.hideBottomNavigationBar();
-        if (items == null) {
-            items = new ArrayList<>();
-            addItem("");
-            addItem("");
-            addItem("");
+        if (instructions == null) {
+            instructions = new ArrayList<>();
+            addInstruction("");
+            addInstruction("");
+            addInstruction("");
         }
-        adapter = new RecipeInstructionsListAdapter(getContext(), items, false);
-        listView.setAdapter(adapter);
+        instructionsAdapter = new RecipeInstructionsListAdapter(getContext(), instructions, false);
+        instructionsListView.setAdapter(instructionsAdapter);
         addStepTV = view.findViewById(R.id.addStep);
         backArrow = view.findViewById(R.id.recipeInstructionsBackArraow);
 
-        addStepTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecipeInstructionsFragment.addItem(""/*txtDetails.getText().toString()*/);
-            }
+        addStepTV.setOnClickListener(v -> RecipeInstructionsFragment.addInstruction(""/*txtDetails.getText().toString()*/));
+
+        backArrow.setOnClickListener(v -> {
+            saveDataInstructions();
+            Fragment fragment = new AddRecipeFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
         });
 
-        backArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData();
-                Fragment fragment = new AddRecipeFragment();
-                getParentFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
-            }
-        });
+        submitBtn.setOnClickListener(v -> {
+            int index = 1;
+            for (String description :
+                    instructions) {
+                if (description.isEmpty()) {
+                    int finalIndex = index;
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("תוכן שלב " + index + " ריק")
+                            .setMessage("האם תרצה למחוק שלב זה או להמשיך לערוך?")
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int index = 1;
-                for (String description :
-                        items) {
-                    if (description.isEmpty() || description == "") {
-                        int finalIndex = index;
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("תוכן שלב " + index + " ריק")
-                                .setMessage("האם תרצה למחוק שלב זה או להמשיך לערוך?")
+                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                            // The dialog is automatically dismissed when a dialog button is clicked.
+                            .setPositiveButton("למחוק", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    removeInstruction(finalIndex - 1);
+                                }
+                            })
 
-                                // Specifying a listener allows you to take an action before dismissing the dialog.
-                                // The dialog is automatically dismissed when a dialog button is clicked.
-                                .setPositiveButton("למחוק", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        removeItem(finalIndex - 1);
-                                    }
-                                })
-
-                                // A null listener allows the button to dismiss the dialog and take no further action.
-                                .setNegativeButton("לערוך", null)
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                    index++;
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton("לערוך", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
+                index++;
             }
         });
         return view;
     }
 
-    public static void addItem(String str) {
-        items.add(str);
-        listView.setAdapter(adapter);
+    public static void addInstruction(String str) {
+        instructions.add(str);
+        instructionsListView.setAdapter(instructionsAdapter);
     }
 
-    public static void removeItem(int index) {
-        items.remove(index);
-        listView.setAdapter(adapter);
+    public static void removeInstruction(int index) {
+        instructions.remove(index);
+        instructionsListView.setAdapter(instructionsAdapter);
     }
 
-    private void saveData(){
+    private void saveDataInstructions(){
         View view1;
         EditText instructionsDetails;
-        for (int i = 0; i < listView.getCount(); i++) {
-            view1 = listView.getChildAt(i);
+        for (int i = 0; i < instructionsListView.getCount(); i++) {
+            view1 = instructionsListView.getChildAt(i);
             instructionsDetails = view1.findViewById(R.id.txtDetails);
-            items.set(i, instructionsDetails.getText().toString());
+            instructions.set(i, instructionsDetails.getText().toString());
         }
     }
 }
