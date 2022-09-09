@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/linear_gradient">
 
 
+    <TextView
+        android:id="@+id/noTimersTV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="טרם נבחרו מתכונים"
+        android:textColor="@color/grey"
+        android:layout_centerInParent="true"
+        android:paddingBottom="100px"
+        android:gravity="center"
+        android:background="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/ellina"/>
 
 
     <ListView

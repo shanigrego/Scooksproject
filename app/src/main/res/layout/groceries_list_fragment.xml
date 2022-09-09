@@ -8,16 +8,18 @@
         android:id="@+id/headerRelativLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/groceriesListHeader"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:text="רשימת קניות"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/groceriesListHeader"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:fontFamily="@font/ellina_bold"
+            android:gravity="center"
+            android:text="רשימת קניות"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30dp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <ListView

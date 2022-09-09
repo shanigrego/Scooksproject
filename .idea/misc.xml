@@ -9,10 +9,15 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/add.xml" value="0.16" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/arrow_back.xml" value="0.16" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circle.xml" value="0.162" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circle_no_dash_completed.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circle_no_dashed.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circle_no_dashed_green.xml" value="0.1515" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circle_with_text.xml" value="0.109" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/circular_progress_bar.xml" value="0.153" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/delete.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/favourite.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/favourites.xml" value="0.17" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/home.xml" value="0.109" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1465" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/ic_baseline_timer_24.xml" value="0.1465" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/ic_launcher_background.xml" value="0.143" />
@@ -30,6 +35,8 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/rounded_corners_yellow.xml" value="0.1465" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/rounded_text_view.xml" value="0.162" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/search.xml" value="0.154" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/seek_bar.xml" value="0.1575" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/seek_thumb.xml" value="0.1575" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/shadow.xml" value="0.172" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/shutdown.xml" value="0.17" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/drawable/square_borer.xml" value="0.1" />
@@ -40,11 +47,12 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/clock_list_item.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/clocks_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/favourites_fragment.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/final_recipe_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/final_recipe_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/final_recipe_instruction.xml" value="0.22" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/groceries_list_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/groceries_list_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/groceries_list_single_item.xml" value="0.17864583333333334" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/home_page.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/groceries_list_single_recipe.xml" value="0.17864583333333334" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/home_page.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/ingredient_list_item.xml" value="0.17864583333333334" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/ingredients.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/ingredients_activity.xml" value="0.22" />
@@ -52,20 +60,22 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/meal_recipes_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/my_recipies.xml" value="0.17864583333333334" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_book.xml" value="0.25" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_book_activity.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_book_activity.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_details_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_erase_snackbar.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_instructions_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_instructions_list.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_instructions_single_item.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/recipe_instructions_single_item.xml" value="0.22" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/single_final_recipe_instruction_item.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/single_ingredient_non_edit.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/single_recipe_grid_layout.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/tall_divider.xml" value="0.16302083333333334" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/testing.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/timer_list_item.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/timer_list_item_without_pb.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/timer_progress_bar.xml" value="0.1" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/timers_fragment.xml" value="0.16302083333333334" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/menu/bottom_menu.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/layout/timers_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/menu/bottom_menu.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/menu/popup_menu.xml" value="0.17864583333333334" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/menu/popup_menu_amount.xml" value="0.16458333333333333" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Scooksproject/app/src/main/res/menu/popup_menu_difficulty.xml" value="0.17864583333333334" />

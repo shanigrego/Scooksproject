@@ -38,6 +38,7 @@ public class FavouritesFragment extends Fragment {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.favourites_fragment, null);
         initComponents(view);
         HomePageActivity.showBottomNavigationBar();
+        HomePageActivity.getBottomNavigationView().performClick();
         return view;
     }
 

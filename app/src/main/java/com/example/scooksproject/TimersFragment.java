@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,10 @@ public class TimersFragment extends Fragment {
 
     private static List<SingleTimer> items = new ArrayList<>();
     private static ListView timersListView;
+    private static TextView noTimersTV;
     private static ArrayAdapter<SingleTimer> adapter;
+
+
 
     public static void addTimer(SingleTimer timer){
         items.add(timer);
@@ -35,6 +39,10 @@ public class TimersFragment extends Fragment {
         timersListView.setAdapter(adapter);
     }
 
+    public static void removeAllTimers(){
+        items.clear();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,8 +53,14 @@ public class TimersFragment extends Fragment {
 
     private void initComponents(View view){
         timersListView = view.findViewById(R.id.timersListView);
+        noTimersTV = view.findViewById(R.id.noTimersTV);
         if(adapter == null)
             adapter = new TimersListViewAdapter(getContext(), items);
-        timersListView.setAdapter(adapter);
+        if(timersListView.getAdapter() == null)
+            timersListView.setAdapter(adapter);
+
+        if(!items.isEmpty()){
+            noTimersTV.setVisibility(View.INVISIBLE);
+        }
     }
 }

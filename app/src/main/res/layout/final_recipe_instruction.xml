@@ -25,9 +25,9 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_marginRight="20dp"
-                android:textAlignment="center"
                 android:gravity="center"
                 android:hint="תיאור שלב"
+                android:textAlignment="center"
                 android:textColor="@color/black" />
 
 
@@ -55,7 +55,7 @@
         android:translationZ="90dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/finalTimerIcon"
+        android:id="@+id/finalTimerIcon2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/finalInstructionUnpressedStepNum"

@@ -30,6 +30,7 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
     private Context context;
     private Resources resources;
     private Integer[] colors;
+    private static int isFirstProgressBar = 0;
 
     public TimersListViewAdapter(@NonNull Context context, @NonNull List<SingleTimer> items) {
         super(context, R.layout.timer_list_item, items);
@@ -41,7 +42,7 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
                 resources.getColor(R.color.purple_200),
                 resources.getColor(R.color.greenish),
                 resources.getColor(R.color.green)};
-
+        isFirstProgressBar++;
     }
 
     @NonNull
@@ -107,12 +108,19 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
     private void setTimer(View convertView, int position, TextView minutes, TextView hours){
         SwitchCompat aSwitch = convertView.findViewById(R.id.notificationSwitch);
 
-        int minutesInt = items.get(position).getMinutes();
-        int hoursInt = items.get(position).getHours();
-        int minutesToCountdown = items.get(position).getMinutesForCountdown();
+        SingleTimer currentTimer = items.get(position);
+        
+        int minutesInt = currentTimer.getMinutes();
+        String minutesString = minutesInt < 10 ? "0" + minutesInt : String.valueOf(minutesInt);
+        int hoursInt = currentTimer.getHours();
+        int minutesToCountdown = currentTimer.getMinutesForCountdown();
 
 
-        minutes.setText(Integer.toString(minutesInt));
+        if (position == 0) {
+            minutes.setText(minutesString);
+        } else {
+            minutes.setText(minutesString);
+        }
         hours.setText(Integer.toString(hoursInt));
 
         aSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -126,7 +134,10 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
             aSwitch.setChecked(true);
         } else aSwitch.setChecked(false);
 
-        startTimer(minutesToCountdown, convertView, position);
+//        if(isFirstProgressBar == 1) {
+            startTimer(minutesToCountdown, convertView, position);
+//            isFirstProgressBar++;
+//        }
     }
 
     private void startTimer(final int minuti, View view, int position) {

@@ -6,91 +6,174 @@
     android:layout_height="match_parent"
     android:background="@drawable/linear_gradient">
 
-        <TextView
-            android:id="@+id/finalRecipeHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="המתכון הסופי!"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"
-            android:layout_centerHorizontal="true"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
-        <LinearLayout
-            android:id="@+id/finalHeadersLinearLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/finalRecipeHeader"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/finalHeadersLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@+id/finalRecipeHeader"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:text="רמת קושי"
+                    android:textColor="@color/teal_200" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:text="זמן הכנה"
+                    android:textColor="@color/teal_200" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:text="זמן עבודה"
+                    android:textColor="@color/teal_200" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/finLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="200px"
+                android:layout_below="@+id/finalHeadersLinearLayout"
+                android:divider="@drawable/tall_divider"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:showDividers="middle">
+
+                <TextView
+                    android:id="@+id/finalLevelTV"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:background="@drawable/circle_green"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:hint="רמת קושי"
+                    android:onClick="showPopupMenu"
+                    android:paddingTop="0dp" />
+
+                <TextView
+                    android:id="@+id/finalPreperationTimeTV"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:background="@drawable/circle_green"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:hint="זמן הכנה" />
+
+                <TextView
+                    android:id="@+id/finalMakingTimeTV"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:height="50dp"
+                    android:background="@drawable/circle_green"
+                    android:fontFamily="@font/ellina"
+                    android:gravity="center"
+                    android:hint="זמן עבודה" />
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/finalRecipeInstructionsList"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="200dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="10.0sp"
+                android:padding="10dp"
+                android:visibility="invisible" />
+
 
             <TextView
+                android:id="@+id/finalRecipeHeader"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="רמת קושי"
-                android:onClick="showPopupMenu" />
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/ellina_bold"
+                android:text="המתכון המשוקלל"
+                android:textSize="20sp" />
 
-            <TextView
+
+            <com.baoyachi.stepview.VerticalStepView
+                android:id="@+id/step_view0"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="זמן הכנה" />
+                android:layout_height="match_parent"
+                android:layout_below="@+id/finLinearLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="17dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="זמן עבודה" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/finLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/finalHeadersLinearLayout"
-            android:orientation="horizontal">
+            <!--    <SeekBar-->
+            <!--        android:id="@+id/seekBar"-->
+            <!--        style="@style/Widget.AppCompat.SeekBar.Discrete"-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        android:layout_below="@+id/finLinearLayout"-->
+            <!--        android:layout_alignBottom="@+id/finLinearLayout"-->
+            <!--        android:layout_centerInParent="true"-->
+            <!--        android:layout_marginTop="500dp"-->
+            <!--        android:layout_marginBottom="-18dp"-->
+            <!--        android:maxHeight="100dp"-->
+            <!--        android:minHeight="100dp"-->
+            <!--        android:max="10"-->
+            <!--        android:paddingLeft="30dp"-->
+            <!--        android:paddingTop="10dp"-->
+            <!--        android:paddingRight="30dp"-->
+            <!--        android:paddingBottom="10dp"-->
+            <!--        android:thumb="@drawable/seek_thumb"-->
+            <!--        android:progressDrawable="@drawable/seek_bar"-->
+            <!--        android:progress="1"-->
+            <!--        android:rotation="90"/>-->
 
-            <TextView
-                android:id="@+id/finalLevelTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="רמת קושי"
-                android:onClick="showPopupMenu" />
+            <com.example.scooksproject.NonScrollListView
+                android:id="@+id/finalInstructionsListView"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/finLinearLayout"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_toStartOf="@+id/step_view0"
+                android:divider="@null" />
 
-            <TextView
-                android:id="@+id/finalPreperationTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="זמן הכנה" />
-
-            <TextView
-                android:id="@+id/finalMakingTimeTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:height="50dp"
-                android:gravity="center"
-                android:hint="זמן עבודה" />
-        </LinearLayout>
-
-        <ListView
-            android:id="@+id/finalRecipeInstructionsList"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/finLinearLayout"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="10.0sp"/>
-
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

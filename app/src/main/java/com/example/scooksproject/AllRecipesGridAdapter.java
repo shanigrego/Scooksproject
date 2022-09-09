@@ -40,7 +40,9 @@ public class AllRecipesGridAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return allRecipes.size();
+        if(allRecipes != null)
+            return allRecipes.size();
+        else return 0;
     }
 
     @Override

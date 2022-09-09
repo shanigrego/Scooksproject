@@ -25,6 +25,7 @@ import com.example.scooksproject.Exceptions.NoNumberBeforeHoursException;
 import com.example.scooksproject.Exceptions.NoNumberBeforeMinutesException;
 
 import java.text.ParseException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,10 +47,10 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     private androidx.appcompat.widget.AppCompatButton levelBtn;
     private int makingTimeHour, makingTimeMinute;
     private AddRecipeViewModel viewModel;
-    private static ListView ingredientsListView;
+    private static NonScrollListView ingredientsListView;
     private static IngredientListViewAdapter ingredientsAdapter;
     private static LinkedList<Ingredient> ingredients;
-    private static ListView instructionsListView;
+    private static NonScrollListView instructionsListView;
     private static ArrayList<String> instructions;
     private static RecipeInstructionsListAdapter instructionsAdapter;
     private TextView addStepTV;
@@ -69,13 +70,29 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 
     private void submitRecipeFunc() {
         String recipeNameStr = recipeName.getText().toString();
+
+        // check recipe name
         if (!checkRecipeName(recipeNameStr))
             return;
-        String preperationTimeStr = preperationTimeBtn.getText().toString();
-        String preparationTimeStr = makingTimeBtn.getText().toString();
+
+        // check recipe instructions
+        if(!checkRecipeInstructions())
+            return;
+        // check recipe ingredients
+        if(!checkRecipeIngredients())
+            return;
+
+
+        String preparationTimeStr = preperationTimeBtn.getText().toString();
+        String makingTimeStr = makingTimeBtn.getText().toString();
         String difficulty = levelBtn.getText().toString();
+
+        if(!checkRecipeTime(makingTimeStr, preparationTimeStr, difficulty)){
+            return;
+        }
+
         List<String> recipeInstructionsStr = RecipeInstructionsFragment.getInstructions();
-        int workTime = RecipeParser.getTimeOfWork(preperationTimeStr);
+        int workTime = RecipeParser.getTimeOfWork(preparationTimeStr);
         List<Instruction> recipeInstructions = null;
         try {
             recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr, workTime);
@@ -85,14 +102,44 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         int totalFreeTime = RecipeParser.getFreeTime(recipeInstructions);
         int preparationTime = RecipeParser.getPreparationTime(recipeInstructions);
 
-        checkRecipeInstructions();
-        Recipe recipe = new Recipe(recipeNameStr, preperationTimeStr, preparationTimeStr, difficulty, ingredients, recipeInstructionsStr, null, recipeInstructions, workTime, totalFreeTime, preparationTime);
+        Recipe recipe = new Recipe(recipeNameStr, preparationTimeStr, makingTimeStr, difficulty, ingredients, recipeInstructionsStr, null, recipeInstructions, workTime, totalFreeTime, preparationTime);
         //DataBase.getInstance().uploadRecipe(recipe);
 
         StorageManager.WriteToFile("MyOwnRecipes.txt", recipe, getContext().getFilesDir(), true);
     }
 
-    private void checkRecipeInstructions(){
+    private boolean checkRecipeTime(String makingTimeStr, String preparationTimeStr, String difficulty) {
+        if(makingTimeStr.isEmpty() || preparationTimeStr.isEmpty() || difficulty.isEmpty()){
+            Toast.makeText(getContext(), "נא להכניס זמני הכנה!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean checkRecipeIngredients(){
+        if(ingredients.isEmpty()){
+            Toast.makeText(getContext(), "נא להכניס לפחות רכיב אחד!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        for(Ingredient ingredient : ingredients){
+            if(ingredient.getName().isEmpty() || ingredient.getAmount() == 0 || ingredient.getMeasureUnit().isEmpty()){
+                Toast.makeText(getContext(), "נא למלא את המידע הדרוש במצרכים!", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    private boolean checkRecipeInstructions(){
+        if(instructions.isEmpty()){
+            Toast.makeText(getContext(), "נא להכניס לפחות הוראה אחת!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         int index = 1;
         for (String description :
                 instructions) {
@@ -110,9 +157,11 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                         .setNegativeButton("לערוך", null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                return false;
             }
             index++;
         }
+        return true;
     }
 
     private boolean checkRecipeName(String name) {
@@ -146,8 +195,12 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
         addStepTV = view.findViewById(R.id.addStep);
         addStepTV.setOnClickListener(v -> addInstruction(""/*txtDetails.getText().toString()*/));
 
-        if (ingredients == null)
+        if (ingredients == null) {
             ingredients = new LinkedList<>();
+            addIngredient("");
+            addIngredient("");
+            addIngredient("");
+        }
         ingredientsAdapter = new IngredientListViewAdapter(getContext(), ingredients, false);
         ingredientsListView.setAdapter(ingredientsAdapter);
 
@@ -238,7 +291,10 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
 //                                    Date date = f24Hours.parse(time);
 //                                    SimpleDateFormat f12Hours = new SimpleDateFormat("HH:mm");
                                 if (makingTimeMinute == 0) {
-                                    makingTimeBtn.setText(makingTimeHour + " שעות");
+                                    if(makingTimeHour == 1){
+                                        makingTimeBtn.setText("שעה אחת");
+                                    }
+                                    else makingTimeBtn.setText(makingTimeHour + " שעות");
                                     if (makingTimeHour == 2) {
                                         makingTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
                                     }

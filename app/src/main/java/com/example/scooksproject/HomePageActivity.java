@@ -1,6 +1,7 @@
 package com.example.scooksproject;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.View;
@@ -12,10 +13,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.TimeUnit;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -26,19 +30,32 @@ public class HomePageActivity extends AppCompatActivity {
     private static com.google.android.material.floatingactionbutton.FloatingActionButton chefButton;
     @SuppressLint("StaticFieldLeak")
     private static View snackBarView;
-
+    private static boolean startedMeal = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
         initComponents();
-
+        bottomNavigationView.setSelectedItemId(R.id.recipeBookIcon);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        bottomNavigationView.setSelectedItemId(R.id.recipeBookIcon);
+//        Fragment fragment = new RecipeBookFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).commit();
     }
 
     //Being used. Do not erase!
     public static BottomAppBar getBottomAppBar() {
         return bottomAppBar;
+    }
+
+    //Being used. Do not erase!
+    public static BottomNavigationView getBottomNavigationView() {
+        return bottomNavigationView;
     }
 
     //Being used. Do not erase!
@@ -69,6 +86,9 @@ public class HomePageActivity extends AppCompatActivity {
         }).show();
     }
 
+    public static void setStartedMeal(boolean startedMeal) {
+        HomePageActivity.startedMeal = startedMeal;
+    }
 
     private void initComponents() {
         scrollView = findViewById(R.id.scrollViewLinearLayout);
@@ -106,9 +126,20 @@ public class HomePageActivity extends AppCompatActivity {
         });
 
         // Chef Button initialization
+        chefButtonInitialFunctionality(getSupportFragmentManager());
+    }
+
+    public static void chefButtonInitialFunctionality(FragmentManager fragmentManager){
         chefButton.setOnClickListener(btn -> {
             Fragment fragment = new MealRecipesFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
+             fragmentManager.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
+        });
+    }
+
+    public static void chefButtonStartedMealFunctionality( FragmentManager fragmentManager){
+        chefButton.setOnClickListener(btn -> {
+            Fragment fragment = new FinalRecipeFragment();
+            fragmentManager.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
         });
     }
 }

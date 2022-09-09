@@ -3,16 +3,12 @@ package com.example.scooksproject;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -22,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 public class RecipeBookFragment extends Fragment {
 
-    private FloatingActionButton myRecpiesButton;
+    private ImageView myRecpiesIV;
     private GridView allRecipesGridView;
     private AllRecipesGridAdapter adapter;
     private AllRecipesGridAdapter filteredAdapter;
@@ -36,7 +32,7 @@ public class RecipeBookFragment extends Fragment {
         View view = inflater.inflate(R.layout.recipe_book_activity, null);
         HomePageActivity.showBottomNavigationBar();
 
-        myRecpiesButton = view.findViewById(R.id.myRecipeFloatingBtn);
+        myRecpiesIV = view.findViewById(R.id.myRecipeFloatingBtn);
         allRecipesGridView = view.findViewById(R.id.allRecipesGridView);
         searchET = view.findViewById(R.id.recipeBookSearchET);
 
@@ -69,7 +65,7 @@ public class RecipeBookFragment extends Fragment {
     private void initComponents(){
 
         //My Recipes Button initialization
-        myRecpiesButton.setOnClickListener(new View.OnClickListener() {
+        myRecpiesIV.setOnClickListener(new View.OnClickListener() {
             Fragment fragment = new MyRecipiesFragment();
             @Override
             public void onClick(View v) {

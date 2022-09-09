@@ -36,6 +36,8 @@ public class MealRecipesFragment extends Fragment {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.meal_recipes_fragment, null);
         initComponents(view);
 
+        HomePageActivity.getBottomNavigationView().getMenu().setGroupCheckable(0, false, true);
+
         return view;
     }
 

@@ -23,7 +23,10 @@
     <color name="purpulish">#8D72DA</color>
     <color name="greenish">#D1FAE2</color>
     <color name="dark_purple2">#7257C1</color>
-
+    <color name="pink_zoher">#FF00E1</color>
+    <color name="green_zoher">#59dD97</color>
+    <color name="clock_color">#F7E6D4</color>
+    <color name="clock_color2">#FDE0EB</color>
 
 
 </resources>

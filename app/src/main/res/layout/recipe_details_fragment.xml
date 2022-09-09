@@ -65,7 +65,7 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="200px"
             android:layout_below="@+id/headersLinearLayout"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
@@ -73,7 +73,8 @@
             android:orientation="horizontal"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            >
 
             <TextView
                 android:id="@+id/levelTV"
@@ -84,11 +85,13 @@
                 android:background="@drawable/circle"
                 android:fontFamily="@font/ellina"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:hint="רמת קושי"
                 android:onClick="showPopupMenu" />
 
             <TextView
                 android:id="@+id/preperationTimeTV"
+                android:layout_gravity="center"
                 android:layout_width="1dp"
                 android:layout_height="65dp"
                 android:layout_weight="1"
@@ -101,6 +104,7 @@
             <TextView
                 android:id="@+id/makingTimeTV"
                 android:layout_width="1dp"
+                android:layout_gravity="center"
                 android:layout_height="65dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"

@@ -1,5 +1,7 @@
 package com.example.scooksproject;
 
+import java.util.Calendar;
+
 public class SingleTimer {
 
     public SingleTimer(int hours, int minutes, String idByStep, int minutesForCountdown) {
@@ -28,5 +30,13 @@ public class SingleTimer {
 
     public int getMinutesForCountdown() {
         return minutesForCountdown;
+    }
+
+    public int getMinutesForView(){
+        return Math.abs(minutes - Calendar.getInstance().get(Calendar.MINUTE));
+    }
+
+    public int getHoursForView(){
+        return Math.abs(hours - Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 }

@@ -46,7 +46,7 @@ public class RecipeInstructionsListAdapter extends ArrayAdapter<String> {
             stepNum.setText(Integer.toString(position + 1));
 
             //Remove Button initialization
-            removeBtn.setOnClickListener(v -> RecipeInstructionsFragment.removeInstruction(position));
+            removeBtn.setOnClickListener(v -> AddRecipeFragment.removeInstruction(position));
             if(position != items.size() - 1)
                 removeBtn.setVisibility(View.INVISIBLE);
 

@@ -18,15 +18,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/backBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/arrow_back"
-                android:layout_marginTop="12dp"
-                android:layout_marginLeft="12dp"/>
-
-
             <EditText
                 android:id="@+id/recipeNameET"
                 android:layout_width="wrap_content"
@@ -38,12 +29,14 @@
                 android:inputType="textPersonName"
                 android:minHeight="48dp" />
 
-            <TextView
-                android:id="@+id/recipeNameError"
-                android:layout_width="210dp"
+
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_gravity="center"/>
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/arrow_back" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -58,22 +51,22 @@
                 android:showDividers="middle">
 
 
-                            <androidx.appcompat.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/levelEV"
                     android:layout_width="wrap_content"
                     android:layout_height="80dp"
-                                android:background="@drawable/circle"
                     android:layout_weight="1"
+                    android:background="@drawable/circle"
                     android:hint="רמת קושי"
-                    android:onClick="showPopupMenu"/>
+                    android:onClick="showPopupMenu" />
 
-<!--                    <TextView-->
-<!--                    android:id="@+id/levelEV"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_weight="1"-->
-<!--                        android:background="@drawable/circle"-->
-<!--                    android:onClick="showPopupMenu"/>-->
+                <!--                    <TextView-->
+                <!--                    android:id="@+id/levelEV"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                        android:background="@drawable/circle"-->
+                <!--                    android:onClick="showPopupMenu"/>-->
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/preperationTimeET"
@@ -92,18 +85,42 @@
                     android:hint="זמן עבודה" />
             </LinearLayout>
 
+
+
+            <TextView
+                android:id="@+id/recipeNameError"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp" />
+
+            <!--            <com.google.android.material.button.MaterialButton-->
+            <!--                android:id="@+id/addIngredientsBtn"-->
+            <!--                android:layout_width="200dp"-->
+            <!--                android:layout_height="60dp"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:backgroundTint="#F9A9FF"-->
+            <!--                android:fontFamily="@font/ellina"-->
+            <!--                app:cornerRadius="30dp"-->
+            <!--                android:gravity="center|center_horizontal"-->
+            <!--                android:text="@string/addIngredients"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="20sp" />-->
+
+
             <TextView
                 android:id="@+id/otherErrors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textEnd" />
 
+
             <TextView
                 android:id="@+id/headerIngredients"
                 android:layout_width="wrap_content"
                 android:layout_height="33dp"
                 android:layout_gravity="end"
-                android:layout_marginTop="40dp"
                 android:fontFamily="@font/ellina"
                 android:gravity="center"
                 android:paddingStart="12dp"
@@ -112,22 +129,7 @@
                 android:textColor="@color/black"
                 android:textSize="22sp" />
 
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/addIngredientsBtn"-->
-<!--                android:layout_width="200dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:backgroundTint="#F9A9FF"-->
-<!--                android:fontFamily="@font/ellina"-->
-<!--                app:cornerRadius="30dp"-->
-<!--                android:gravity="center|center_horizontal"-->
-<!--                android:text="@string/addIngredients"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp" />-->
-
-
-            <ListView
+            <com.example.scooksproject.NonScrollListView
                 android:id="@+id/ingredientsListView"
                 android:layout_width="match_parent"
                 android:layout_height="69dp" />
@@ -137,16 +139,29 @@
                 android:id="@+id/addSingleIngredientBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded_text_view"
                 android:backgroundTint="#FF91E0"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="@string/add"
-                android:layout_marginTop="10dp"
                 android:textColor="@android:color/white"
-                android:textSize="30sp"
-                />
+                android:textSize="30sp" />
+
+            <!--            <com.google.android.material.button.MaterialButton-->
+            <!--                android:id="@+id/addWorkingProccessBtn"-->
+            <!--                android:layout_width="200dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_gravity="center"-->
+            <!--                app:cornerRadius="30dp"-->
+            <!--                android:fontFamily="@font/ellina"-->
+            <!--                android:backgroundTint="#F9A9FF"-->
+            <!--                android:gravity="center|center_horizontal"-->
+            <!--                android:text="@string/addInstructions"-->
+            <!--                android:textColor="@color/black"-->
+            <!--                android:textSize="20sp"-->
+            <!--                android:textStyle="bold" />-->
 
             <TextView
                 android:id="@+id/recipeDetailsSteps"
@@ -162,21 +177,7 @@
                 android:textColor="@color/black"
                 android:textSize="22sp" />
 
-<!--            <com.google.android.material.button.MaterialButton-->
-<!--                android:id="@+id/addWorkingProccessBtn"-->
-<!--                android:layout_width="200dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                app:cornerRadius="30dp"-->
-<!--                android:fontFamily="@font/ellina"-->
-<!--                android:backgroundTint="#F9A9FF"-->
-<!--                android:gravity="center|center_horizontal"-->
-<!--                android:text="@string/addInstructions"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20sp"-->
-<!--                android:textStyle="bold" />-->
-
-            <ListView
+            <com.example.scooksproject.NonScrollListView
                 android:id="@+id/recipeStepsListView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -187,12 +188,12 @@
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentBottom="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_text_view"
                 android:backgroundTint="#69FFAD"
                 android:gravity="center"
                 android:text="+"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
 
@@ -200,16 +201,16 @@
                 android:id="@+id/submitRecipeBtn"
                 android:layout_width="200dp"
                 android:layout_height="60dp"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center"
-                app:cornerRadius="30dp"
-                android:fontFamily="@font/ellina"
+                android:layout_marginTop="20dp"
                 android:backgroundTint="#AFFFA9"
+                android:fontFamily="@font/ellina"
                 android:gravity="center|center_horizontal"
                 android:text="@string/finish"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:cornerRadius="30dp" />
 
         </LinearLayout>
     </ScrollView>

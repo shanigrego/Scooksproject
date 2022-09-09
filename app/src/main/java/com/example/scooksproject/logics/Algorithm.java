@@ -1,9 +1,12 @@
 package com.example.scooksproject.logics;
 
+import com.example.scooksproject.GroceriesListFragment;
 import com.example.scooksproject.Ingredient;
 import com.example.scooksproject.Instruction;
 import com.example.scooksproject.Recipe;
+import com.example.scooksproject.TimersFragment;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -13,6 +16,9 @@ public class Algorithm {
 
     //TODO לשים עשרים שניות הפרש בין הסיום של הסטופר לבין סיום שלב הביניים
 
+    private static List<Recipe> itemsForGroceriesList = new ArrayList<Recipe>();
+
+
 
     public static Recipe scooksAlgorithm(List<Recipe> recipeList) {
 
@@ -21,6 +27,11 @@ public class Algorithm {
         List<Recipe> notUsedRecipesList = new LinkedList<>(recipeList);
         List<Instruction> instructionList=new LinkedList<>();
         runAlgorithm(notUsedRecipesList,instructionList);
+
+        itemsForGroceriesList.clear();
+        itemsForGroceriesList.addAll(recipeList);
+        TimersFragment.removeAllTimers();
+
         List<Ingredient> ingredientList = getIngredientsFromAllRecipe(recipeList);
         String timeOfWorkNeeded = getTimeWorkAllRecipes(instructionList);
         String totalTimeRecipe = getTotalTimeAllRecipes(instructionList);
@@ -29,6 +40,10 @@ public class Algorithm {
 
         resRecipe = new Recipe("תוכנית עבודה", timeOfWorkNeeded, totalTimeRecipe, difficultLevel, ingredientList, instructionListStr, null, instructionList, 0, 0, 0);
         return resRecipe;
+    }
+
+    public static List<Recipe> getGroceriesListFragment(){
+        return itemsForGroceriesList;
     }
 
     private static void updateRecipeNameForInstructions(List<Recipe> recipeList) {
