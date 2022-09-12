@@ -83,7 +83,7 @@ public class AllRecipesGridAdapter extends BaseAdapter {
         Recipe currentRecipe = allRecipes.get(position);
 
         //Image loading
-        if (!currentRecipe.getRecipeImg().isEmpty())
+        if (currentRecipe.getRecipeImg() != null && !currentRecipe.getRecipeImg().isEmpty())
             Picasso.get().load(currentRecipe.getRecipeImg()).centerCrop().fit().into(recipeImage, new Callback() {
                 @Override
                 public void onSuccess() {

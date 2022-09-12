@@ -28,7 +28,7 @@
     <item
         android:id="@+id/timers"
         android:icon="@drawable/ic_baseline_timer_24"
-        android:title="בית"
+        android:title="שעונים"
         app:showAsAction="ifRoom" />
 
 </menu>

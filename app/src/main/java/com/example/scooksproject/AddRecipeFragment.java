@@ -54,6 +54,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     private static ArrayList<String> instructions;
     private static RecipeInstructionsListAdapter instructionsAdapter;
     private TextView addStepTV;
+    private int workTime;
 
     @Nullable
     @Override
@@ -91,18 +92,20 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
             return;
         }
 
-        List<String> recipeInstructionsStr = RecipeInstructionsFragment.getInstructions();
-        int workTime = RecipeParser.getTimeOfWork(preparationTimeStr);
+
+//        int workTime = RecipeParser.getTimeOfWork(preparationTimeStr);
         List<Instruction> recipeInstructions = null;
         try {
-            recipeInstructions = RecipeParser.convertListStringToInstructionList(recipeInstructionsStr, workTime);
+            recipeInstructions = RecipeParser.convertListStringToInstructionList(instructions, workTime);
         } catch (NoNumberBeforeMinutesException | NoNumberBeforeHoursException e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         int totalFreeTime = RecipeParser.getFreeTime(recipeInstructions);
         int preparationTime = RecipeParser.getPreparationTime(recipeInstructions);
 
-        Recipe recipe = new Recipe(recipeNameStr, preparationTimeStr, makingTimeStr, difficulty, ingredients, recipeInstructionsStr, null, recipeInstructions, workTime, totalFreeTime, preparationTime);
+
+
+        Recipe recipe = new Recipe(recipeNameStr, preparationTimeStr, makingTimeStr, difficulty, ingredients, instructions, null, recipeInstructions, workTime, totalFreeTime, preparationTime);
         //DataBase.getInstance().uploadRecipe(recipe);
 
         StorageManager.WriteToFile("MyOwnRecipes.txt", recipe, getContext().getFilesDir(), true);
@@ -122,6 +125,11 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
             Toast.makeText(getContext(), "נא להכניס לפחות רכיב אחד!", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+//        for(Ingredient ingredient : ingredientsAdapter) {
+//            ingredientsAdapter.getView
+//
+//        }
 
         for(Ingredient ingredient : ingredients){
             if(ingredient.getName().isEmpty() || ingredient.getAmount() == 0 || ingredient.getMeasureUnit().isEmpty()){
@@ -167,7 +175,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
     private boolean checkRecipeName(String name) {
         String enterRecipeName = "נא להכניס שם מתכון!";
         if (name.isEmpty()) {
-            Toast.makeText(getContext(), enterRecipeName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), enterRecipeName, Toast.LENGTH_LONG).show();
             return false;
         }
         //check for existence in database
@@ -342,6 +350,7 @@ public class AddRecipeFragment extends Fragment implements PopupMenu.OnMenuItemC
                                         preperationTimeBtn.setText("שעתיים ו" + makingTimeMinute + " דקות");
                                     } else
                                         preperationTimeBtn.setText(makingTimeHour + " שעות ו" + makingTimeMinute + " דקות");
+                                       workTime = makingTimeHour * 60 + makingTimeMinute;
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }

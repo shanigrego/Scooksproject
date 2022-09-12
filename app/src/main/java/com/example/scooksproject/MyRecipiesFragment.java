@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment;
 
 public class MyRecipiesFragment extends Fragment {
 
-    private FloatingActionButton addRecipeBtn;
+    private androidx.appcompat.widget.AppCompatButton addRecipeBtn;
     private ImageView backBtn;
     private GridView myRecipesGridView;
     private ListAdapter adapter;
@@ -46,7 +46,7 @@ public class MyRecipiesFragment extends Fragment {
         addRecipeBtn = view.findViewById(R.id.addRecipeBtn);
         backBtn = view.findViewById(R.id.backBtn);
         myRecipesGridView = view.findViewById(R.id.myRecipesGridView);
-        myRecipes = StorageManager.ReadFromFile("MyRecipe3.txt", getContext().getFilesDir());
+        myRecipes = StorageManager.ReadFromFile("MyOwnRecipes.txt", getContext().getFilesDir());
         adapter = new AllRecipesGridAdapter(getContext(), myRecipes);
         searchET = view.findViewById(R.id.myRecipesSearchET);
         filteredItems = new ArrayList<>();

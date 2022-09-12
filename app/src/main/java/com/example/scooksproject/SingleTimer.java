@@ -4,17 +4,21 @@ import java.util.Calendar;
 
 public class SingleTimer {
 
-    public SingleTimer(int hours, int minutes, String idByStep, int minutesForCountdown) {
+    public SingleTimer(int hours, int minutes, String idByStep, int minutesForCountdown, int hourOfTheDayStarted, int minuteOfTeDayStarted) {
         this.hours = hours;
         this.minutes = minutes;
         this.idByStep = idByStep;
         this.minutesForCountdown = minutesForCountdown;
+        this.hourOfTheDayStarted = hourOfTheDayStarted;
+        this.minuteOfTeDayStarted = minuteOfTeDayStarted;
     }
 
     private int hours;
     private int minutes;
     private String idByStep;
     private int minutesForCountdown;
+    private int hourOfTheDayStarted;
+    private int minuteOfTeDayStarted;
 
     public int getHours() {
         return hours;
@@ -30,6 +34,14 @@ public class SingleTimer {
 
     public int getMinutesForCountdown() {
         return minutesForCountdown;
+    }
+
+    public int getHourOfTheDayStarted() {
+        return hourOfTheDayStarted;
+    }
+
+    public int getMinuteOfTeDayStarted() {
+        return minuteOfTeDayStarted;
     }
 
     public int getMinutesForView(){

@@ -44,12 +44,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Log.i("notification sound", "sound");
         final Intent emptyIntent = new Intent();
         createNotificationChannel(context, alarmSound);
+        int stepNum = Integer.parseInt(intent.getStringExtra("NotificationID")) + 1;
         NotificationCompat.Builder notification = new NotificationCompat.Builder(
                  context,
                  context.getString(R.string.channel_name))
                 .setSmallIcon(android.R.mipmap.sym_def_app_icon)
                 .setContentTitle("התראת Scook")
-                .setContentText("נא להוציא מהתנור!");
+                .setContentText(" שלב " + stepNum + " הסתיים! ");
 //                .setSound(alarmSound);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

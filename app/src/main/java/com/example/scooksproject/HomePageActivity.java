@@ -54,9 +54,9 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     //Being used. Do not erase!
-    public static BottomNavigationView getBottomNavigationView() {
-        return bottomNavigationView;
-    }
+//    public static BottomNavigationView getBottomNavigationView() {
+//        return bottomNavigationView;
+//    }
 
     //Being used. Do not erase!
     public static FloatingActionButton getChefButton() {
@@ -131,7 +131,7 @@ public class HomePageActivity extends AppCompatActivity {
 
     public static void chefButtonInitialFunctionality(FragmentManager fragmentManager){
         chefButton.setOnClickListener(btn -> {
-            Fragment fragment = new MealRecipesFragment();
+             Fragment fragment = new MealRecipesFragment();
              fragmentManager.beginTransaction().replace(R.id.scrollViewLinearLayout, fragment).addToBackStack("tag").commit();
         });
     }

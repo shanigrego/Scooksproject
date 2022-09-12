@@ -138,11 +138,11 @@ public class FinalRecipeListViewAdapter extends ArrayAdapter<Instruction> {
         int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int currentMinutes = Calendar.getInstance().get(Calendar.MINUTE);
 
-        int timerHour = currentHour + hours;
         int timerMinutes = currentMinutes + minutes;
         int minutesToCountdown = minutes + hours * 60;
+        int timerHour = currentHour + hours + (currentMinutes +  minutesToCountdown) / 60;
 
-        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes, Integer.toString(position), minutesToCountdown);
+        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes, Integer.toString(position), minutesToCountdown, currentHour, currentMinutes);
         TimersFragment.addTimer(singleTimer);
 
     }

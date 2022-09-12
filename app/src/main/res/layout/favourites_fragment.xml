@@ -17,6 +17,7 @@
         app:layout_constraintEnd_toStartOf="@+id/favouritesSearchET"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginRight="20dp"/>
+
     <EditText
         android:id="@+id/favouritesSearchET"
         android:layout_width="183dp"
@@ -26,6 +27,20 @@
         android:hint="חיפוש"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/favouritesNotChosen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="טרם נבחרו מתכונים"
+        android:gravity="center"
+        android:layout_marginTop="300dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/ellina"
+        app:layout_constraintTop_toBottomOf="@id/favouritesSearchET"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
         android:id="@+id/imageView"

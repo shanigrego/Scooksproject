@@ -56,6 +56,29 @@ public class IngredientListViewAdapter extends ArrayAdapter<Ingredient> {
 
             //Ingredient Name initialization
             ingredientName.setText(ingredients.get(position).getName());
+            ingredientName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus && !amountIngredient.getText().toString().isEmpty() && !amountIngredient.getText().toString().equals("")){
+                        ingredients.get(position).setName(ingredientName.getText().toString());
+                        String g = amountIngredient.getText().toString();
+                        double r = Double.parseDouble(g);
+                        ingredients.get(position).setAmount(r);
+                    }
+                }
+            });
+
+            amountIngredient.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus && !ingredientName.getText().toString().isEmpty() && !amountIngredient.getText().toString().isEmpty() && !amountIngredient.getText().toString().equals("")){
+                        ingredients.get(position).setName(ingredientName.getText().toString());
+                        String g = amountIngredient.getText().toString();
+                        double r = Double.parseDouble(g);
+                        ingredients.get(position).setAmount(r);
+                    }
+                }
+            });
 
             //Popup menu initialization
             initPopupMenu(convertView);

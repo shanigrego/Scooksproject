@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -112,7 +113,7 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
         
         int minutesInt = currentTimer.getMinutes();
         String minutesString = minutesInt < 10 ? "0" + minutesInt : String.valueOf(minutesInt);
-        int hoursInt = currentTimer.getHours();
+        int hoursInt = currentTimer.getHours() + (currentTimer.getMinutesForCountdown() + currentTimer.getMinuteOfTeDayStarted()) / 60;
         int minutesToCountdown = currentTimer.getMinutesForCountdown();
 
 
@@ -144,9 +145,16 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
         ProgressBar barTimer = (ProgressBar) view.findViewById(R.id.barTimer);
         if (position == 0) {
             TextView textTimer = view.findViewById(R.id.timerTextView);
-            barTimer.setMax((int) minuti * 60);
 
-            CountDownTimer countDownTimer = new CountDownTimer(60 * minuti * 1000, 500) {
+            int maxInSeconds = (int) minuti * 60;
+            int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            int currentMinutes = Calendar.getInstance().get(Calendar.MINUTE);
+            SingleTimer currentTimer = items.get(position);
+
+            barTimer.setMax(maxInSeconds);
+            long currentProgress = (maxInSeconds - ((currentHour * 3600 + currentMinutes * 60) - (currentTimer.getHourOfTheDayStarted() * 3600L + currentTimer.getMinuteOfTeDayStarted() * 60L)));
+
+            CountDownTimer countDownTimer = new CountDownTimer(currentProgress * 1000, 1000) {
                 // 500 means, onTick function will be called at every 500 milliseconds
 
                 @Override
@@ -154,7 +162,7 @@ public class TimersListViewAdapter extends ArrayAdapter<SingleTimer> {
 
                     long seconds = leftTimeInMilliseconds / 1000;
                     barTimer.setProgress((int) seconds);
-                    textTimer.setText(String.format("%02d", seconds / 60) + ":" + String.format("%02d", seconds % 60));
+                    textTimer.setText(String.format("%02d", seconds / 60) + ":" + String.format("%02d", (seconds % 60)));
                     // format the textview to show the easily readable format
 
                 }

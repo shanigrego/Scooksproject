@@ -142,7 +142,7 @@ public class FinalRecipeInstructionsListViewAdapter extends ArrayAdapter<Instruc
         int timerMinutes = currentMinutes + minutes;
         int minutesToCountdown = minutes + hours * 60;
 
-        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes % 60, Integer.toString(position), minutesToCountdown);
+        SingleTimer singleTimer = new SingleTimer(timerHour, timerMinutes % 60, Integer.toString(position), minutesToCountdown, currentHour, currentMinutes);
         TimersFragment.addTimer(singleTimer);
 
     }

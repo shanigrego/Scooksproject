@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class FavouritesFragment extends Fragment {
     private EditText searchET;
     private ArrayList<Recipe> filteredItems;
     private ImageView backBtn;
+    private TextView notChosen;
 
     @Nullable
     @Override
@@ -38,18 +40,25 @@ public class FavouritesFragment extends Fragment {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.favourites_fragment, null);
         initComponents(view);
         HomePageActivity.showBottomNavigationBar();
-        HomePageActivity.getBottomNavigationView().performClick();
+//        HomePageActivity.getBottomNavigationView().performClick();
         return view;
     }
 
     private void initComponents(View view) {
         GridView favouritesGridView = view.findViewById(R.id.favouritesGridView);
         List<Recipe> favouriteRecipesList = StorageManager.ReadFromFile("Fav1.txt", getContext().getFilesDir());
+
         adapter = new AllRecipesGridAdapter(getContext(), favouriteRecipesList);
         favouritesGridView.setAdapter(adapter);
         searchET = view.findViewById(R.id.favouritesSearchET);
         filteredItems = new ArrayList<>();
         backBtn = view.findViewById(R.id.favouritesBackBtn);
+        notChosen = view.findViewById(R.id.favouritesNotChosen);
+
+        if(!favouriteRecipesList.isEmpty())
+            notChosen.setVisibility(View.INVISIBLE);
+        else favouritesGridView.setVisibility(View.INVISIBLE);
+
 
         backBtn.setOnClickListener(item -> {
             if (backBtn.getVisibility() == View.VISIBLE) {

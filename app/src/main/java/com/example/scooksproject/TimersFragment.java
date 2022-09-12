@@ -36,7 +36,8 @@ public class TimersFragment extends Fragment {
                 if(singleTimer.getIdByStep().equals(id))
                     items.remove(singleTimer);
         }
-        timersListView.setAdapter(adapter);
+        if(timersListView != null)
+            timersListView.setAdapter(adapter);
     }
 
     public static void removeAllTimers(){

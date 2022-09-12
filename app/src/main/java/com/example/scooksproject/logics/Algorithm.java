@@ -18,7 +18,11 @@ public class Algorithm {
 
     private static List<Recipe> itemsForGroceriesList = new ArrayList<Recipe>();
 
+    private static Recipe finalRecipe;
 
+    public static Recipe getFinalRecipe() {
+        return finalRecipe;
+    }
 
     public static Recipe scooksAlgorithm(List<Recipe> recipeList) {
 
@@ -39,6 +43,7 @@ public class Algorithm {
         List<String> instructionListStr = getStrFormInstructionList(instructionList);
 
         resRecipe = new Recipe("תוכנית עבודה", timeOfWorkNeeded, totalTimeRecipe, difficultLevel, ingredientList, instructionListStr, null, instructionList, 0, 0, 0);
+        finalRecipe = resRecipe;
         return resRecipe;
     }
 
